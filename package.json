@@ -1,0 +1,21 @@
+{
+  "name": "zane-calendar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "zane-calendar.js",
+  "scripts": {
+    "dev": "gulp"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-clean": "^0.3.2",
+    "gulp-clean-css": "^3.8.0",
+    "gulp-connect": "^5.0.0",
+    "gulp-uglify": "^3.0.0"
+  }
+}

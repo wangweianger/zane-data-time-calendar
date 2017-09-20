@@ -1,0 +1,93 @@
+* {
+  padding: 0;
+  margin: 0; }
+
+ul, li {
+  list-style: none; }
+
+.zane-calendar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 14px;
+  width: 280px;
+  border: solid 1px #ddd;
+  background: #fff;
+  overflow: hidden;
+  -moz-user-select: none;
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+  .zane-calendar .main-color {
+    color: #34a9da; }
+  .zane-calendar .left {
+    float: left; }
+  .zane-calendar .zane-calendar-one {
+    width: 280px; }
+    .zane-calendar .zane-calendar-one .top {
+      height: 40px;
+      line-height: 40px;
+      position: relative;
+      text-align: center;
+      border-bottom: solid 1px #ddd;
+      font-size: 16px; }
+      .zane-calendar .zane-calendar-one .top .icom {
+        width: 40px;
+        height: 40px;
+        position: absolute; }
+      .zane-calendar .zane-calendar-one .top .left {
+        left: 0;
+        top: 0;
+        background: url("../img/left-icon.png") no-repeat center center;
+        background-size: 70%; }
+      .zane-calendar .zane-calendar-one .top .right {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: url("../img/right-icon.png") no-repeat center center;
+        background-size: 70%; }
+      .zane-calendar .zane-calendar-one .top .center span:hover {
+        color: #34a9da;
+        cursor: pointer; }
+      .zane-calendar .zane-calendar-one .top .center span:nth-child(1) {
+        margin-right: 15px; }
+    .zane-calendar .zane-calendar-one .main {
+      overflow: hidden; }
+      .zane-calendar .zane-calendar-one .main .week-day {
+        padding: 10px; }
+        .zane-calendar .zane-calendar-one .main .week-day table.day {
+          width: 100%; }
+        .zane-calendar .zane-calendar-one .main .week-day th, .zane-calendar .zane-calendar-one .main .week-day td {
+          padding: 10px 0;
+          text-align: center; }
+        .zane-calendar .zane-calendar-one .main .week-day th.light, .zane-calendar .zane-calendar-one .main .week-day td.light {
+          color: #cacaca; }
+        .zane-calendar .zane-calendar-one .main .week-day td {
+          cursor: pointer; }
+        .zane-calendar .zane-calendar-one .main .week-day td:hover {
+          background: #f4f4f4; }
+        .zane-calendar .zane-calendar-one .main .week-day td.active {
+          background: #34a9da;
+          color: #fff; }
+    .zane-calendar .zane-calendar-one .bottom {
+      border-top: solid 1px #ddd;
+      overflow: hidden;
+      padding: 8px;
+      font-size: 12px; }
+      .zane-calendar .zane-calendar-one .bottom .left {
+        float: left; }
+      .zane-calendar .zane-calendar-one .bottom .right {
+        float: right; }
+        .zane-calendar .zane-calendar-one .bottom .right .button.no-right-line {
+          border-right: none; }
+      .zane-calendar .zane-calendar-one .bottom .button {
+        cursor: pointer;
+        border: solid 1px #ddd;
+        padding: 6px 8px;
+        float: left;
+        background: #fff;
+        color: #999; }
+        .zane-calendar .zane-calendar-one .bottom .button:hover {
+          color: #34a9da; }

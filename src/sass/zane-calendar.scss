@@ -1,0 +1,120 @@
+*{
+	padding:0;
+	margin:0;
+}
+ul,li{
+	list-style:none;
+}
+.zane-calendar{
+	position:absolute;
+	left:0;
+	top:0;
+	font-size:14px;
+	width:280px;
+	border:solid 1px #ddd;
+	background:#fff; 
+	overflow:hidden;
+	-moz-user-select: none;
+	-o-user-select:none;
+	-khtml-user-select:none;
+	-webkit-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+	.main-color{
+		color:#34a9da;
+	}
+	.left{
+		float:left;
+	}
+	.zane-calendar-one{
+		width:280px;
+		.top{
+			height:40px;
+			line-height:40px;
+			position:relative;
+			text-align:center;
+			border-bottom:solid 1px #ddd;
+			font-size:16px;
+			.icom{
+				width:40px;
+				height:40px;
+				position:absolute;
+			}
+			.left{
+				left:0;
+				top:0;
+				background:url('../img/left-icon.png') no-repeat center center;
+				background-size:70%;
+			}
+			.right{
+				position:absolute;
+				top:0;
+				right:0;
+				background:url('../img/right-icon.png') no-repeat center center;
+				background-size:70%;
+			}
+			.center{
+				span:hover{
+					color:#34a9da;
+					cursor:pointer;
+				}
+				span:nth-child(1){
+					margin-right:15px;
+				}
+			}
+		}
+		.main{
+			overflow:hidden;
+			.week-day{
+				padding:10px;
+				table.day{
+					width:100%;
+				}
+				th,td{
+					padding:10px 0;
+					text-align:center; 
+				}
+				th.light,td.light{
+					color:#cacaca
+				}
+				td{
+					cursor:pointer;
+				}
+				td:hover{
+					background:#f4f4f4;
+				}
+				td.active{
+					background:#34a9da;
+					color:#fff;
+				}
+			}
+		}
+		.bottom{
+			border-top:solid 1px #ddd;
+			overflow:hidden;
+			padding:8px;
+			font-size:12px;
+			.left{
+				float:left;
+			}
+			.right{
+				float:right;
+				.button.no-right-line{
+					border-right:none;
+				}
+			}
+			.button{
+				cursor:pointer;
+				border:solid 1px #ddd;
+				padding:6px 8px;
+				float:left;
+				background:#fff;
+				color:#999;
+				&:hover{
+					color:#34a9da;
+				}
+			}
+		}
+	}
+	
+}
