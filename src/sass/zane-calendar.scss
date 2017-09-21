@@ -71,7 +71,7 @@ ul,li{
 					width:100%;
 				}
 				th,td{
-					padding:7px 0;
+					padding:3px 0;
 					text-align:center; 
 				}
 				th.light,td.light{
@@ -79,6 +79,10 @@ ul,li{
 				}
 				td{
 					cursor:pointer;
+					&.calendar-disabled{
+						cursor:not-allowed;
+						color: #ccc;
+					}
 				}
 				td:hover{
 					background:#f4f4f4;
@@ -90,19 +94,27 @@ ul,li{
 			}
 			.main-check-month{
 				.week-day{
-					padding:11px;
+					padding:12px;
 					td{
-						padding:18px 0;
+						padding:13px 0;
 						width: 33.333%;
+						&.calendar-disabled{
+							cursor:not-allowed;
+							color: #ccc;
+						}
 					}
 				}
 			}
 			.main-check-year{
 				.week-day{
-					padding:7px;
+					padding:6px;
 					td{
-						padding:10px 0;
+						padding:6px 0;
 						width: 33.333%;
+						&.calendar-disabled{
+							cursor:not-allowed;
+							color: #ccc;
+						}
 					}
 				}
 			}
@@ -123,7 +135,7 @@ ul,li{
 						overflow:hidden;
 						text-align:center;
 						ul{
-							height:190px;
+							height:176px;
 							display:inline-block;
 							overflow-y:scroll;
 							width:28%;
