@@ -1,3 +1,4 @@
+@charset "UTF-8";
 * {
   padding: 0;
   margin: 0; }
@@ -52,7 +53,7 @@ ul, li {
         color: #34a9da;
         cursor: pointer; }
       .zane-calendar .zane-calendar-one .top .center span:nth-child(1) {
-        margin-right: 15px; }
+        margin-right: 8px; }
     .zane-calendar .zane-calendar-one .main {
       overflow: hidden; }
       .zane-calendar .zane-calendar-one .main .week-day {
@@ -60,7 +61,7 @@ ul, li {
         .zane-calendar .zane-calendar-one .main .week-day table.day {
           width: 100%; }
         .zane-calendar .zane-calendar-one .main .week-day th, .zane-calendar .zane-calendar-one .main .week-day td {
-          padding: 10px 0;
+          padding: 7px 0;
           text-align: center; }
         .zane-calendar .zane-calendar-one .main .week-day th.light, .zane-calendar .zane-calendar-one .main .week-day td.light {
           color: #cacaca; }
@@ -71,6 +72,58 @@ ul, li {
         .zane-calendar .zane-calendar-one .main .week-day td.active {
           background: #34a9da;
           color: #fff; }
+      .zane-calendar .zane-calendar-one .main .main-check-month .week-day {
+        padding: 11px; }
+        .zane-calendar .zane-calendar-one .main .main-check-month .week-day td {
+          padding: 18px 0;
+          width: 33.333%; }
+      .zane-calendar .zane-calendar-one .main .main-check-year .week-day {
+        padding: 7px; }
+        .zane-calendar .zane-calendar-one .main .main-check-year .week-day td {
+          padding: 10px 0;
+          width: 33.333%; }
+      .zane-calendar .zane-calendar-one .main .main-check-time .week-day {
+        padding: 5px; }
+        .zane-calendar .zane-calendar-one .main .main-check-time .week-day .nav {
+          overflow: hidden;
+          height: 30px;
+          line-height: 30px; }
+          .zane-calendar .zane-calendar-one .main .main-check-time .week-day .nav li {
+            width: 33.333%;
+            float: left;
+            text-align: center; }
+        .zane-calendar .zane-calendar-one .main .main-check-time .week-day .select-time {
+          overflow: hidden;
+          text-align: center;
+          /*滚动条样式*/ }
+          .zane-calendar .zane-calendar-one .main .main-check-time .week-day .select-time ul {
+            height: 190px;
+            display: inline-block;
+            overflow-y: scroll;
+            width: 28%;
+            margin: 0 2%;
+            float: left;
+            border: solid 1px #ccc; }
+            .zane-calendar .zane-calendar-one .main .main-check-time .week-day .select-time ul li {
+              height: 25px;
+              line-height: 25px;
+              cursor: pointer; }
+              .zane-calendar .zane-calendar-one .main .main-check-time .week-day .select-time ul li:hover {
+                background: #f4f4f4; }
+              .zane-calendar .zane-calendar-one .main .main-check-time .week-day .select-time ul li.active {
+                background: #34a9da;
+                color: #fff; }
+          .zane-calendar .zane-calendar-one .main .main-check-time .week-day .select-time ul::-webkit-scrollbar {
+            width: 4px;
+            height: 4px; }
+          .zane-calendar .zane-calendar-one .main .main-check-time .week-day .select-time ul::-webkit-scrollbar-thumb {
+            border-radius: 5px;
+            -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.6); }
+          .zane-calendar .zane-calendar-one .main .main-check-time .week-day .select-time ul::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+            border-radius: 0;
+            background: rgba(0, 0, 0, 0.1); }
     .zane-calendar .zane-calendar-one .bottom {
       border-top: solid 1px #ddd;
       overflow: hidden;

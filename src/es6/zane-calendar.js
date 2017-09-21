@@ -1,7 +1,9 @@
 // 日期插件
 class calendar{
-	constructor(){
+	constructor(json={}){
+
 		this.config={
+			calendarName:'',
 			//控件的dom原生仅限制于id
 			elem:'#zane-calendar',
 			//year month date time datetime
@@ -12,7 +14,7 @@ class calendar{
 			lang:'cn', 
 			format:'yyyy-MM-dd HH:mm:ss',
 			// 初始默认值
-			value:'2017-08-20',
+			value:'',
 			min:'1900-10-01',
 			max: '2099-12-31',
 			//click , focus
@@ -27,7 +29,7 @@ class calendar{
 			showsubmit:true,
 			//插件于输入框的高度 
 			behindTop:10,
-			calendarHeight:325,
+			calendarHeight:318,
 			// 选择年时展示的数量
 			totalYear:18,
 			// 插件加载完成之后调用
@@ -37,11 +39,15 @@ class calendar{
 			//选择完成之后调用
 			done:()=>{},
 		}
+
+		this.config = this.extend(this.config,json);
+
 		this.obj={
 			input:document.querySelector(this.config.elem),
 			calendar:null,
 			id:`#zane-calendar-${this.config.elem.substring(1)}`,
 			fulldatas:{},
+			handleType:'date',
 			cn:{
 		        weeks: ['日', '一', '二', '三', '四', '五', '六'],
 		        time: ['时', '分', '秒'],
@@ -96,11 +102,13 @@ class calendar{
 							<div class="common-main main-check-time"></div>
 						</div>
 						<div class="bottom">
-							<div class="left button">选择时间</div>
-							<div class="right">
-								<div class="button no-right-line">清空</div>
-								<div class="button no-right-line">今天</div>
-								<div class="button">确定</div>
+							<div class="btn-select-time">
+								<div class="left button btn-select-time-item" onclick="${this.config.calendarName}.getTimeHtml()">选择时间</div>
+							</div>	
+				 			<div class="right">
+								<div class="button no-right-line" onclick="${this.config.calendarName}.cleanInputVal()">清空</div>
+								<div class="button no-right-line" onclick="${this.config.calendarName}.changeToToday()">今天</div>
+								<div class="button" onclick="${this.config.calendarName}.makeSureSelectTime()">确定</div>
 							</div>
 						</div>
 					</div>
@@ -110,12 +118,12 @@ class calendar{
 	// day - top html
 	topCheckDayHTML(json){
 		let html =`	
-		<div onclick="calendarObj.preMonth(${json.year},${json.month})" class="icom left"></div>
+		<div onclick="${this.config.calendarName}.preMonth(${json.year},${json.month})" class="icom left"></div>
 			<div class="center">
-				<span onclick="calendarObj.getYearHtml(${json.year})">${json.year}年</span>
-				<span onclick="calendarObj.getMonthHtml(${json.month})">${json.month}月</span>
+				<span onclick="${this.config.calendarName}.getYearHtml(${json.year})">${json.year}年</span>
+				<span onclick="${this.config.calendarName}.getMonthHtml(${json.month})">${json.month}月</span>
 			</div>
-			<div onclick="calendarObj.nextMonth(${json.year},${json.month})" class="icom right"></div>
+			<div onclick="${this.config.calendarName}.nextMonth(${json.year},${json.month})" class="icom right"></div>
 		`
 		return html;
 	}
@@ -160,12 +168,12 @@ class calendar{
 	// year - top html
 	topCheckYearHTML(json){
 		let html=`
-		<div class="icom left" onclick="calendarObj.perYear(${json.nowyear})"></div>
+		<div class="icom left" onclick="${this.config.calendarName}.perYear(${json.nowyear})"></div>
 		<div class="center">
 			<span>${json.firstYear}年</span>-
 			<span>${json.lastYear}年</span>
 		</div>
-		<div class="icom right" onclick="calendarObj.nextYear(${json.nowyear})"></div>`
+		<div class="icom right" onclick="${this.config.calendarName}.nextYear(${json.nowyear})"></div>`
 		return html;
 	}
 	// year - main html
@@ -197,11 +205,11 @@ class calendar{
 	// month -top html
 	topCheckMonthHTML(json){
 		let html=`
-		<div class="icom left" onclick="calendarObj.perMonthYear(${json.year},${json.nowmonth})"></div>
+		<div class="icom left" onclick="${this.config.calendarName}.perMonthYear(${json.year},${json.nowmonth})"></div>
 		<div class="center">
 			<span>${json.year}年</span>
 		</div>
-		<div class="icom right" onclick="calendarObj.nextMonthYear(${json.year},${json.nowmonth})"></div>`
+		<div class="icom right" onclick="${this.config.calendarName}.nextMonthYear(${json.year},${json.nowmonth})"></div>`
 		return html;	
 	}
 	// month -main html
@@ -210,7 +218,7 @@ class calendar{
 			<table class="day">`
 				for (let i = 0,len=json.datalist.length; i < len; i++) {
 					let className = json.datalist[i].class||"";
-					if(json.datalist[i] === json.nowmonth){
+					if((i+1) === json.nowmonth){
 						className+=` active`
 					}
 					if(i == 0){
@@ -229,6 +237,48 @@ class calendar{
 		</div>`
 		return html;
 	}
+
+	// time -top  html
+	topCheckTimeHTML(){
+		let html=`<div class="center"><span>选择时间</span></div>`
+		return html;	
+	}
+	// time -main html
+	mainCheckTimeHTML(json){
+		let html = `<div class="week-day"><ul class="nav"><li>小时</li><li>分钟</li><li>秒数</li></ul><div class="select-time">
+				<ul class="hour">`
+				for (let i = 0,len=json.hours.length; i < len; i++) {
+					let className='';
+					if(json.hours[i] == json.hour) className='active';
+					html +=`<li class="${className}" data-time="${json.hours[i]}">${json.hours[i]}</li>`
+				}
+			html+=`</ul><ul class="minute">`
+				for (let i = 0,len=json.minutes.length; i < len; i++) {
+					let className='';
+					if(json.minutes[i] == json.minute) className='active';
+					html +=`<li class="${className}" data-time="${json.minutes[i]}">${json.minutes[i]}</li>`
+				}
+			html+=`</ul><ul class="second">`
+				for (let i = 0,len=json.seconds.length; i < len; i++) {
+					let className='';
+					if(json.seconds[i] == json.second) className='active';
+					html +=`<li class="${className}" data-time="${json.seconds[i]}">${json.seconds[i]}</li>`
+				}
+			html+=`</ul></div></div>`
+		return html;
+	}
+
+	// time -bottom html
+	bottomCheckTimeHTML(){
+		let html = '';
+		if(this.obj.handleType === 'time'){
+			html+= `<div class="left button" onclick="${this.config.calendarName}.backDateHtml()">返回时间</div>`
+		}else{
+			html+= `<div class="left button" onclick="${this.config.calendarName}.getTimeHtml()">选择时间</div>`
+		}
+		return html;
+	}
+
 	// 插件位置定位
 	elemEventPoint(){
 		this.on(this.obj.input,this.config.event, (e)=>{
@@ -246,29 +296,30 @@ class calendar{
 				document.body.appendChild(divElement)
 
 				this.obj.calendar = document.querySelector(this.obj.id);
+			
+				let screenClientHeight 	= document.documentElement.clientHeight
+				let screenScrolTop	 	= document.documentElement.scrollTop
+				let objOffsetTop		= e.target.offsetTop
+				let objOffsetLeft		= e.target.offsetLeft
+				let objOffsetHeight		= e.target.offsetHeight
+
+				let objBotton = screenClientHeight-(objOffsetTop+objOffsetHeight+this.config.behindTop-screenScrolTop)
+
+				this.obj.calendar.style.display = 'block';
+				// 设置插件point位置
+				this.obj.calendar.style.left 	=	objOffsetLeft+'px';
+				objBotton > this.config.calendarHeight?
+					//插件在input框之下 
+					this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.config.behindTop+'px':
+					//插件在input框之上
+					this.obj.calendar.style.top = objOffsetTop-this.config.behindTop-this.config.calendarHeight+'px';
+			    
+				this.documentClick();
+				this.calendarClick(); 
+				this.getDay();
+			}else{
+				document.querySelector(this.obj.id).style.display 	= 	"block";
 			};
-
-			let screenClientHeight 	= document.documentElement.clientHeight
-			let screenScrolTop	 	= document.documentElement.scrollTop
-			let objOffsetTop		= e.target.offsetTop
-			let objOffsetLeft		= e.target.offsetLeft
-			let objOffsetHeight		= e.target.offsetHeight
-
-			let objBotton = screenClientHeight-(objOffsetTop+objOffsetHeight+this.config.behindTop-screenScrolTop)
-
-			this.obj.calendar.style.display = 'block';
-			// 设置插件point位置
-			this.obj.calendar.style.left 	=	objOffsetLeft+'px';
-			objBotton > this.config.calendarHeight?
-				//插件在input框之下 
-				this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.config.behindTop+'px':
-				//插件在input框之上
-				this.obj.calendar.style.top = objOffsetTop-this.config.behindTop-this.config.calendarHeight+'px';
-		    
-
-			this.documentClick();
-			this.calendarClick(); 
-			this.getDay();
 		});
 	}
 
@@ -280,13 +331,23 @@ class calendar{
 		let month   	= date.getMonth()+1
 		let toDate  	= date.getDate()
 		let weekday 	= date.getDay()
+		let hour 		= date.getHours()
+		let minute 		= date.getMinutes()
+		let second 		= date.getSeconds()
+		month 			= (month+'').length<2? '0'+month : month;
+		toDate 			= (toDate+'').length<2? '0'+toDate : toDate;
+		hour 			= (hour+'').length<2? '0'+hour : hour;
+		minute 			= (minute+'').length<2? '0'+minute:minute;
+		second 			= (second+'').length<2? '0'+second:second;
+
 		// 计算当前这个月的天数
 		let monTotalDay = new Date(year,month,0).getDate()
 
 		// 计算第一天是周几
 		let firstDayMeek = new Date(`${year}/${month}/1`).getDay()
 		let lastDayMeek  = new Date(`${year}/${month}/${monTotalDay}`).getDay()
-
+		let preweek	 = null;
+		let preday      = null;	
 		// 计算需要补充的时间
 		if(firstDayMeek>0){
 			let preMonTotalDay =  new Date(year,month-1,0).getDate()
@@ -297,48 +358,71 @@ class calendar{
 				premonth = 12;
 			}	
 			for (var i = 0,len=firstDayMeek; i < len; i++) {
+				let day 	= preMonTotalDay-i;
+				premonth 	= (premonth+'').length<2?'0'+premonth:premonth;
+				day 		= (day+'').length<2?'0'+day:day;
+
 				timeDatas.push({
 					day:preMonTotalDay-i,
 					week:len-1-i,
 					class:'light',
 					daytype:`pre`,
-					fullday:`${preyear}/${premonth}/${preMonTotalDay-i}`
+					fullday:`${preyear}/${premonth}/${day}`
 				})
 			}
 		}
 		timeDatas = timeDatas.reverse();
 		for (let i = 0,len=monTotalDay; i < len; i++) {
-			let weekday = (firstDayMeek+i)%7;
+			let weekday 	= (firstDayMeek+i)%7;
+			let premonth 	= month;
+			let day 		= i+1
+				premonth 	= (premonth+'').length<2?'0'+premonth:premonth;
+				day 		= (day+'').length<2?'0'+day:day;
+
 			timeDatas.push({
 				day:i+1,
 				week:weekday,
 				daytype:`now`,
-				fullday:`${year}/${month}/${i+1}`
+				fullday:`${year}/${premonth}/${day}`
+			})
+			if(i === len-1){
+				preweek 	= weekday;
+				preday 		= i+1;
+			}
+		}
+
+		let totalLength 	= timeDatas.length;
+		let haveNeedLength 	= 42-totalLength;
+
+		let preyear  	= year;
+		let premonth 	= month+1;
+		if(premonth === 13){
+			preyear  	= year+1;
+			premonth 	= 1;
+		}
+
+		for (var i = 0; i < haveNeedLength; i++) {
+			let weekday = (preweek+1+i)%7;
+			let day 	= i+1;
+				premonth 	= (premonth+'').length<2?'0'+premonth:premonth;
+				day 		= (day+'').length<2?'0'+day:day;
+
+			timeDatas.push({
+				day:i+1,
+				week:weekday,
+				class:'light',
+				daytype:`next`,
+				fullday:`${preyear}/${premonth}/${day}`
 			})
 		}
-		if(lastDayMeek<6){
-			let preyear  = year;
-			let premonth = month+1;
-			if(premonth === 13){
-				preyear  = year+1;
-				premonth = 1;
-			}
-
-			for(let i =0,len=6-lastDayMeek;i<len;i++){
-				let weekday = (lastDayMeek+1+i)%7;
-				timeDatas.push({
-					day:i+1,
-					week:weekday,
-					class:'light',
-					daytype:`next`,
-					fullday:`${preyear}/${premonth}/${i+1}`
-				})
-			}
-		}
+		
 		return {
 			year:year,
 			month:month,
 			today:toDate,
+			hour:hour,
+			minute:minute,
+			second:second,
 			datalist:timeDatas
 		}
 	}
@@ -352,14 +436,12 @@ class calendar{
 		}
 		let fulldate 	= `${year}/${month}/${this.obj.fulldatas.today}`
 		let json 		= this.getTimeDates(fulldate);
-		let tnodyhtml 	= this.mainCheckDayHTML(json);
-		let tophtml		= this.topCheckDayHTML(json);
+		let mainHTML 	= this.mainCheckDayHTML(json);
+		let topHTML		= this.topCheckDayHTML(json);
 		this.obj.fulldatas = json;
 
-		console.log(fulldate)
-
-		document.querySelector(this.obj.id).querySelector('.main-check-day').innerHTML = tnodyhtml;
-		document.querySelector(this.obj.id).querySelector('.top-check-day').innerHTML = tophtml;
+		document.querySelector(this.obj.id).querySelector('.main-check-day').innerHTML = mainHTML;
+		document.querySelector(this.obj.id).querySelector('.top-check-day').innerHTML = topHTML;
 		this.getDay();
 	}
 
@@ -372,20 +454,35 @@ class calendar{
 		}
 		let fulldate 	= `${year}/${month}/${this.obj.fulldatas.today}`
 		let json 		= this.getTimeDates(fulldate);
-		let tnodyhtml 	= this.mainCheckDayHTML(json);
-		let tophtml		= this.topCheckDayHTML(json);
+		let mainHTML 	= this.mainCheckDayHTML(json);
+		let topHTML		= this.topCheckDayHTML(json);
 		this.obj.fulldatas = json;
-		document.querySelector(this.obj.id).querySelector('.main-check-day').innerHTML = tnodyhtml;
-		document.querySelector(this.obj.id).querySelector('.top-check-day').innerHTML = tophtml;
+		document.querySelector(this.obj.id).querySelector('.main-check-day').innerHTML = mainHTML;
+		document.querySelector(this.obj.id).querySelector('.top-check-day').innerHTML = topHTML;
 		this.getDay();
 	}
 
 	// 获得年月日
 	getDay(){
+		let _this=this;
 		let objs = document.querySelector(this.obj.id)
 		.querySelector('.main-check-day').querySelectorAll('td');
 		this.on(objs,'click',function(e){
-			console.log(this)
+			let dataTime 				= 	this.getAttribute('data-time');
+			let arr 					=	dataTime.split('/')
+			_this.obj.fulldatas.year 	=	arr[0]
+			_this.obj.fulldatas.month 	=	arr[1]
+			_this.obj.fulldatas.today 	=	arr[2]
+
+			if(_this.config.showtime){
+				_this.forEach(objs,(index,item)=>{
+					_this.removeClass(item,'active');
+				})
+				_this.addClass(this,'active');
+			}else{
+				let value = `${_this.obj.fulldatas.year}/${_this.obj.fulldatas.month}/${_this.obj.fulldatas.today}`
+				_this.getYearMonthAndDay(value)
+			}
 		})
 	}
 
@@ -405,11 +502,11 @@ class calendar{
 			})
 		}
 
-		let tnodyhtml 	= this.mainCheckYearHTML(yearDatas);
-		let tophtml		= this.topCheckYearHTML(yearDatas);
+		let mainHTML 	= this.mainCheckYearHTML(yearDatas);
+		let topHTML		= this.topCheckYearHTML(yearDatas);
 		
-		document.querySelector(this.obj.id).querySelector('.main-check-year').innerHTML = tnodyhtml;
-		document.querySelector(this.obj.id).querySelector('.top-check-year').innerHTML = tophtml;
+		document.querySelector(this.obj.id).querySelector('.main-check-year').innerHTML = mainHTML;
+		document.querySelector(this.obj.id).querySelector('.top-check-year').innerHTML = topHTML;
 
 		this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-top'),'hide')
 		this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-main'),'hide')
@@ -417,6 +514,7 @@ class calendar{
 		document.querySelector(this.obj.id).querySelector('.main-check-year').style.display = 'block'
 		document.querySelector(this.obj.id).querySelector('.top-check-year').style.display = 'block'
 
+		this.obj.handleType = 'year';
 		this.getYear();
 	}
 
@@ -453,8 +551,10 @@ class calendar{
 			datalist:this.obj.cn.month
 		};
 
+		this.obj.handleType = 'month';
 		this.monthHTML(monthDatas);
 	}
+
 	perMonthYear(year,month){
 		let monthDatas 	= {
 			nowmonth:month,
@@ -463,6 +563,7 @@ class calendar{
 		};
 		this.monthHTML(monthDatas);
 	}
+
 	nextMonthYear(year,month){
 		let monthDatas 	= {
 			nowmonth:month,
@@ -471,11 +572,12 @@ class calendar{
 		};
 		this.monthHTML(monthDatas);
 	}
+
 	monthHTML(monthDatas){
-		let tnodyhtml 	= this.mainCheckMonthHTML(monthDatas);
-		let tophtml		= this.topCheckMonthHTML(monthDatas);
-		document.querySelector(this.obj.id).querySelector('.main-check-month').innerHTML = tnodyhtml;
-		document.querySelector(this.obj.id).querySelector('.top-check-month').innerHTML = tophtml;
+		let mainHTML 	= this.mainCheckMonthHTML(monthDatas);
+		let topHTML		= this.topCheckMonthHTML(monthDatas);
+		document.querySelector(this.obj.id).querySelector('.main-check-month').innerHTML = mainHTML;
+		document.querySelector(this.obj.id).querySelector('.top-check-month').innerHTML = topHTML;
 		this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-top'),'hide')
 		this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-main'),'hide')
 		document.querySelector(this.obj.id).querySelector('.main-check-month').style.display = 'block'
@@ -489,7 +591,6 @@ class calendar{
 		let objs = document.querySelector(this.obj.id)
 		.querySelector('.main-check-month').querySelectorAll('td');
 		this.on(objs,'click',function(e){
-			console.log(this)
 			let year 	= e.target.getAttribute('data-year')
 			let month 	= e.target.getAttribute('data-month')
 
@@ -497,16 +598,17 @@ class calendar{
 			_this.monthYearCommon(fulldate)
 		})
 	}
-	// 
+
+	// 选择月份公共代码
 	monthYearCommon(fulldate){
 		let json 		= this.getTimeDates(fulldate);
-		let tnodyhtml 	= this.mainCheckDayHTML(json);
-		let tophtml		= this.topCheckDayHTML(json);
+		let mainHTML 	= this.mainCheckDayHTML(json);
+		let topHTML		= this.topCheckDayHTML(json);
 		
 		this.obj.fulldatas = json;
 
-		document.querySelector(this.obj.id).querySelector('.main-check-day').innerHTML = tnodyhtml;
-		document.querySelector(this.obj.id).querySelector('.top-check-day').innerHTML = tophtml;
+		document.querySelector(this.obj.id).querySelector('.main-check-day').innerHTML = mainHTML;
+		document.querySelector(this.obj.id).querySelector('.top-check-day').innerHTML = topHTML;
 
 		this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-top'),'hide')
 		this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-main'),'hide')
@@ -514,7 +616,139 @@ class calendar{
 		document.querySelector(this.obj.id).querySelector('.main-check-day').style.display = 'block'
 		document.querySelector(this.obj.id).querySelector('.top-check-day').style.display = 'block'
 
+		this.obj.handleType = 'date';
 		this.getDay();
+	}
+
+	// 选择时间
+	getTimeHtml(){
+		let datas ={
+			hour:this.obj.fulldatas.hour,
+			minute:this.obj.fulldatas.minute,
+			second:this.obj.fulldatas.second,
+			hours:[],
+			minutes:[],
+			seconds:[]
+		}
+		for (var i = 0; i < 24; i++) {
+			if(i<10){
+				datas.hours.push('0'+i)
+			}else{
+				datas.hours.push(i+'')
+			}
+		}
+		for (var i = 0; i < 60; i++) {
+			if(i<10){
+				datas.minutes.push('0'+i)
+				datas.seconds.push('0'+i)
+			}else{
+				datas.minutes.push(i+'')
+				datas.seconds.push(i+'')
+			}
+		}
+		this.obj.handleType = 'time';
+
+		let mainHTML 	= this.mainCheckTimeHTML(datas);
+		let topHTML		= this.topCheckTimeHTML();
+		let bottomHTML  = this.bottomCheckTimeHTML();
+		document.querySelector(this.obj.id).querySelector('.main-check-time').innerHTML = mainHTML;
+		document.querySelector(this.obj.id).querySelector('.top-check-time').innerHTML = topHTML;
+		document.querySelector(this.obj.id).querySelector('.btn-select-time').innerHTML = bottomHTML;
+
+		this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-top'),'hide')
+		this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-main'),'hide')
+		document.querySelector(this.obj.id).querySelector('.main-check-time').style.display = 'block'
+		document.querySelector(this.obj.id).querySelector('.top-check-time').style.display = 'block'
+
+		let hourScrollTop = document.querySelector(this.obj.id).querySelector('ul.hour').querySelector('li.active').offsetTop
+		let minuteScrollTop = document.querySelector(this.obj.id).querySelector('ul.minute').querySelector('li.active').offsetTop
+		let secondScrollTop = document.querySelector(this.obj.id).querySelector('ul.second').querySelector('li.active').offsetTop
+
+		document.querySelector(this.obj.id).querySelector('ul.hour').scrollTop 		= 	hourScrollTop-150
+		document.querySelector(this.obj.id).querySelector('ul.minute').scrollTop 	= 	minuteScrollTop-150
+		document.querySelector(this.obj.id).querySelector('ul.second').scrollTop 	=	secondScrollTop-150
+		
+		this.selectTime();
+	}
+
+	// 选择时间
+	selectTime(){
+		let _this 		= this
+		let hourObjs 	= document.querySelector(this.obj.id).querySelector('ul.hour').querySelectorAll('li')
+		let minuteObjs 	= document.querySelector(this.obj.id).querySelector('ul.minute').querySelectorAll('li')
+		let secondObjs 	= document.querySelector(this.obj.id).querySelector('ul.second').querySelectorAll('li')
+		
+		this.on(hourObjs,'click',function(e){
+			_this.forEach(hourObjs,(index,item)=>{
+				_this.removeClass(item,'active');
+			})
+			_this.addClass(this,'active');
+			_this.obj.fulldatas.hour = this.getAttribute('data-time');
+		})
+
+		this.on(minuteObjs,'click',function(e){
+			_this.forEach(minuteObjs,(index,item)=>{
+				_this.removeClass(item,'active');
+			})
+			_this.addClass(this,'active');
+			_this.obj.fulldatas.minute = this.getAttribute('data-time');
+		})
+
+		this.on(secondObjs,'click',function(e){
+			_this.forEach(secondObjs,(index,item)=>{
+				_this.removeClass(item,'active');
+			})
+			_this.addClass(this,'active');
+			_this.obj.fulldatas.second = this.getAttribute('data-time');
+		})
+	}
+
+	// 返回日期
+	backDateHtml(){
+		this.obj.handleType = 'date';
+		let bottomHTML  = this.bottomCheckTimeHTML();
+		document.querySelector(this.obj.id).querySelector('.btn-select-time').innerHTML = bottomHTML;
+
+		this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-top'),'hide')
+		this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-main'),'hide')
+		document.querySelector(this.obj.id).querySelector('.main-check-day').style.display = 'block'
+		document.querySelector(this.obj.id).querySelector('.top-check-day').style.display = 'block'
+	}
+
+	// 今天
+	changeToToday(){
+		let json 		= 	this.getTimeDates();
+		let value 		=	null;
+
+		if(this.config.showtime){
+			value = `${json.year}/${json.month}/${json.today} ${json.hour}:${json.minute}:${json.second}`
+		}else{
+			value = `${json.year}/${json.month}/${json.today}`
+		}
+		this.getYearMonthAndDay(value)
+	}
+
+	// 清空
+	cleanInputVal(){
+		let value = ""
+		this.getYearMonthAndDay(value)
+	}
+
+	// 确定
+	makeSureSelectTime(){
+		let value = null;
+		if(this.config.showtime){
+			value = `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today} ${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`
+		}else{
+			value = `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today}`
+		}
+		this.getYearMonthAndDay(value)
+	}
+
+	// 获得年月日的值
+	getYearMonthAndDay(datatime){
+		document.querySelector(this.config.elem).value		=	datatime;
+		document.querySelector(this.obj.id).style.display 	= 	"none";
 	}
 
 	//插件自身点击阻止冒泡
@@ -529,6 +763,21 @@ class calendar{
 	extend(obj1,obj2){
 		return Object.assign(obj1,obj2);
 	}
+
+	hasClass(obj, cls) {  
+    	return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));  
+	}  
+	  
+	addClass(obj, cls) {  
+	    if (!this.hasClass(obj, cls)) obj.className += " " + cls;  
+	}  
+	  
+	removeClass(obj, cls) {  
+	    if (this.hasClass(obj, cls)) {  
+	        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');  
+	        obj.className = obj.className.replace(reg, ' ');  
+	    }  
+	} 
 
 	//对象遍历
   	forEach(obj, fn){
@@ -586,8 +835,14 @@ class calendar{
   			this.obj.calendar.style.display = 'none';
   		})
   	}
-
 };
 
+// 实例化日期插件
+var zaneDate = function(option){
+	let calendarName 		= option.elem.substring(1);
+	calendarName 			= calendarName.replace(/[_-]/g,'').toUpperCase();
+	option.calendarName 	= calendarName;
+	window[calendarName] 	= new calendar(option)
+}
 
-var calendarObj = new calendar();
+

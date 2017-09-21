@@ -7,20 +7,22 @@
 			display: block;
 			margin: 100px auto;
 			height: 40px;
-			margin-top: 300px;
 		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="/css/zane-calendar.css">
 </head>
 <body>
-	<div style="height:300px;background:#ccc;"></div>
-	<div style="height:500px;margin-top:100px;">
+	<div style="height:100px;background:#ccc;"></div>
+	<div style="height:100px;margin-top:100px;">
 		<input type="" name="" id="zane-calendar">
 	</div>
+	<div>
+		<input type="" name="" id="zane-calendar-1">
+	</div>
 		
-	<div class="zane-calendar" id="zane-calendar-obj">
+	<!-- <div class="zane-calendar" id="zane-calendar-obj">
 		<div class="zane-calendar-one left">
-			<!-- <div class="top">
+			<div class="top">
 				<div class="icom left"></div>
 				<div class="center">
 					<span >2017年</span>
@@ -87,44 +89,36 @@
 						</tr>
 					</table>
 				</div>
-			</div> -->
+			</div>
 			<div class="top">
-				<div class="icom left"></div>
 				<div class="center">
-					<span>2017年</span>
+					<span>选择时间</span>
 				</div>
-				<div class="icom right"></div>
 			</div>
 			<div class="main">
+			<div class="common-main main-check-time">
 				<div class="week-day">
-					<table class="day">
-						<tr>
-							<td>一月</td>
-							<td>二月</td>
-							<td>三月</td>
-						</tr>
-						<tr>
-							<td>一月</td>
-							<td>二月</td>
-							<td>三月</td>
-						</tr>
-						<tr>
-							<td>一月</td>
-							<td>二月</td>
-							<td>三月</td>
-						</tr>
-						<tr>
-							<td>一月</td>
-							<td>二月</td>
-							<td>三月</td>
-						</tr>
-						<tr>
-							<td class="light">2018年</td>
-							<td class="light">2019年</td>
-							<td class="light">2010年</td>
-						</tr>
-					</table>
+					<ul class="nav">
+						<li>小时</li>
+						<li>分钟</li>
+						<li>秒数</li>
+					</ul>
+					<div class="select-time">
+						<ul class="hour">
+							<li>00</li>
+							<li>00</li>
+							<li class="active">00</li>
+							<li>00</li>
+						</ul>
+						<ul class="minute">
+							<li></li>
+						</ul>
+						<ul class="second">
+							<li></li>
+						</ul>
+					</div>
 				</div>
+			</div>	
 			</div>
 			<div class="bottom">
 				<div class="left button">选择时间</div>
@@ -135,8 +129,18 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 
 	<script src="./js/zane-calendar.js"></script>
+	<script>
+		zaneDate({
+			elem:'#zane-calendar',
+			showtime:false,
+		})
+		zaneDate({
+			elem:'#zane-calendar-1',
+			value:'2017-08-20 12:23:22'
+		})
+	</script>
 </body>
 </html>

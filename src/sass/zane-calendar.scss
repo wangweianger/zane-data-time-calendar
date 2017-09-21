@@ -59,7 +59,7 @@ ul,li{
 					cursor:pointer;
 				}
 				span:nth-child(1){
-					margin-right:15px;
+					margin-right:8px;
 				}
 			}
 		}
@@ -71,7 +71,7 @@ ul,li{
 					width:100%;
 				}
 				th,td{
-					padding:10px 0;
+					padding:7px 0;
 					text-align:center; 
 				}
 				th.light,td.light{
@@ -88,6 +88,80 @@ ul,li{
 					color:#fff;
 				}
 			}
+			.main-check-month{
+				.week-day{
+					padding:11px;
+					td{
+						padding:18px 0;
+						width: 33.333%;
+					}
+				}
+			}
+			.main-check-year{
+				.week-day{
+					padding:7px;
+					td{
+						padding:10px 0;
+						width: 33.333%;
+					}
+				}
+			}
+			.main-check-time{
+				.week-day{
+					padding:5px;
+					.nav{
+						overflow:hidden;
+						height: 30px;
+						line-height:30px;
+						li{
+							width:33.333%;
+							float:left;
+							text-align:center;
+						}
+					}
+					.select-time{
+						overflow:hidden;
+						text-align:center;
+						ul{
+							height:190px;
+							display:inline-block;
+							overflow-y:scroll;
+							width:28%;
+							margin:0 2%;
+							float:left;
+							border:solid 1px #ccc;
+							li{
+								height:25px;
+								line-height:25px;
+								cursor:pointer;
+								&:hover{
+									background:#f4f4f4;
+								}
+								&.active{
+									background:#34a9da;
+									color:#fff;
+								}
+							}
+						}
+						/*滚动条样式*/
+				        ul::-webkit-scrollbar {
+				            width: 4px;     
+				            height: 4px;
+				        }
+				        ul::-webkit-scrollbar-thumb {
+				            border-radius: 5px;
+				            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+				            background: rgba(0,0,0,0.6);
+				        }
+				        ul::-webkit-scrollbar-track {
+				            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+				            border-radius: 0;
+				            background: rgba(0,0,0,.1);
+				        }
+					}
+				}
+			}
+			
 		}
 		.bottom{
 			border-top:solid 1px #ddd;
