@@ -41,7 +41,10 @@ var calendar = function () {
 			//absolute , fixed   
 			position: 'absolute',
 			//cn , en 
-			lang: 'en',
+			lang: 'cn',
+			// 宽度
+			width: 280,
+			// 格式化
 			format: 'yyyy-MM-dd',
 			// 初始默认值
 			value: '',
@@ -59,7 +62,6 @@ var calendar = function () {
 			shownow: true,
 			//是否显示提交按钮
 			showsubmit: true,
-
 			// 插件加载完成之后调用
 			mounted: function mounted() {},
 			//时间变更之后调用
@@ -148,6 +150,14 @@ var calendar = function () {
 					_this2.elemEventPoint(e); //定位并显示选择器
 				};
 				_this2.obj.initVal = _this2.obj.input.value;
+
+				// 隐藏其他时间插件框
+				var objs = document.querySelectorAll('.zane-calendar');
+				_this2.forEach(objs, function (index, item) {
+					if ('#' + item.getAttribute('id') !== _this2.obj.id) {
+						item.style.display = "none";
+					}
+				});
 			});
 			this.config.mounted && this.config.mounted();
 		}
@@ -156,7 +166,7 @@ var calendar = function () {
 	}, {
 		key: "objHTML",
 		value: function objHTML(json) {
-			var html = "<div class=\"zane-calendar\" id=\"zane-calendar-" + this.config.elem.substring(1) + "\">\n\t\t\t\t\t<div class=\"zane-calendar-one left\">\n\t\t\t\t\t\t<div class=\"top\">\n\t\t\t\t\t\t\t<div class=\"common-top top-check-day\">" + this.topCheckDayHTML(json) + "</div>\n\t\t\t\t\t\t\t<div class=\"common-top top-check-year\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-month\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-time\"></div>\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"main\">\n\t\t\t\t\t\t\t<div class=\"common-main main-check-day\">" + this.mainCheckDayHTML(json) + ("</div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-year\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-month\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-time\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"bottom\">\n\t\t\t\t\t\t\t<div class=\"btn-select-time\">\n\t\t\t\t\t\t\t\t<div class=\"left button btn-select-time-item\" onclick=\"" + this.config.calendarName + ".getTimeHtml()\">" + this.obj.lang.timeTips + "</div>\n\t\t\t\t\t\t\t</div>\t\n\t\t\t\t \t\t\t<div class=\"right\">\n\t\t\t\t\t\t\t\t<div class=\"button no-right-line\" onclick=\"" + this.config.calendarName + ".cleanInputVal()\">" + this.obj.lang.tools.clear + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button no-right-line\" onclick=\"" + this.config.calendarName + ".changeToToday()\">" + this.obj.lang.tools.now + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button\" onclick=\"" + this.config.calendarName + ".makeSureSelectTime()\">" + this.obj.lang.tools.confirm + "</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>");
+			var html = "<div class=\"zane-calendar\" style=\"width:" + this.config.width + "px;\" id=\"zane-calendar-" + this.config.elem.substring(1) + "\">\n\t\t\t\t\t<div class=\"zane-calendar-one left\" style=\"width:" + this.config.width + "px;\">\n\t\t\t\t\t\t<div class=\"top\">\n\t\t\t\t\t\t\t<div class=\"common-top top-check-day\">" + this.topCheckDayHTML(json) + "</div>\n\t\t\t\t\t\t\t<div class=\"common-top top-check-year\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-month\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-time\"></div>\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"main\">\n\t\t\t\t\t\t\t<div class=\"common-main main-check-day\">" + this.mainCheckDayHTML(json) + ("</div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-year\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-month\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-time\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"bottom\">\n\t\t\t\t\t\t\t<div class=\"btn-select-time\">\n\t\t\t\t\t\t\t\t<div class=\"left button btn-select-time-item\" onclick=\"" + this.config.calendarName + ".getTimeHtml()\">" + this.obj.lang.timeTips + "</div>\n\t\t\t\t\t\t\t</div>\t\n\t\t\t\t \t\t\t<div class=\"right\">\n\t\t\t\t\t\t\t\t<div class=\"button no-right-line\" onclick=\"" + this.config.calendarName + ".cleanInputVal()\">" + this.obj.lang.tools.clear + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button no-right-line\" onclick=\"" + this.config.calendarName + ".changeToToday()\">" + this.obj.lang.tools.now + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button\" onclick=\"" + this.config.calendarName + ".makeSureSelectTime()\">" + this.obj.lang.tools.confirm + "</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>");
 			return html;
 		}
 		// day - top html   时间选择器选择年月块
@@ -451,15 +461,6 @@ var calendar = function () {
 					fullday: preyear + "/" + premonth + "/" + _day2
 				});
 			}
-			console.log({
-				year: year,
-				month: month,
-				today: toDate,
-				hour: hour,
-				minute: minute,
-				second: second,
-				datalist: timeDatas
-			});
 			return {
 				year: year,
 				month: month,
@@ -846,8 +847,7 @@ var calendar = function () {
 	}, {
 		key: "getYearMonthAndDay",
 		value: function getYearMonthAndDay(datatime) {
-			var formatTime = new Date(datatime).Format(this.config.format);
-
+			var formatTime = datatime ? new Date(datatime).Format(this.config.format) : datatime;
 			document.querySelector(this.config.elem).value = formatTime;
 			document.querySelector(this.obj.id).style.display = "none";
 
@@ -984,5 +984,7 @@ var zaneDate = function zaneDate(option) {
 	var calendarName = option.elem.substring(1);
 	calendarName = calendarName.replace(/[_-]/g, '').toUpperCase();
 	option.calendarName = calendarName;
+	option.width = option.width < 260 ? 260 : option.width;
+	option.width = option.width > 500 ? 500 : option.width;
 	window[calendarName] = new calendar(option);
 };

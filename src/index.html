@@ -136,6 +136,17 @@
 		zaneDate({
 			elem:'#zane-calendar',
 			showtime:false,
+			lang:'en',
+			width:260,
+			mounted:()=>{
+				console.log('-------')
+			},
+			change:(time)=>{
+				console.log(time)
+			},
+			done:(time)=>{
+				console.log(time)
+			}
 		})
 		zaneDate({
 			elem:'#zane-calendar-1',

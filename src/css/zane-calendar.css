@@ -55,33 +55,43 @@ ul, li {
       .zane-calendar .zane-calendar-one .top .center span:nth-child(1) {
         margin-right: 8px; }
     .zane-calendar .zane-calendar-one .main {
-      overflow: hidden; }
+      overflow: hidden;
+      height: 200px; }
       .zane-calendar .zane-calendar-one .main .week-day {
         padding: 10px; }
         .zane-calendar .zane-calendar-one .main .week-day table.day {
           width: 100%; }
         .zane-calendar .zane-calendar-one .main .week-day th, .zane-calendar .zane-calendar-one .main .week-day td {
-          padding: 7px 0;
+          padding: 3px 0;
           text-align: center; }
         .zane-calendar .zane-calendar-one .main .week-day th.light, .zane-calendar .zane-calendar-one .main .week-day td.light {
           color: #cacaca; }
         .zane-calendar .zane-calendar-one .main .week-day td {
           cursor: pointer; }
+          .zane-calendar .zane-calendar-one .main .week-day td.calendar-disabled {
+            cursor: not-allowed;
+            color: #ccc; }
         .zane-calendar .zane-calendar-one .main .week-day td:hover {
           background: #f4f4f4; }
         .zane-calendar .zane-calendar-one .main .week-day td.active {
           background: #34a9da;
           color: #fff; }
       .zane-calendar .zane-calendar-one .main .main-check-month .week-day {
-        padding: 11px; }
+        padding: 12px; }
         .zane-calendar .zane-calendar-one .main .main-check-month .week-day td {
-          padding: 18px 0;
+          padding: 13px 0;
           width: 33.333%; }
+          .zane-calendar .zane-calendar-one .main .main-check-month .week-day td.calendar-disabled {
+            cursor: not-allowed;
+            color: #ccc; }
       .zane-calendar .zane-calendar-one .main .main-check-year .week-day {
-        padding: 7px; }
+        padding: 6px; }
         .zane-calendar .zane-calendar-one .main .main-check-year .week-day td {
-          padding: 10px 0;
+          padding: 6px 0;
           width: 33.333%; }
+          .zane-calendar .zane-calendar-one .main .main-check-year .week-day td.calendar-disabled {
+            cursor: not-allowed;
+            color: #ccc; }
       .zane-calendar .zane-calendar-one .main .main-check-time .week-day {
         padding: 5px; }
         .zane-calendar .zane-calendar-one .main .main-check-time .week-day .nav {
@@ -97,7 +107,7 @@ ul, li {
           text-align: center;
           /*滚动条样式*/ }
           .zane-calendar .zane-calendar-one .main .main-check-time .week-day .select-time ul {
-            height: 190px;
+            height: 176px;
             display: inline-block;
             overflow-y: scroll;
             width: 28%;

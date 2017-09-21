@@ -1,3 +1,23 @@
+if(!new Date().Format){
+	Date.prototype.Format = function (fmt) { //author: meizz 
+	    var o = {
+	        "M+": this.getMonth() + 1, //月份 
+	        "d+": this.getDate(), //日 
+	        "h+": this.getHours(), //小时 
+			"H+":this.getHours()>12?this.getHours()-12:this.getHours(),
+	        "m+": this.getMinutes(), //分 
+	        "s+": this.getSeconds(), //秒 
+	        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+	        "S": this.getMilliseconds() //毫秒 
+	    };
+	    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	    for (var k in o)
+	    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	    return fmt;
+	}
+};
+
+
 // 日期插件
 class calendar{
 	constructor(json={}){
@@ -12,11 +32,16 @@ class calendar{
 			position:'absolute', 
 			//cn , en 
 			lang:'cn', 
-			format:'yyyy-MM-dd HH:mm:ss',
+			// 宽度
+			width:280,
+			// 格式化
+			format:'yyyy-MM-dd',
 			// 初始默认值
 			value:'',
-			min:'1900-10-01',
-			max: '2099-12-31',
+			// min:'1900-10-01',
+			// max: '2099-12-31',
+			min:'',
+			max: '',
 			//click , focus
 			event:'click',  
 			//是否显示选择时间
@@ -27,11 +52,6 @@ class calendar{
 			shownow:true,  
 			//是否显示提交按钮
 			showsubmit:true,
-			//插件于输入框的高度 
-			behindTop:10,
-			calendarHeight:318,
-			// 选择年时展示的数量
-			totalYear:18,
 			// 插件加载完成之后调用
 			mounted:()=>{},
 			//时间变更之后调用
@@ -41,6 +61,10 @@ class calendar{
 		}
 
 		this.config = this.extend(this.config,json);
+		//校验时间格式
+		if(isNaN(new Date(this.config.value)))this.config.value = ''
+		if(isNaN(new Date(this.config.min)))this.config.min = ''
+		if(isNaN(new Date(this.config.max)))this.config.max = ''
 
 		this.obj={
 			input:document.querySelector(this.config.elem),
@@ -48,6 +72,12 @@ class calendar{
 			id:`#zane-calendar-${this.config.elem.substring(1)}`,
 			fulldatas:{},
 			handleType:'date',
+			initVal:'',//每次进来的初始值
+			//插件于输入框的高度 
+			behindTop:10,
+			calendarHeight:307,
+			// 选择年时展示的数量
+			totalYear:18,
 			cn:{
 		        weeks: ['日', '一', '二', '三', '四', '五', '六'],
 		        time: ['时', '分', '秒'],
@@ -77,18 +107,50 @@ class calendar{
 		        }
 		      }
 		}
-		
+		this.obj.lang = this.obj[this.config.lang];
 		// 初始化
 		this.init();
 	}
 
 	init(){
-		this.elemEventPoint();
+		this.on(this.obj.input,this.config.event, (e)=>{
+			e.preventDefault();
+			e.stopPropagation();
+
+			if(!this.obj.calendar){//没有calendar为第一次生成
+				// 获得年月日
+				let json 	= this.getTimeDates(this.config.value);//生成时间选择器日期数据
+				let html 	= this.objHTML(json);//生成时间选择器HTML
+				this.obj.fulldatas = json;
+
+				var divElement = document.createElement("div");
+				divElement.innerHTML = html
+				document.body.appendChild(divElement)
+
+				this.elemEventPoint(e);//定位并显示选择器
+				this.documentClick();
+				this.calendarClick(); 
+				this.getDay();
+
+			}else{
+				this.elemEventPoint(e);//定位并显示选择器
+			};
+			this.obj.initVal = this.obj.input.value;
+
+			// 隐藏其他时间插件框
+			let objs = document.querySelectorAll('.zane-calendar');
+			this.forEach(objs,(index,item)=>{
+				if('#'+item.getAttribute('id') !== this.obj.id){
+					item.style.display 	= 	"none";
+				}
+			})
+		});
+		this.config.mounted&&this.config.mounted();
 	}
-	
+	//生成时间选择器区域
 	objHTML(json){
-		let html =`<div class="zane-calendar" id="zane-calendar-${this.config.elem.substring(1)}">
-					<div class="zane-calendar-one left">
+		let html =`<div class="zane-calendar" style="width:${this.config.width}px;" id="zane-calendar-${this.config.elem.substring(1)}">
+					<div class="zane-calendar-one left" style="width:${this.config.width}px;">
 						<div class="top">
 							<div class="common-top top-check-day">`+this.topCheckDayHTML(json)+`</div>
 							<div class="common-top top-check-year"></div>	
@@ -103,51 +165,60 @@ class calendar{
 						</div>
 						<div class="bottom">
 							<div class="btn-select-time">
-								<div class="left button btn-select-time-item" onclick="${this.config.calendarName}.getTimeHtml()">选择时间</div>
+								<div class="left button btn-select-time-item" onclick="${this.config.calendarName}.getTimeHtml()">${this.obj.lang.timeTips}</div>
 							</div>	
 				 			<div class="right">
-								<div class="button no-right-line" onclick="${this.config.calendarName}.cleanInputVal()">清空</div>
-								<div class="button no-right-line" onclick="${this.config.calendarName}.changeToToday()">今天</div>
-								<div class="button" onclick="${this.config.calendarName}.makeSureSelectTime()">确定</div>
+								<div class="button no-right-line" onclick="${this.config.calendarName}.cleanInputVal()">${this.obj.lang.tools.clear}</div>
+								<div class="button no-right-line" onclick="${this.config.calendarName}.changeToToday()">${this.obj.lang.tools.now}</div>
+								<div class="button" onclick="${this.config.calendarName}.makeSureSelectTime()">${this.obj.lang.tools.confirm}</div>
 							</div>
 						</div>
 					</div>
 				</div>`
 		return html
 	}
-	// day - top html
+	// day - top html   时间选择器选择年月块
 	topCheckDayHTML(json){
 		let html =`	
-		<div onclick="${this.config.calendarName}.preMonth(${json.year},${json.month})" class="icom left"></div>
-			<div class="center">
+		<div onclick="${this.config.calendarName}.preMonth(${json.year},${json.month})" class="icom left"></div>`
+		if (this.config.lang == 'cn'){
+			html += `<div class="center">
 				<span onclick="${this.config.calendarName}.getYearHtml(${json.year})">${json.year}年</span>
 				<span onclick="${this.config.calendarName}.getMonthHtml(${json.month})">${json.month}月</span>
-			</div>
-			<div onclick="${this.config.calendarName}.nextMonth(${json.year},${json.month})" class="icom right"></div>
-		`
+			</div>`
+		}else{
+			html += `<div class="center">
+				<span onclick="${this.config.calendarName}.getMonthHtml(${json.month})">${this.weekToEn(json.month)}</span>
+				<span onclick="${this.config.calendarName}.getYearHtml(${json.year})">${json.year}</span>
+			</div>`
+		}
+		html +=`<div onclick="${this.config.calendarName}.nextMonth(${json.year},${json.month})" class="icom right"></div>`
+		
 		return html;
 	}
 
-	// day - main html
+	// day - main html 时间选择器选择日期块
 	mainCheckDayHTML(json){
 		let html =`
 		<div class="week-day"><table class="day">
-			<tr>
-				<th>日</th>
-				<th>一</th>
-				<th>二</th>
-				<th>三</th>
-				<th>四</th>
-				<th>五</th>
-				<th>六</th>
-			</tr>
+			<tr>`
+			for (let j = 0,len = 7; j<len; j++){
+				html += `<th>${this.obj.lang.weeks[j]}</th>`
+			}
+		html +=`</tr>
 			<tbody class="tbody">`
 
 			for (let i = 0,len=json.datalist.length; i < len; i++) {
 				let className = json.datalist[i].class||"";
 				if(json.datalist[i].day === json.today&&json.datalist[i].daytype==='now'){
 					className+=` active`
+					
 				}
+				//如果超出min时间或者max时间的，给禁止选中样式
+				if((this.config.min!='' && new Date(json.datalist[i].fullday).getTime()<new Date(this.config.min).getTime()) || (this.config.max!='' && new Date(json.datalist[i].fullday).getTime()>new Date(this.config.max).getTime())){
+					className+=` calendar-disabled`
+				}
+
 				if(i == 0){
 					html+=`<tr><td data-time="${json.datalist[i].fullday}" class="${className}">${json.datalist[i].day}</td>`;
 				}else if(i == len-1){
@@ -165,18 +236,18 @@ class calendar{
 		return html;
 	}
 
-	// year - top html
+	// year - top html 时间选择器选择年份状态头部
 	topCheckYearHTML(json){
 		let html=`
 		<div class="icom left" onclick="${this.config.calendarName}.perYear(${json.nowyear})"></div>
 		<div class="center">
-			<span>${json.firstYear}年</span>-
-			<span>${json.lastYear}年</span>
+			<span>${json.firstYear}${this.config.lang=='cn'?'年':''}</span>-
+			<span>${json.lastYear}${this.config.lang=='cn'?'年':''}</span>
 		</div>
 		<div class="icom right" onclick="${this.config.calendarName}.nextYear(${json.nowyear})"></div>`
 		return html;
 	}
-	// year - main html
+	// year - main html 时间选择器选择年份状态内容块
 	mainCheckYearHTML(json){
 		let html=`<div class="week-day">
 			<table class="day">`
@@ -186,14 +257,14 @@ class calendar{
 						className+=` active`
 					}
 					if(i == 0){
-						html+=`<tr><td data-year="${json.datalist[i].year}" class="${className}">${json.datalist[i].year}年</td>`;
+						html+=`<tr><td data-year="${json.datalist[i].year}" class="${className}">${json.datalist[i].year}${this.config.lang=='cn'?'年':''}</td>`;
 					}else if(i == len-1){
-						html+=`<td data-year="${json.datalist[i].year}" class="${className}">${json.datalist[i].year}年</td></tr>`;
+						html+=`<td data-year="${json.datalist[i].year}" class="${className}">${json.datalist[i].year}${this.config.lang=='cn'?'年':''}</td></tr>`;
 					}else{
 						if((i+1)%3 == 0){
-							html+=`<td data-year="${json.datalist[i].year}" class="${className}">${json.datalist[i].year}年</td></tr><tr>`;
+							html+=`<td data-year="${json.datalist[i].year}" class="${className}">${json.datalist[i].year}${this.config.lang=='cn'?'年':''}</td></tr><tr>`;
 						}else{
-							html+=`<td data-year="${json.datalist[i].year}" class="${className}">${json.datalist[i].year}年</td>`;
+							html+=`<td data-year="${json.datalist[i].year}" class="${className}">${json.datalist[i].year}${this.config.lang=='cn'?'年':''}</td>`;
 						}
 					}
 				}
@@ -202,7 +273,7 @@ class calendar{
 		return html;
 	}
 
-	// month -top html
+	// month -top html 时间选择器选择月份头部
 	topCheckMonthHTML(json){
 		let html=`
 		<div class="icom left" onclick="${this.config.calendarName}.perMonthYear(${json.year},${json.nowmonth})"></div>
@@ -212,7 +283,7 @@ class calendar{
 		<div class="icom right" onclick="${this.config.calendarName}.nextMonthYear(${json.year},${json.nowmonth})"></div>`
 		return html;	
 	}
-	// month -main html
+	// month -main html 时间选择器选择月份状态内容块
 	mainCheckMonthHTML(json){
 		let html=`<div class="week-day">
 			<table class="day">`
@@ -238,14 +309,14 @@ class calendar{
 		return html;
 	}
 
-	// time -top  html
+	// time -top  html 时间选择器选择时间状态头部
 	topCheckTimeHTML(){
-		let html=`<div class="center"><span>选择时间</span></div>`
+		let html=`<div class="center"><span>${this.obj.lang.timeTips}</span></div>`
 		return html;	
 	}
-	// time -main html
+	// time -main html 时间选择器选择时间状态内容块
 	mainCheckTimeHTML(json){
-		let html = `<div class="week-day"><ul class="nav"><li>小时</li><li>分钟</li><li>秒数</li></ul><div class="select-time">
+		let html = `<div class="week-day"><ul class="nav"><li>${this.obj.lang.time[0]}</li><li>${this.obj.lang.time[1]}</li><li>${this.obj.lang.time[2]}</li></ul><div class="select-time">
 				<ul class="hour">`
 				for (let i = 0,len=json.hours.length; i < len; i++) {
 					let className='';
@@ -268,62 +339,39 @@ class calendar{
 		return html;
 	}
 
-	// time -bottom html
+	// time -bottom html 时间选择器日期/时间切换块
 	bottomCheckTimeHTML(){
 		let html = '';
 		if(this.obj.handleType === 'time'){
-			html+= `<div class="left button" onclick="${this.config.calendarName}.backDateHtml()">返回时间</div>`
+			html+= `<div class="left button" onclick="${this.config.calendarName}.backDateHtml()">${this.obj.lang.dateTips}</div>`
 		}else{
-			html+= `<div class="left button" onclick="${this.config.calendarName}.getTimeHtml()">选择时间</div>`
+			html+= `<div class="left button" onclick="${this.config.calendarName}.getTimeHtml()">${this.obj.lang.timeTips}</div>`
 		}
 		return html;
 	}
 
-	// 插件位置定位
-	elemEventPoint(){
-		this.on(this.obj.input,this.config.event, (e)=>{
-			e.preventDefault();
-			e.stopPropagation();
+	// 插件位置定位并显示
+	elemEventPoint(e){
+		this.obj.calendar = document.querySelector(this.obj.id);
+		let screenClientHeight 	= document.documentElement.clientHeight
+		let screenScrolTop	 	= document.documentElement.scrollTop
+		let objOffsetTop		= e.target.offsetTop
+		let objOffsetLeft		= e.target.offsetLeft
+		let objOffsetHeight		= e.target.offsetHeight
 
-			if(!this.obj.calendar){
-				// 获得年月日
-				let json 	= this.getTimeDates(this.config.value);
-				let html 	= this.objHTML(json);
-				this.obj.fulldatas = json;
+		let objBotton = screenClientHeight-(objOffsetTop+objOffsetHeight+this.obj.behindTop-screenScrolTop)
 
-				var divElement = document.createElement("div");
-				divElement.innerHTML = html
-				document.body.appendChild(divElement)
-
-				this.obj.calendar = document.querySelector(this.obj.id);
-			
-				let screenClientHeight 	= document.documentElement.clientHeight
-				let screenScrolTop	 	= document.documentElement.scrollTop
-				let objOffsetTop		= e.target.offsetTop
-				let objOffsetLeft		= e.target.offsetLeft
-				let objOffsetHeight		= e.target.offsetHeight
-
-				let objBotton = screenClientHeight-(objOffsetTop+objOffsetHeight+this.config.behindTop-screenScrolTop)
-
-				this.obj.calendar.style.display = 'block';
-				// 设置插件point位置
-				this.obj.calendar.style.left 	=	objOffsetLeft+'px';
-				objBotton > this.config.calendarHeight?
-					//插件在input框之下 
-					this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.config.behindTop+'px':
-					//插件在input框之上
-					this.obj.calendar.style.top = objOffsetTop-this.config.behindTop-this.config.calendarHeight+'px';
-			    
-				this.documentClick();
-				this.calendarClick(); 
-				this.getDay();
-			}else{
-				document.querySelector(this.obj.id).style.display 	= 	"block";
-			};
-		});
+		this.obj.calendar.style.display = 'block';
+		// 设置插件point位置
+		this.obj.calendar.style.left 	=	objOffsetLeft+'px';
+		objBotton > this.obj.calendarHeight?
+			//插件在input框之下 
+			this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.obj.behindTop+'px':
+			//插件在input框之上
+			this.obj.calendar.style.top = objOffsetTop-this.obj.behindTop-this.obj.calendarHeight+'px';
 	}
 
-	// 插件内容渲染
+	// 插件数据渲染
 	getTimeDates(deraultDay){
 		let timeDatas 	= [];
 		let date    	= deraultDay?new Date(deraultDay):new Date()
@@ -395,7 +443,7 @@ class calendar{
 		let haveNeedLength 	= 42-totalLength;
 
 		let preyear  	= year;
-		let premonth 	= month+1;
+		let premonth 	= parseInt(month)+1;
 		if(premonth === 13){
 			preyear  	= year+1;
 			premonth 	= 1;
@@ -415,7 +463,6 @@ class calendar{
 				fullday:`${preyear}/${premonth}/${day}`
 			})
 		}
-		
 		return {
 			year:year,
 			month:month,
@@ -427,7 +474,7 @@ class calendar{
 		}
 	}
 
-	// 上一月
+	// 选择上一月
 	preMonth(year,month){
 		month = month-1
 		if(month == 0) {
@@ -445,7 +492,7 @@ class calendar{
 		this.getDay();
 	}
 
-	// 下一月
+	// 选择下一月
 	nextMonth(year,month){
 		month = month+1
 		if(month == 13) {
@@ -462,26 +509,29 @@ class calendar{
 		this.getDay();
 	}
 
-	// 获得年月日
+	// 获得年月日,如果showtime=true,日期加样式，如果为false,直接设置当前选择的日期
 	getDay(){
 		let _this=this;
 		let objs = document.querySelector(this.obj.id)
 		.querySelector('.main-check-day').querySelectorAll('td');
 		this.on(objs,'click',function(e){
-			let dataTime 				= 	this.getAttribute('data-time');
-			let arr 					=	dataTime.split('/')
-			_this.obj.fulldatas.year 	=	arr[0]
-			_this.obj.fulldatas.month 	=	arr[1]
-			_this.obj.fulldatas.today 	=	arr[2]
+			if(!_this.hasClass(e.target,'calendar-disabled')){//有calendar-disabled样式的不赋予事件
+				let dataTime 				= 	this.getAttribute('data-time');
+				let arr 					=	dataTime.split('/')
+				_this.obj.fulldatas.year 	=	arr[0]
+				_this.obj.fulldatas.month 	=	arr[1]
+				_this.obj.fulldatas.today 	=	arr[2]
 
-			if(_this.config.showtime){
+				//选择具体日期添加样式
 				_this.forEach(objs,(index,item)=>{
 					_this.removeClass(item,'active');
 				})
 				_this.addClass(this,'active');
-			}else{
-				let value = `${_this.obj.fulldatas.year}/${_this.obj.fulldatas.month}/${_this.obj.fulldatas.today}`
-				_this.getYearMonthAndDay(value)
+
+				if(!_this.config.showtime){
+					let value = `${_this.obj.fulldatas.year}/${_this.obj.fulldatas.month}/${_this.obj.fulldatas.today}`
+					_this.getYearMonthAndDay(value)
+				}
 			}
 		})
 	}
@@ -492,10 +542,10 @@ class calendar{
 			nowyear:year,
 			datalist:[]
 		};
-		for (var i = 0; i < this.config.totalYear; i++) {
-			let getyear = year-Math.floor(this.config.totalYear/2)+i
+		for (var i = 0; i < this.obj.totalYear; i++) {
+			let getyear = year-Math.floor(this.obj.totalYear/2)+i
 			if(i === 0) yearDatas.firstYear = getyear;
-			if(i === this.config.totalYear-1) yearDatas.lastYear = getyear;
+			if(i === this.obj.totalYear-1) yearDatas.lastYear = getyear;
 			yearDatas.datalist.push({
 				class:'',
 				year:getyear
@@ -520,13 +570,13 @@ class calendar{
 
 	// 上一年
 	perYear(year){
-		year = year-this.config.totalYear
+		year = year-this.obj.totalYear
 		this.getYearHtml(year)
 	}
 
 	// 下一年
 	nextYear(year){
-		year = year+this.config.totalYear
+		year = year+this.obj.totalYear
 		this.getYearHtml(year)
 	}
 
@@ -548,7 +598,7 @@ class calendar{
 		let monthDatas 	= {
 			nowmonth:month,
 			year:this.obj.fulldatas.year,
-			datalist:this.obj.cn.month
+			datalist:this.obj.lang.month
 		};
 
 		this.obj.handleType = 'month';
@@ -559,7 +609,7 @@ class calendar{
 		let monthDatas 	= {
 			nowmonth:month,
 			year:year-1,
-			datalist:this.obj.cn.month
+			datalist:this.obj.lang.month
 		};
 		this.monthHTML(monthDatas);
 	}
@@ -568,7 +618,7 @@ class calendar{
 		let monthDatas 	= {
 			nowmonth:month,
 			year:year+1,
-			datalist:this.obj.cn.month
+			datalist:this.obj.lang.month
 		};
 		this.monthHTML(monthDatas);
 	}
@@ -745,10 +795,14 @@ class calendar{
 		this.getYearMonthAndDay(value)
 	}
 
-	// 获得年月日的值
+	// 确定年月日的值并在input里面显示，时间选择器隐藏
 	getYearMonthAndDay(datatime){
-		document.querySelector(this.config.elem).value		=	datatime;
+		let formatTime = datatime?new Date(datatime).Format(this.config.format):datatime;
+		document.querySelector(this.config.elem).value		=	formatTime;
 		document.querySelector(this.obj.id).style.display 	= 	"none";
+
+		this.config.done&&this.config.done(formatTime);
+		if(this.obj.initVal!=formatTime&&this.config.change)this.config.change(formatTime)
 	}
 
 	//插件自身点击阻止冒泡
@@ -808,6 +862,12 @@ class calendar{
 	    });
 	};
 
+	//中英文月份枚举
+	weekToEn(val){
+		let num = typeof val == 'string'?parseInt(val):val;
+		return this.obj.en.month[num-1];
+	}
+
 	// 
 	showOrHide(obj,type){
 		for (var i = 0,len=obj.length; i < len; i++) {
@@ -842,6 +902,8 @@ var zaneDate = function(option){
 	let calendarName 		= option.elem.substring(1);
 	calendarName 			= calendarName.replace(/[_-]/g,'').toUpperCase();
 	option.calendarName 	= calendarName;
+	option.width = option.width<260?260:option.width
+	option.width = option.width>500?500:option.width
 	window[calendarName] 	= new calendar(option)
 }
 
