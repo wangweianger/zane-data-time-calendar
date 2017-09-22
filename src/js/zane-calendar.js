@@ -51,7 +51,7 @@ var calendar = function () {
 			min: '', //'1900-10-01',
 			// 可选取时间最大范围
 			max: '', //'2099-12-31',
-			//时间方式 click 
+			//事件方式 click 
 			event: 'click',
 			//是否显示选择时间
 			showtime: true,
