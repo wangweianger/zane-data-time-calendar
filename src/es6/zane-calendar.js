@@ -268,7 +268,7 @@ class calendar{
 		html +=`</tr>`
 			for (let i = 0,len=json.datalist.length; i < len; i++) {
 				let className = json.datalist[i].class||"";
-				if(json.datalist[i].day === json.today&&json.datalist[i].daytype==='now'){
+				if(json.datalist[i].day === parseInt(json.today)&&json.datalist[i].daytype==='now'){
 					className+=` active`
 					
 				}

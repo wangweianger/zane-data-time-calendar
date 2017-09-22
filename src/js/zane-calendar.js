@@ -253,7 +253,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				html += "</tr>";
 				for (var i = 0, _len = json.datalist.length; i < _len; i++) {
 					var className = json.datalist[i].class || "";
-					if (json.datalist[i].day === json.today && json.datalist[i].daytype === 'now') {
+					if (json.datalist[i].day === parseInt(json.today) && json.datalist[i].daytype === 'now') {
 						className += " active";
 					}
 					//如果超出min时间或者max时间的，给禁止选中样式
