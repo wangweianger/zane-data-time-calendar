@@ -69,7 +69,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				// 宽度
 				width: 280,
 				// 格式化
-				format: 'yyyy-MM-dd HH:mm:ss',
+				format: 'yyyy-MM-dd',
 				// 初始默认值
 				value: '',
 				// 可选取时间最小范围
@@ -585,7 +585,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				});
 				// 绑定双击
 				this.on(objs, 'dblclick', function (e) {
-					_this.makeSureSelectTime();
+					if (e.type === 'dblclick') _this.makeSureSelectTime();
 				});
 			}
 
