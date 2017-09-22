@@ -1,45 +1,1085 @@
-var _createClass=function(){function f(a,c){for(var b=0;b<c.length;b++){var d=c[b];d.enumerable=d.enumerable||!1;d.configurable=!0;"value"in d&&(d.writable=!0);Object.defineProperty(a,d.key,d)}}return function(a,c,b){c&&f(a.prototype,c);b&&f(a,b);return a}}();function _classCallCheck(f,a){if(!(f instanceof a))throw new TypeError("Cannot call a class as a function");}
-(new Date).Format||(Date.prototype.Format=function(f){var a={"M+":this.getMonth()+1,"d+":this.getDate(),"h+":this.getHours(),"H+":12<this.getHours()?this.getHours()-12:this.getHours(),"m+":this.getMinutes(),"s+":this.getSeconds(),"q+":Math.floor((this.getMonth()+3)/3),S:this.getMilliseconds()};/(y+)/.test(f)&&(f=f.replace(RegExp.$1,(this.getFullYear()+"").substr(4-RegExp.$1.length)));for(var c in a)(new RegExp("("+c+")")).test(f)&&(f=f.replace(RegExp.$1,1==RegExp.$1.length?a[c]:("00"+a[c]).substr((""+
-a[c]).length)));return f});
-var calendar=function(){function f(){var a=0<arguments.length&&void 0!==arguments[0]?arguments[0]:{};_classCallCheck(this,f);this.config={elem:"#zane-calendar",type:"day",position:"fixed",lang:"cn",width:280,format:"yyyy-MM-dd HH:mm:ss",value:"",min:"",max:"",event:"click",showtime:!0,showclean:!0,shownow:!0,showsubmit:!0,haveBotBtns:!0,calendarName:"",mounted:function(){},change:function(){},done:function(){}};this.config=this.extend(this.config,a);isNaN(new Date(this.config.value))&&(this.config.value=
-"");isNaN(new Date(this.config.min))&&(this.config.min="");isNaN(new Date(this.config.max))&&(this.config.max="");this.obj={input:document.querySelector(this.config.elem),calendar:null,id:"#zane-calendar-"+this.config.elem.substring(1),$obj:null,fulldatas:{},handleType:"date",initVal:"",behindTop:10,calendarHeight:307,totalYear:18,cn:{weeks:"\u65e5\u4e00\u4e8c\u4e09\u56db\u4e94\u516d".split(""),time:["\u65f6","\u5206","\u79d2"],timeTips:"\u9009\u62e9\u65f6\u95f4",startTime:"\u5f00\u59cb\u65f6\u95f4",
-endTime:"\u7ed3\u675f\u65f6\u95f4",dateTips:"\u8fd4\u56de\u65e5\u671f",month:"\u4e00\u6708 \u4e8c\u6708 \u4e09\u6708 \u56db\u6708 \u4e94\u6708 \u516d\u6708 \u4e03\u6708 \u516b\u6708 \u4e5d\u6708 \u5341\u6708 \u5341\u4e00\u6708 \u5341\u4e8c\u6708".split(" "),tools:{confirm:"\u786e\u5b9a",clear:"\u6e05\u7a7a",now:"\u73b0\u5728"}},en:{weeks:"Su Mo Tu We Th Fr Sa".split(" "),time:["Hours","Minutes","Seconds"],timeTips:"Select Time",startTime:"Start Time",endTime:"End Time",dateTips:"Select Date",month:"Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(" "),
-tools:{confirm:"Confirm",clear:"Clear",now:"Now"}}};this.vision="1.0.0";this.auther="zane";this.obj.lang=this.obj[this.config.lang];if("year"==this.config.type||"month"==this.config.type)this.config.haveBotBtns=!1;this.config.showtime="time"==this.config.type?!1:!0;this.init()}_createClass(f,[{key:"init",value:function(){var a=this;this.on(this.obj.input,this.config.event,function(c){c.preventDefault();c.stopPropagation();if(a.obj.calendar)a.elemEventPoint(c);else{var b=a.objHTML(),d=document.createElement("div");
-d.innerHTML=b;document.body.appendChild(d);a.$obj=document.querySelector(a.obj.id);switch(a.config.type){case "day":a.judgeCalendarRender("day",a.config.value);break;case "year":a.getYearHtml();break;case "month":a.getMonthHtml();break;case "time":a.getTimeHtml()}a.elemEventPoint(c);a.documentClick();a.calendarClick()}a.obj.initVal=a.obj.input.value;c=document.querySelectorAll(".zane-calendar");a.forEach(c,function(b,c){"#"+c.getAttribute("id")!==a.obj.id&&(c.style.display="none")})});this.config.mounted&&
-this.config.mounted()}},{key:"objHTML",value:function(a){return'<div class="zane-calendar" style="width:'+this.config.width+'px;" id="zane-calendar-'+this.config.elem.substring(1)+'">\n\t\t\t\t\t<div class="zane-calendar-one left" style="width:'+this.config.width+'px;">\n\t\t\t\t\t\t<div class="top">\n\t\t\t\t\t\t\t<div class="common-top top-check-day"></div>\n\t\t\t\t\t\t\t<div class="common-top top-check-year"></div>\t\n\t\t\t\t\t\t\t<div class="common-top top-check-month"></div>\t\n\t\t\t\t\t\t\t<div class="common-top top-check-time"></div>\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class="main">\n\t\t\t\t\t\t\t<div class="common-main main-check-day"></div>\n\t\t\t\t\t\t\t<div class="common-main main-check-year"></div>\n\t\t\t\t\t\t\t<div class="common-main main-check-month"></div>\n\t\t\t\t\t\t\t<div class="common-main main-check-time"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class="bottom" style="display:'+
-(this.config.haveBotBtns?"block":"none")+'">\n\t\t\t\t\t\t\t<div class="btn-select-time" style="display:'+(this.config.showtime?"blcok":"none")+'">\n\t\t\t\t\t\t\t\t<div class="left button btn-select-time-item" onclick="'+this.config.calendarName+'.getTimeHtml()">'+this.obj.lang.timeTips+'</div>\n\t\t\t\t\t\t\t</div>\t\n\t\t\t\t \t\t\t<div class="right">\n\t\t\t\t\t\t\t\t<div class="button '+(this.config.shownow?"no-right-line":"")+'" \n\t\t\t\t\t\t\t\t\tstyle="display:'+(this.config.showclean?"blcok":
-"none")+'"\n\t\t\t\t\t\t\t\t\tonclick="'+this.config.calendarName+'.cleanInputVal()">'+this.obj.lang.tools.clear+'</div>\n\t\t\t\t\t\t\t\t<div class="button '+(this.config.showsubmit?"no-right-line":"")+'"\n\t\t\t\t\t\t\t\t\tstyle="display:'+(this.config.shownow?"blcok":"none")+'" \n\t\t\t\t\t\t\t\t\tonclick="'+this.config.calendarName+'.changeToToday()">'+this.obj.lang.tools.now+'</div>\n\t\t\t\t\t\t\t\t<div class="button" \n\t\t\t\t\t\t\t\t\tstyle="display:'+(this.config.showsubmit?"blcok":"none")+
-'"\n\t\t\t\t\t\t\t\t\tonclick="'+this.config.calendarName+'.makeSureSelectTime()">'+this.obj.lang.tools.confirm+"</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>"}},{key:"topCheckDayHTML",value:function(a){var c='\t\n\t\t<div onclick="'+this.config.calendarName+".preMonth("+a.year+","+a.month+')" class="icom left"></div>',c="cn"==this.config.lang?c+('<div class="center">\n\t\t\t\t<span onclick="'+this.config.calendarName+".getYearHtml("+a.year+')">'+a.year+'\u5e74</span>\n\t\t\t\t<span onclick="'+
-this.config.calendarName+".getMonthHtml("+a.month+')">'+a.month+"\u6708</span>\n\t\t\t</div>"):c+('<div class="center">\n\t\t\t\t<span onclick="'+this.config.calendarName+".getMonthHtml("+a.month+')">'+this.weekToEn(a.month)+'</span>\n\t\t\t\t<span onclick="'+this.config.calendarName+".getYearHtml("+a.year+')">'+a.year+"</span>\n\t\t\t</div>");return c+='<div onclick="'+this.config.calendarName+".nextMonth("+a.year+","+a.month+')" class="icom right"></div>'}},{key:"mainCheckDayHTML",value:function(a){for(var c=
-'\n\t\t<div class="week-day"><table class="day" border="0" cellspacing="0">\n\t\t\t<tr>',b=0;7>b;b++)c+="<th>"+this.obj.lang.weeks[b]+"</th>";for(var c=c+"</tr>",b=0,d=a.datalist.length;b<d;b++){var e=a.datalist[b].class||"";a.datalist[b].day===a.today&&"now"===a.datalist[b].daytype&&(e+=" active");if(""!=this.config.min&&(new Date(a.datalist[b].fullday)).getTime()<(new Date(this.config.min)).getTime()||""!=this.config.max&&(new Date(a.datalist[b].fullday)).getTime()>(new Date(this.config.max)).getTime())e+=
-" calendar-disabled";c=0==b?c+('<tr><td data-time="'+a.datalist[b].fullday+'" class="'+e+'">'+a.datalist[b].day+"</td>"):b==d-1?c+('<td data-time="'+a.datalist[b].fullday+'" class="'+e+'">'+a.datalist[b].day+"</td></tr>"):0==(b+1)%7?c+('<td data-time="'+a.datalist[b].fullday+'" class="'+e+'">'+a.datalist[b].day+"</td></tr><tr>"):c+('<td data-time="'+a.datalist[b].fullday+'" class="'+e+'">'+a.datalist[b].day+"</td>")}return c+"</table></div>"}},{key:"topCheckYearHTML",value:function(a){return'\n\t\t<div class="icom left" onclick="'+
-this.config.calendarName+".perYear("+a.nowyear+')"></div>\n\t\t<div class="center">\n\t\t\t<span>'+a.firstYear+("cn"==this.config.lang?"\u5e74":"")+"</span>-\n\t\t\t<span>"+a.lastYear+("cn"==this.config.lang?"\u5e74":"")+'</span>\n\t\t</div>\n\t\t<div class="icom right" onclick="'+this.config.calendarName+".nextYear("+a.nowyear+')"></div>'}},{key:"mainCheckYearHTML",value:function(a){for(var c='<div class="week-day">\n\t\t\t<table class="day" border="0" cellspacing="0">',b=0,d=a.datalist.length;b<
-d;b++){var e=a.datalist[b].class||"";a.datalist[b].year===a.nowyear&&(e+=" active");c=0==b?c+('<tr><td data-year="'+a.datalist[b].year+'" class="'+e+'">'+a.datalist[b].year+("cn"==this.config.lang?"\u5e74":"")+"</td>"):b==d-1?c+('<td data-year="'+a.datalist[b].year+'" class="'+e+'">'+a.datalist[b].year+("cn"==this.config.lang?"\u5e74":"")+"</td></tr>"):0==(b+1)%3?c+('<td data-year="'+a.datalist[b].year+'" class="'+e+'">'+a.datalist[b].year+("cn"==this.config.lang?"\u5e74":"")+"</td></tr><tr>"):c+
-('<td data-year="'+a.datalist[b].year+'" class="'+e+'">'+a.datalist[b].year+("cn"==this.config.lang?"\u5e74":"")+"</td>")}return c+"</table>\n\t\t</div>"}},{key:"topCheckMonthHTML",value:function(a){return'\n\t\t<div class="icom left" onclick="'+this.config.calendarName+".perMonthYear("+a.year+","+a.nowmonth+')"></div>\n\t\t<div class="center">\n\t\t\t<span>'+a.year+'\u5e74</span>\n\t\t</div>\n\t\t<div class="icom right" onclick="'+this.config.calendarName+".nextMonthYear("+a.year+","+a.nowmonth+
-')"></div>'}},{key:"mainCheckMonthHTML",value:function(a){for(var c='<div class="week-day">\n\t\t\t<table class="day" border="0" cellspacing="0">',b=0,d=a.datalist.length;b<d;b++){var e=a.datalist[b].class||"";b+1===a.nowmonth&&(e+=" active");c=0==b?c+('<tr><td data-month="'+(b+1)+'" data-year="'+a.year+'" class="'+e+'">'+a.datalist[b]+"</td>"):b==d-1?c+('<td data-month="'+(b+1)+'" data-year="'+a.year+'" class="'+e+'">'+a.datalist[b]+"</td></tr>"):0==(b+1)%3?c+('<td data-month="'+(b+1)+'" data-year="'+
-a.year+'" class="'+e+'">'+a.datalist[b]+"</td></tr><tr>"):c+('<td data-month="'+(b+1)+'" data-year="'+a.year+'" class="'+e+'">'+a.datalist[b]+"</td>")}return c+"</table>\n\t\t</div>"}},{key:"topCheckTimeHTML",value:function(){return'<div class="center"><span>'+this.obj.lang.timeTips+"</span></div>"}},{key:"mainCheckTimeHTML",value:function(a){for(var c='<div class="week-day"><ul class="nav"><li>'+this.obj.lang.time[0]+"</li><li>"+this.obj.lang.time[1]+"</li><li>"+this.obj.lang.time[2]+'</li></ul><div class="select-time">\n\t\t\t\t<ul class="hour">',
-b=0,d=a.hours.length;b<d;b++){var e="";a.hours[b]==a.hour&&(e="active");c+='<li class="'+e+'" data-time="'+a.hours[b]+'">'+a.hours[b]+"</li>"}c+='</ul><ul class="minute">';b=0;for(d=a.minutes.length;b<d;b++)e="",a.minutes[b]==a.minute&&(e="active"),c+='<li class="'+e+'" data-time="'+a.minutes[b]+'">'+a.minutes[b]+"</li>";c+='</ul><ul class="second">';b=0;for(d=a.seconds.length;b<d;b++)e="",a.seconds[b]==a.second&&(e="active"),c+='<li class="'+e+'" data-time="'+a.seconds[b]+'">'+a.seconds[b]+"</li>";
-return c+"</ul></div></div>"}},{key:"bottomCheckTimeHTML",value:function(){var a="";return a="time"===this.obj.handleType?a+('<div class="left button" onclick="'+this.config.calendarName+'.backDateHtml()">'+this.obj.lang.dateTips+"</div>"):a+('<div class="left button" onclick="'+this.config.calendarName+'.getTimeHtml()">'+this.obj.lang.timeTips+"</div>")}},{key:"elemEventPoint",value:function(a){this.obj.calendar=this.$obj;var c=a.target.offsetTop,b=a.target.offsetLeft;a=a.target.offsetHeight;var d=
-document.documentElement.clientHeight-(c+a+this.obj.behindTop-document.documentElement.scrollTop);this.obj.calendar.style.display="block";this.obj.calendar.style.left=b+"px";d>this.obj.calendarHeight?this.obj.calendar.style.top=c+a+this.obj.behindTop+"px":this.obj.calendar.style.top=c-this.obj.behindTop-this.obj.calendarHeight+"px"}},{key:"getTimeDates",value:function(a){var c=[],b=a?new Date(a):new Date;a=b.getFullYear();var d=b.getMonth()+1,e=b.getDate();b.getDay();var f=b.getHours(),n=b.getMinutes(),
-b=b.getSeconds(),d=2>(d+"").length?"0"+d:d,e=2>(e+"").length?"0"+e:e,f=2>(f+"").length?"0"+f:f,n=2>(n+"").length?"0"+n:n,b=2>(b+"").length?"0"+b:b,p=(new Date(a,d,0)).getDate(),m=(new Date(a+"/"+d+"/1")).getDay();(new Date(a+"/"+d+"/"+p)).getDay();var r=null;if(0<m){var k=(new Date(a,d-1,0)).getDate(),l=a,g=d-1;0===g&&(l=a-1,g=12);for(var h=0;h<m;h++){var q=k-h,g=2>(g+"").length?"0"+g:g,q=2>(q+"").length?"0"+q:q;c.push({day:k-h,week:m-1-h,class:"light",daytype:"pre",fullday:l+"/"+g+"/"+q})}}c=c.reverse();
-for(h=0;h<p;h++)k=(m+h)%7,l=d,g=h+1,l=2>(l+"").length?"0"+l:l,g=2>(g+"").length?"0"+g:g,c.push({day:h+1,week:k,daytype:"now",fullday:a+"/"+l+"/"+g}),h===p-1&&(r=k);p=42-c.length;m=a;k=parseInt(d)+1;13===k&&(m=a+1,k=1);for(h=0;h<p;h++)l=(r+1+h)%7,g=h+1,k=2>(k+"").length?"0"+k:k,g=2>(g+"").length?"0"+g:g,c.push({day:h+1,week:l,class:"light",daytype:"next",fullday:m+"/"+k+"/"+g});return{year:a,month:d,today:e,hour:f,minute:n,second:b,datalist:c}}},{key:"preMonth",value:function(a,c){--c;0==c&&(c=12,
---a);this.judgeCalendarRender("day",a+"/"+c+"/"+this.obj.fulldatas.today)}},{key:"nextMonth",value:function(a,c){c+=1;13==c&&(c=1,a+=1);this.judgeCalendarRender("day",a+"/"+c+"/"+this.obj.fulldatas.today)}},{key:"getDay",value:function(){var a=this,c=this.$obj.querySelector(".main-check-day").querySelectorAll("td");this.on(c,"click",function(b){a.hasClass(b.target,"calendar-disabled")||(b=this.getAttribute("data-time").split("/"),a.obj.fulldatas.year=b[0],a.obj.fulldatas.month=b[1],a.obj.fulldatas.today=
-b[2],a.forEach(c,function(b,c){a.removeClass(c,"active")}),a.addClass(this,"active"),a.config.showtime||a.getYearMonthAndDay(a.obj.fulldatas.year+"/"+a.obj.fulldatas.month+"/"+a.obj.fulldatas.today))})}},{key:"getYearHtml",value:function(a){a=a||(new Date).getFullYear();for(var c={nowyear:a,datalist:[]},b=0;b<this.obj.totalYear;b++){var d=a-Math.floor(this.obj.totalYear/2)+b;0===b&&(c.firstYear=d);b===this.obj.totalYear-1&&(c.lastYear=d);c.datalist.push({class:"",year:d})}this.judgeCalendarRender("year",
-c)}},{key:"perYear",value:function(a){a-=this.obj.totalYear;this.getYearHtml(a)}},{key:"nextYear",value:function(a){a+=this.obj.totalYear;this.getYearHtml(a)}},{key:"getYear",value:function(){var a=this,c=this.$obj.querySelector(".main-check-year").querySelectorAll("td");this.on(c,"click",function(b){b=b.target.getAttribute("data-year");var c=b+"/"+a.obj.fulldatas.month+"/"+a.obj.fulldatas.today;"year"===a.config.type?a.getYearMonthAndDay(b,!1):a.judgeCalendarRender("day",c)})}},{key:"getMonthHtml",
-value:function(a){var c=new Date,b=this.obj.fulldatas.year||c.getFullYear();a=a||c.getMonth()+1;this.judgeCalendarRender("month",{nowmonth:a,year:b,datalist:this.obj.lang.month})}},{key:"perMonthYear",value:function(a,c){this.judgeCalendarRender("month",{nowmonth:c,year:a-1,datalist:this.obj.lang.month})}},{key:"nextMonthYear",value:function(a,c){this.judgeCalendarRender("month",{nowmonth:c,year:a+1,datalist:this.obj.lang.month})}},{key:"getMonth",value:function(){var a=this,c=this.$obj.querySelector(".main-check-month").querySelectorAll("td");
-this.on(c,"click",function(b){var c=b.target.getAttribute("data-year");b=b.target.getAttribute("data-month");c=c+"/"+b+"/"+a.obj.fulldatas.today;"month"===a.config.type?a.getYearMonthAndDay(b,!1):a.judgeCalendarRender("day",c)})}},{key:"getTimeHtml",value:function(){var a=new Date,c=a.getHours(),b=a.getMinutes(),a=a.getSeconds(),c=2>(c+"").length?"0"+c:c,b=2>(b+"").length?"0"+b:b,a=2>(a+"").length?"0"+a:a;this.obj.fulldatas.hour=this.obj.fulldatas.hour||c;this.obj.fulldatas.minute=this.obj.fulldatas.hour||
-b;this.obj.fulldatas.second=this.obj.fulldatas.hour||a;c={hour:this.obj.fulldatas.hour,minute:this.obj.fulldatas.minute,second:this.obj.fulldatas.second,hours:[],minutes:[],seconds:[]};for(b=0;24>b;b++)10>b?c.hours.push("0"+b):c.hours.push(b+"");for(b=0;60>b;b++)10>b?(c.minutes.push("0"+b),c.seconds.push("0"+b)):(c.minutes.push(b+""),c.seconds.push(b+""));this.judgeCalendarRender("time",c)}},{key:"selectTime",value:function(){var a=this,c=this.$obj.querySelector("ul.hour").querySelectorAll("li"),
-b=this.$obj.querySelector("ul.minute").querySelectorAll("li"),d=this.$obj.querySelector("ul.second").querySelectorAll("li");this.on(c,"click",function(b){a.forEach(c,function(c,b){a.removeClass(b,"active")});a.addClass(this,"active");a.obj.fulldatas.hour=this.getAttribute("data-time")});this.on(b,"click",function(c){a.forEach(b,function(c,b){a.removeClass(b,"active")});a.addClass(this,"active");a.obj.fulldatas.minute=this.getAttribute("data-time")});this.on(d,"click",function(b){a.forEach(d,function(b,
-c){a.removeClass(c,"active")});a.addClass(this,"active");a.obj.fulldatas.second=this.getAttribute("data-time")})}},{key:"backDateHtml",value:function(){this.obj.handleType="date";var a=this.bottomCheckTimeHTML();this.$obj.querySelector(".btn-select-time").innerHTML=a;this.showOrHide(this.$obj.querySelectorAll(".common-top"),"hide");this.showOrHide(this.$obj.querySelectorAll(".common-main"),"hide");this.$obj.querySelector(".main-check-day").style.display="block";this.$obj.querySelector(".top-check-day").style.display=
-"block"}},{key:"changeToToday",value:function(){var a=this.getTimeDates(),c=!0;this.config.showtime?a=a.year+"/"+a.month+"/"+a.today+" "+a.hour+":"+a.minute+":"+a.second:"time"==this.config.type?(c=!1,a=a.hour+":"+a.minute+":"+a.second):a=a.year+"/"+a.month+"/"+a.today;this.getYearMonthAndDay(a,c)}},{key:"cleanInputVal",value:function(){this.getYearMonthAndDay("",!1)}},{key:"makeSureSelectTime",value:function(){var a,c=!0;this.config.showtime?a=this.obj.fulldatas.year+"/"+this.obj.fulldatas.month+
-"/"+this.obj.fulldatas.today+" "+this.obj.fulldatas.hour+":"+this.obj.fulldatas.minute+":"+this.obj.fulldatas.second:"time"==this.config.type?(c=!1,a=this.obj.fulldatas.hour+":"+this.obj.fulldatas.minute+":"+this.obj.fulldatas.second):a=this.obj.fulldatas.year+"/"+this.obj.fulldatas.month+"/"+this.obj.fulldatas.today;this.getYearMonthAndDay(a,c)}},{key:"getYearMonthAndDay",value:function(a){var c=(1<arguments.length&&void 0!==arguments[1]?arguments[1]:1)?(new Date(a)).Format(this.config.format):a;
-document.querySelector(this.config.elem).value=c;this.$obj.style.display="none";this.config.done&&this.config.done(c);this.obj.initVal!=c&&this.config.change&&this.config.change(c)}},{key:"judgeCalendarRender",value:function(a,c){var b;switch(a){case "day":this.obj.handleType="day";a=this.getTimeDates(c);this.obj.fulldatas=a;c=this.topCheckDayHTML(a);a=this.mainCheckDayHTML(a);this.$obj.querySelector(".top-check-day").innerHTML=c;this.$obj.querySelector(".main-check-day").innerHTML=a;this.showOrHide(this.$obj.querySelectorAll(".common-top"),
-"hide");this.showOrHide(this.$obj.querySelectorAll(".common-main"),"hide");this.$obj.querySelector(".main-check-day").style.display="block";this.$obj.querySelector(".top-check-day").style.display="block";this.countHeight(".main-check-day",7);this.getDay();break;case "year":this.obj.handleType="year";a=this.mainCheckYearHTML(c);c=this.topCheckYearHTML(c);this.$obj.querySelector(".main-check-year").innerHTML=a;this.$obj.querySelector(".top-check-year").innerHTML=c;this.showOrHide(this.$obj.querySelectorAll(".common-top"),
-"hide");this.showOrHide(this.$obj.querySelectorAll(".common-main"),"hide");this.$obj.querySelector(".main-check-year").style.display="block";this.$obj.querySelector(".top-check-year").style.display="block";this.countHeight(".main-check-year",6);this.getYear();break;case "month":this.obj.handleType="month";a=this.mainCheckMonthHTML(c);c=this.topCheckMonthHTML(c);this.$obj.querySelector(".main-check-month").innerHTML=a;this.$obj.querySelector(".top-check-month").innerHTML=c;this.showOrHide(this.$obj.querySelectorAll(".common-top"),
-"hide");this.showOrHide(this.$obj.querySelectorAll(".common-main"),"hide");this.$obj.querySelector(".main-check-month").style.display="block";this.$obj.querySelector(".top-check-month").style.display="block";this.countHeight(".main-check-month",4);this.getMonth();break;case "time":this.obj.handleType="time",a=this.mainCheckTimeHTML(c),c=this.topCheckTimeHTML(),b=this.bottomCheckTimeHTML(),this.$obj.querySelector(".main-check-time").innerHTML=a,this.$obj.querySelector(".top-check-time").innerHTML=
-c,this.$obj.querySelector(".btn-select-time").innerHTML=b,this.showOrHide(this.$obj.querySelectorAll(".common-top"),"hide"),this.showOrHide(this.$obj.querySelectorAll(".common-main"),"hide"),this.$obj.querySelector(".main-check-time").style.display="block",this.$obj.querySelector(".top-check-time").style.display="block",a=this.$obj.querySelector("ul.hour").querySelector("li.active").offsetTop,c=this.$obj.querySelector("ul.minute").querySelector("li.active").offsetTop,b=this.$obj.querySelector("ul.second").querySelector("li.active").offsetTop,
-this.$obj.querySelector("ul.hour").scrollTop=a-150,this.$obj.querySelector("ul.minute").scrollTop=c-150,this.$obj.querySelector("ul.second").scrollTop=b-150,this.selectTime()}}},{key:"calendarClick",value:function(){this.on(this.obj.calendar,"click",function(a){a.preventDefault();a.stopPropagation()})}},{key:"extend",value:function(a,c){return Object.assign(a,c)}},{key:"hasClass",value:function(a,c){return a.className.match(new RegExp("(\\s|^)"+c+"(\\s|$)"))}},{key:"addClass",value:function(a,c){this.hasClass(a,
-c)||(a.className+=" "+c)}},{key:"removeClass",value:function(a,c){this.hasClass(a,c)&&(a.className=a.className.replace(new RegExp("(\\s|^)"+c+"(\\s|$)")," "))}},{key:"forEach",value:function(a,c){var b=void 0;if("function"!==typeof c)return this;a=a||[];if("[object Object]"==Object.prototype.toString.call(a))for(b in a){if(c.call(a[b],b,a[b]))break}else if("[object NodeList]"==Object.prototype.toString.call(a)||"[object Array]"==Object.prototype.toString.call(a))for(b=0;b<a.length&&!c.call(a[b],b,
-a[b]);b++);else c.call(a,0,a);return this}},{key:"on",value:function(a,c,b){return this.forEach(a,function(a,e){e.attachEvent?e.attachEvent("on"+c,function(a){a.target=a.srcElement;b.call(e,a)}):e.addEventListener(c,b,!1)})}},{key:"weekToEn",value:function(a){a="string"==typeof a?parseInt(a):a;return this.obj.en.month[a-1]}},{key:"showOrHide",value:function(a,c){for(var b=0,d=a.length;b<d;b++)a[b].style.display="hide"===c?"none":"block"}},{key:"off",value:function(a,c,b){return this.forEach(a,function(a,
-e){e.detachEvent?e.detachEvent("on"+c,b):e.removeEventListener(c,b,!1)})}},{key:"countHeight",value:function(a,c){var b=this.$obj.querySelector(".main").offsetHeight;a=this.$obj.querySelector(a).querySelectorAll("tr");var d=Math.floor(b/c);this.forEach(a,function(a,b){b.style.height=d+"px"})}},{key:"documentClick",value:function(){var a=this;this.on(document,"click",function(c){a.obj.calendar&&(a.obj.calendar.style.display="none")})}}]);return f}(),zaneDate=function(f){var a=f.elem.substring(1),a=
-a.replace(/[_-]/g,"").toUpperCase();f.calendarName=a;f.width=260>f.width?260:f.width;f.width=500<f.width?500:f.width;window[a]=new calendar(f)};
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/*!
+ * zaneDate Javascript Library 1.0.0
+ * https://github.com/wangweianger/zane-data-time-calendar
+ * Date : 2017-09-22
+ * auther :zane
+ */
+;(function (global, factory) {
+	"use strict";
+
+	if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" && _typeof(module.exports) === "object") {
+		module.exports = global.document ? factory(global, true) : function (w) {
+			if (!w.document) {
+				throw new Error("zaneDate requires a window with a document");
+			}
+			return factory(w);
+		};
+	} else {
+		factory(global);
+	}
+})(typeof window !== "undefined" ? window : undefined, function (window, noGlobal) {
+
+	if (!new Date().Format) {
+		Date.prototype.Format = function (fmt) {
+			//author: meizz 
+			var o = {
+				"M+": this.getMonth() + 1, //月份 
+				"d+": this.getDate(), //日 
+				"h+": this.getHours(), //小时 
+				"H+": this.getHours() > 12 ? this.getHours() - 12 : this.getHours(),
+				"m+": this.getMinutes(), //分 
+				"s+": this.getSeconds(), //秒 
+				"q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+				"S": this.getMilliseconds() //毫秒 
+			};
+			if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+			for (var k in o) {
+				if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+			}return fmt;
+		};
+	};
+
+	// 日期插件
+
+	var calendar = function () {
+		function calendar() {
+			var json = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+			_classCallCheck(this, calendar);
+
+			this.config = {
+				//控件的dom原生仅限制于id
+				elem: '#zane-calendar',
+				//day year month time datetime
+				type: 'day',
+				//absolute , fixed   
+				position: 'fixed',
+				//cn , en 
+				lang: 'cn',
+				// 宽度
+				width: 280,
+				// 格式化
+				format: 'yyyy-MM-dd HH:mm:ss',
+				// 初始默认值
+				value: '',
+				// 可选取时间最小范围
+				min: '', //'1900-10-01',
+				// 可选取时间最大范围
+				max: '', //'2099-12-31',
+				//事件方式 click 
+				event: 'click',
+				//是否显示选择时间
+				showtime: true,
+				//是否显示清除按钮
+				showclean: true,
+				//是否显示当前按钮
+				shownow: true,
+				//是否显示提交按钮
+				showsubmit: true,
+				// 是否有底部按钮列表
+				haveBotBtns: true,
+				calendarName: '',
+				// 插件加载完成之后调用
+				mounted: function mounted() {},
+				//时间变更之后调用
+				change: function change() {},
+				//选择完成之后调用
+				done: function done() {}
+			};
+
+			this.config = this.extend(this.config, json);
+			//校验时间格式
+			if (isNaN(new Date(this.config.value))) this.config.value = '';
+			if (isNaN(new Date(this.config.min))) this.config.min = '';
+			if (isNaN(new Date(this.config.max))) this.config.max = '';
+
+			this.obj = {
+				input: document.querySelector(this.config.elem),
+				calendar: null,
+				id: "#zane-calendar-" + this.config.elem.substring(1),
+				$obj: null,
+				fulldatas: {},
+				handleType: 'date',
+				initVal: '', //每次进来的初始值
+				//插件于输入框的高度 
+				behindTop: 10,
+				calendarHeight: 307,
+				// 选择年时展示的数量
+				totalYear: 18,
+				cn: {
+					weeks: ['日', '一', '二', '三', '四', '五', '六'],
+					time: ['时', '分', '秒'],
+					timeTips: '选择时间',
+					startTime: '开始时间',
+					endTime: '结束时间',
+					dateTips: '返回日期',
+					month: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+					tools: {
+						confirm: '确定',
+						clear: '清空',
+						now: '现在'
+					}
+				},
+				en: {
+					weeks: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+					time: ['Hours', 'Minutes', 'Seconds'],
+					timeTips: 'Select Time',
+					startTime: 'Start Time',
+					endTime: 'End Time',
+					dateTips: 'Select Date',
+					month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+					tools: {
+						confirm: 'Confirm',
+						clear: 'Clear',
+						now: 'Now'
+					}
+				}
+			};
+
+			this.vision = '1.0.0';
+			this.auther = 'zane';
+
+			this.obj.lang = this.obj[this.config.lang];
+
+			if (this.config.type == 'year' || this.config.type == 'month') {
+				this.config.haveBotBtns = false;
+			}
+
+			this.config.showtime = this.config.type == 'time' ? false : true;
+
+			// 初始化
+			this.init();
+		}
+
+		_createClass(calendar, [{
+			key: "init",
+			value: function init() {
+				var _this2 = this;
+
+				this.on(this.obj.input, this.config.event, function (e) {
+					e.preventDefault();
+					e.stopPropagation();
+
+					if (!_this2.obj.calendar) {
+						//没有calendar为第一次生成
+						// 获得年月日
+						var html = _this2.objHTML(); //生成时间选择器HTML
+						var divElement = document.createElement("div");
+						divElement.innerHTML = html;
+						document.body.appendChild(divElement);
+
+						_this2.$obj = document.querySelector(_this2.obj.id);
+
+						switch (_this2.config.type) {
+							case 'day':
+								_this2.judgeCalendarRender('day', _this2.config.value);
+								break;
+							case 'year':
+								_this2.getYearHtml();
+								break;
+							case 'month':
+								_this2.getMonthHtml();
+								break;
+							case 'time':
+								_this2.getTimeHtml();
+								break;
+						}
+
+						//定位并显示选择器
+						_this2.elemEventPoint(e);
+						_this2.documentClick();
+						_this2.calendarClick();
+					} else {
+						_this2.elemEventPoint(e); //定位并显示选择器
+					};
+					_this2.obj.initVal = _this2.obj.input.value;
+
+					// 隐藏其他时间插件框
+					var objs = document.querySelectorAll('.zane-calendar');
+					_this2.forEach(objs, function (index, item) {
+						if ('#' + item.getAttribute('id') !== _this2.obj.id) {
+							item.style.display = "none";
+						}
+					});
+				});
+				this.config.mounted && this.config.mounted();
+			}
+
+			//生成时间选择器区域
+
+		}, {
+			key: "objHTML",
+			value: function objHTML(json) {
+				var html = "<div class=\"zane-calendar\" style=\"width:" + this.config.width + "px;\" id=\"zane-calendar-" + this.config.elem.substring(1) + "\">\n\t\t\t\t\t<div class=\"zane-calendar-one left\" style=\"width:" + this.config.width + "px;\">\n\t\t\t\t\t\t<div class=\"top\">\n\t\t\t\t\t\t\t<div class=\"common-top top-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-top top-check-year\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-month\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-time\"></div>\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"main\">\n\t\t\t\t\t\t\t<div class=\"common-main main-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-year\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-month\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-time\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"bottom\" style=\"display:" + (this.config.haveBotBtns ? 'block' : 'none') + "\">\n\t\t\t\t\t\t\t<div class=\"btn-select-time\" style=\"display:" + (this.config.showtime ? 'blcok' : 'none') + "\">\n\t\t\t\t\t\t\t\t<div class=\"left button btn-select-time-item\" onclick=\"" + this.config.calendarName + ".getTimeHtml()\">" + this.obj.lang.timeTips + "</div>\n\t\t\t\t\t\t\t</div>\t\n\t\t\t\t \t\t\t<div class=\"right\">\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.shownow ? 'no-right-line' : '') + "\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showclean ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".cleanInputVal()\">" + this.obj.lang.tools.clear + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.showsubmit ? 'no-right-line' : '') + "\"\n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.shownow ? 'blcok' : 'none') + "\" \n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".changeToToday()\">" + this.obj.lang.tools.now + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showsubmit ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".makeSureSelectTime()\">" + this.obj.lang.tools.confirm + "</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>";
+				return html;
+			}
+			// day - top html   时间选择器选择年月块
+
+		}, {
+			key: "topCheckDayHTML",
+			value: function topCheckDayHTML(json) {
+				var html = "\t\n\t\t<div onclick=\"" + this.config.calendarName + ".preMonth(" + json.year + "," + json.month + ")\" class=\"icom left\"></div>";
+				if (this.config.lang == 'cn') {
+					html += "<div class=\"center\">\n\t\t\t\t<span onclick=\"" + this.config.calendarName + ".getYearHtml(" + json.year + ")\">" + json.year + "\u5E74</span>\n\t\t\t\t<span onclick=\"" + this.config.calendarName + ".getMonthHtml(" + json.month + ")\">" + json.month + "\u6708</span>\n\t\t\t</div>";
+				} else {
+					html += "<div class=\"center\">\n\t\t\t\t<span onclick=\"" + this.config.calendarName + ".getMonthHtml(" + json.month + ")\">" + this.weekToEn(json.month) + "</span>\n\t\t\t\t<span onclick=\"" + this.config.calendarName + ".getYearHtml(" + json.year + ")\">" + json.year + "</span>\n\t\t\t</div>";
+				}
+				html += "<div onclick=\"" + this.config.calendarName + ".nextMonth(" + json.year + "," + json.month + ")\" class=\"icom right\"></div>";
+
+				return html;
+			}
+
+			// day - main html 时间选择器选择日期块
+
+		}, {
+			key: "mainCheckDayHTML",
+			value: function mainCheckDayHTML(json) {
+				var html = "\n\t\t<div class=\"week-day\"><table class=\"day\" border=\"0\" cellspacing=\"0\">\n\t\t\t<tr>";
+				for (var j = 0, len = 7; j < len; j++) {
+					html += "<th>" + this.obj.lang.weeks[j] + "</th>";
+				}
+				html += "</tr>";
+				for (var i = 0, _len = json.datalist.length; i < _len; i++) {
+					var className = json.datalist[i].class || "";
+					if (json.datalist[i].day === json.today && json.datalist[i].daytype === 'now') {
+						className += " active";
+					}
+					//如果超出min时间或者max时间的，给禁止选中样式
+					if (this.config.min != '' && new Date(json.datalist[i].fullday).getTime() < new Date(this.config.min).getTime() || this.config.max != '' && new Date(json.datalist[i].fullday).getTime() > new Date(this.config.max).getTime()) {
+						className += " calendar-disabled";
+					}
+
+					if (i == 0) {
+						html += "<tr><td data-time=\"" + json.datalist[i].fullday + "\" class=\"" + className + "\">" + json.datalist[i].day + "</td>";
+					} else if (i == _len - 1) {
+						html += "<td data-time=\"" + json.datalist[i].fullday + "\" class=\"" + className + "\">" + json.datalist[i].day + "</td></tr>";
+					} else {
+						if ((i + 1) % 7 == 0) {
+							html += "<td data-time=\"" + json.datalist[i].fullday + "\" class=\"" + className + "\">" + json.datalist[i].day + "</td></tr><tr>";
+						} else {
+							html += "<td data-time=\"" + json.datalist[i].fullday + "\" class=\"" + className + "\">" + json.datalist[i].day + "</td>";
+						}
+					}
+				}
+
+				html += "</table></div>";
+				return html;
+			}
+
+			// year - top html 时间选择器选择年份状态头部
+
+		}, {
+			key: "topCheckYearHTML",
+			value: function topCheckYearHTML(json) {
+				var html = "\n\t\t<div class=\"icom left\" onclick=\"" + this.config.calendarName + ".perYear(" + json.nowyear + ")\"></div>\n\t\t<div class=\"center\">\n\t\t\t<span>" + json.firstYear + (this.config.lang == 'cn' ? '年' : '') + "</span>-\n\t\t\t<span>" + json.lastYear + (this.config.lang == 'cn' ? '年' : '') + "</span>\n\t\t</div>\n\t\t<div class=\"icom right\" onclick=\"" + this.config.calendarName + ".nextYear(" + json.nowyear + ")\"></div>";
+				return html;
+			}
+			// year - main html 时间选择器选择年份状态内容块
+
+		}, {
+			key: "mainCheckYearHTML",
+			value: function mainCheckYearHTML(json) {
+				var html = "<div class=\"week-day\">\n\t\t\t<table class=\"day\" border=\"0\" cellspacing=\"0\">";
+				for (var i = 0, len = json.datalist.length; i < len; i++) {
+					var className = json.datalist[i].class || "";
+					if (json.datalist[i].year === json.nowyear) {
+						className += " active";
+					}
+					if (i == 0) {
+						html += "<tr><td data-year=\"" + json.datalist[i].year + "\" class=\"" + className + "\">" + json.datalist[i].year + (this.config.lang == 'cn' ? '年' : '') + "</td>";
+					} else if (i == len - 1) {
+						html += "<td data-year=\"" + json.datalist[i].year + "\" class=\"" + className + "\">" + json.datalist[i].year + (this.config.lang == 'cn' ? '年' : '') + "</td></tr>";
+					} else {
+						if ((i + 1) % 3 == 0) {
+							html += "<td data-year=\"" + json.datalist[i].year + "\" class=\"" + className + "\">" + json.datalist[i].year + (this.config.lang == 'cn' ? '年' : '') + "</td></tr><tr>";
+						} else {
+							html += "<td data-year=\"" + json.datalist[i].year + "\" class=\"" + className + "\">" + json.datalist[i].year + (this.config.lang == 'cn' ? '年' : '') + "</td>";
+						}
+					}
+				}
+				html += "</table>\n\t\t</div>";
+				return html;
+			}
+
+			// month -top html 时间选择器选择月份头部
+
+		}, {
+			key: "topCheckMonthHTML",
+			value: function topCheckMonthHTML(json) {
+				var html = "\n\t\t<div class=\"icom left\" onclick=\"" + this.config.calendarName + ".perMonthYear(" + json.year + "," + json.nowmonth + ")\"></div>\n\t\t<div class=\"center\">\n\t\t\t<span>" + json.year + "\u5E74</span>\n\t\t</div>\n\t\t<div class=\"icom right\" onclick=\"" + this.config.calendarName + ".nextMonthYear(" + json.year + "," + json.nowmonth + ")\"></div>";
+				return html;
+			}
+			// month -main html 时间选择器选择月份状态内容块
+
+		}, {
+			key: "mainCheckMonthHTML",
+			value: function mainCheckMonthHTML(json) {
+				var html = "<div class=\"week-day\">\n\t\t\t<table class=\"day\" border=\"0\" cellspacing=\"0\">";
+				for (var i = 0, len = json.datalist.length; i < len; i++) {
+					var className = json.datalist[i].class || "";
+					if (i + 1 === json.nowmonth) {
+						className += " active";
+					}
+					if (i == 0) {
+						html += "<tr><td data-month=\"" + (i + 1) + "\" data-year=\"" + json.year + "\" class=\"" + className + "\">" + json.datalist[i] + "</td>";
+					} else if (i == len - 1) {
+						html += "<td data-month=\"" + (i + 1) + "\" data-year=\"" + json.year + "\" class=\"" + className + "\">" + json.datalist[i] + "</td></tr>";
+					} else {
+						if ((i + 1) % 3 == 0) {
+							html += "<td data-month=\"" + (i + 1) + "\" data-year=\"" + json.year + "\" class=\"" + className + "\">" + json.datalist[i] + "</td></tr><tr>";
+						} else {
+							html += "<td data-month=\"" + (i + 1) + "\" data-year=\"" + json.year + "\" class=\"" + className + "\">" + json.datalist[i] + "</td>";
+						}
+					}
+				}
+				html += "</table>\n\t\t</div>";
+				return html;
+			}
+
+			// time -top  html 时间选择器选择时间状态头部
+
+		}, {
+			key: "topCheckTimeHTML",
+			value: function topCheckTimeHTML() {
+				var html = "<div class=\"center\"><span>" + this.obj.lang.timeTips + "</span></div>";
+				return html;
+			}
+			// time -main html 时间选择器选择时间状态内容块
+
+		}, {
+			key: "mainCheckTimeHTML",
+			value: function mainCheckTimeHTML(json) {
+				var html = "<div class=\"week-day\"><ul class=\"nav\"><li>" + this.obj.lang.time[0] + "</li><li>" + this.obj.lang.time[1] + "</li><li>" + this.obj.lang.time[2] + "</li></ul><div class=\"select-time\">\n\t\t\t\t<ul class=\"hour\">";
+				for (var i = 0, len = json.hours.length; i < len; i++) {
+					var className = '';
+					if (json.hours[i] == json.hour) className = 'active';
+					html += "<li class=\"" + className + "\" data-time=\"" + json.hours[i] + "\">" + json.hours[i] + "</li>";
+				}
+				html += "</ul><ul class=\"minute\">";
+				for (var _i = 0, _len2 = json.minutes.length; _i < _len2; _i++) {
+					var _className = '';
+					if (json.minutes[_i] == json.minute) _className = 'active';
+					html += "<li class=\"" + _className + "\" data-time=\"" + json.minutes[_i] + "\">" + json.minutes[_i] + "</li>";
+				}
+				html += "</ul><ul class=\"second\">";
+				for (var _i2 = 0, _len3 = json.seconds.length; _i2 < _len3; _i2++) {
+					var _className2 = '';
+					if (json.seconds[_i2] == json.second) _className2 = 'active';
+					html += "<li class=\"" + _className2 + "\" data-time=\"" + json.seconds[_i2] + "\">" + json.seconds[_i2] + "</li>";
+				}
+				html += "</ul></div></div>";
+				return html;
+			}
+
+			// time -bottom html 时间选择器日期/时间切换块
+
+		}, {
+			key: "bottomCheckTimeHTML",
+			value: function bottomCheckTimeHTML() {
+				var html = '';
+				if (this.obj.handleType === 'time') {
+					html += "<div class=\"left button\" onclick=\"" + this.config.calendarName + ".backDateHtml()\">" + this.obj.lang.dateTips + "</div>";
+				} else {
+					html += "<div class=\"left button\" onclick=\"" + this.config.calendarName + ".getTimeHtml()\">" + this.obj.lang.timeTips + "</div>";
+				}
+				return html;
+			}
+
+			// 插件位置定位并显示
+
+		}, {
+			key: "elemEventPoint",
+			value: function elemEventPoint(e) {
+				this.obj.calendar = this.$obj;
+				var screenClientHeight = document.documentElement.clientHeight;
+				var screenScrolTop = document.documentElement.scrollTop;
+				var objOffsetTop = e.target.offsetTop;
+				var objOffsetLeft = e.target.offsetLeft;
+				var objOffsetHeight = e.target.offsetHeight;
+
+				var objBotton = screenClientHeight - (objOffsetTop + objOffsetHeight + this.obj.behindTop - screenScrolTop);
+
+				this.obj.calendar.style.display = 'block';
+				// 设置插件point位置
+				this.obj.calendar.style.left = objOffsetLeft + 'px';
+				objBotton > this.obj.calendarHeight ?
+				//插件在input框之下 
+				this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.obj.behindTop + 'px' :
+				//插件在input框之上
+				this.obj.calendar.style.top = objOffsetTop - this.obj.behindTop - this.obj.calendarHeight + 'px';
+			}
+
+			// 插件数据渲染
+
+		}, {
+			key: "getTimeDates",
+			value: function getTimeDates(deraultDay) {
+				var timeDatas = [];
+				var date = deraultDay ? new Date(deraultDay) : new Date();
+				var year = date.getFullYear();
+				var month = date.getMonth() + 1;
+				var toDate = date.getDate();
+				var weekday = date.getDay();
+				var hour = date.getHours();
+				var minute = date.getMinutes();
+				var second = date.getSeconds();
+				month = (month + '').length < 2 ? '0' + month : month;
+				toDate = (toDate + '').length < 2 ? '0' + toDate : toDate;
+				hour = (hour + '').length < 2 ? '0' + hour : hour;
+				minute = (minute + '').length < 2 ? '0' + minute : minute;
+				second = (second + '').length < 2 ? '0' + second : second;
+
+				// 计算当前这个月的天数
+				var monTotalDay = new Date(year, month, 0).getDate();
+
+				// 计算第一天是周几
+				var firstDayMeek = new Date(year + "/" + month + "/1").getDay();
+				var lastDayMeek = new Date(year + "/" + month + "/" + monTotalDay).getDay();
+				var preweek = null;
+				var preday = null;
+				// 计算需要补充的时间
+				if (firstDayMeek > 0) {
+					var preMonTotalDay = new Date(year, month - 1, 0).getDate();
+					var _preyear = year;
+					var _premonth = month - 1;
+					if (_premonth === 0) {
+						_preyear = year - 1;
+						_premonth = 12;
+					}
+					for (var i = 0, len = firstDayMeek; i < len; i++) {
+						var day = preMonTotalDay - i;
+						_premonth = (_premonth + '').length < 2 ? '0' + _premonth : _premonth;
+						day = (day + '').length < 2 ? '0' + day : day;
+
+						timeDatas.push({
+							day: preMonTotalDay - i,
+							week: len - 1 - i,
+							class: 'light',
+							daytype: "pre",
+							fullday: _preyear + "/" + _premonth + "/" + day
+						});
+					}
+				}
+				timeDatas = timeDatas.reverse();
+				for (var _i3 = 0, _len4 = monTotalDay; _i3 < _len4; _i3++) {
+					var _weekday = (firstDayMeek + _i3) % 7;
+					var _premonth2 = month;
+					var _day = _i3 + 1;
+					_premonth2 = (_premonth2 + '').length < 2 ? '0' + _premonth2 : _premonth2;
+					_day = (_day + '').length < 2 ? '0' + _day : _day;
+
+					timeDatas.push({
+						day: _i3 + 1,
+						week: _weekday,
+						daytype: "now",
+						fullday: year + "/" + _premonth2 + "/" + _day
+					});
+					if (_i3 === _len4 - 1) {
+						preweek = _weekday;
+						preday = _i3 + 1;
+					}
+				}
+
+				var totalLength = timeDatas.length;
+				var haveNeedLength = 42 - totalLength;
+
+				var preyear = year;
+				var premonth = parseInt(month) + 1;
+				if (premonth === 13) {
+					preyear = year + 1;
+					premonth = 1;
+				}
+
+				for (var i = 0; i < haveNeedLength; i++) {
+					var _weekday2 = (preweek + 1 + i) % 7;
+					var _day2 = i + 1;
+					premonth = (premonth + '').length < 2 ? '0' + premonth : premonth;
+					_day2 = (_day2 + '').length < 2 ? '0' + _day2 : _day2;
+
+					timeDatas.push({
+						day: i + 1,
+						week: _weekday2,
+						class: 'light',
+						daytype: "next",
+						fullday: preyear + "/" + premonth + "/" + _day2
+					});
+				}
+				return {
+					year: year,
+					month: month,
+					today: toDate,
+					hour: hour,
+					minute: minute,
+					second: second,
+					datalist: timeDatas
+				};
+			}
+
+			// 选择上一月
+
+		}, {
+			key: "preMonth",
+			value: function preMonth(year, month) {
+				month = month - 1;
+				if (month == 0) {
+					month = 12;
+					year = year - 1;
+				}
+				var fulldate = year + "/" + month + "/" + this.obj.fulldatas.today;
+				this.judgeCalendarRender('day', fulldate);
+			}
+
+			// 选择下一月
+
+		}, {
+			key: "nextMonth",
+			value: function nextMonth(year, month) {
+				month = month + 1;
+				if (month == 13) {
+					month = 1;
+					year = year + 1;
+				}
+				var fulldate = year + "/" + month + "/" + this.obj.fulldatas.today;
+				this.judgeCalendarRender('day', fulldate);
+			}
+
+			// 获得年月日,如果showtime=true,日期加样式，如果为false,直接设置当前选择的日期
+
+		}, {
+			key: "getDay",
+			value: function getDay() {
+				var _this = this;
+				var objs = this.$obj.querySelector('.main-check-day').querySelectorAll('td');
+				this.on(objs, 'click', function (e) {
+					if (!_this.hasClass(e.target, 'calendar-disabled')) {
+						//有calendar-disabled样式的不赋予事件
+						var dataTime = this.getAttribute('data-time');
+						var arr = dataTime.split('/');
+						_this.obj.fulldatas.year = arr[0];
+						_this.obj.fulldatas.month = arr[1];
+						_this.obj.fulldatas.today = arr[2];
+
+						//选择具体日期添加样式
+						_this.forEach(objs, function (index, item) {
+							_this.removeClass(item, 'active');
+						});
+						_this.addClass(this, 'active');
+
+						if (!_this.config.showtime) {
+							var value = _this.obj.fulldatas.year + "/" + _this.obj.fulldatas.month + "/" + _this.obj.fulldatas.today;
+							_this.getYearMonthAndDay(value);
+						}
+					}
+				});
+			}
+
+			// 获得年html
+
+		}, {
+			key: "getYearHtml",
+			value: function getYearHtml(year) {
+				year = year || new Date().getFullYear();
+				var yearDatas = {
+					nowyear: year,
+					datalist: []
+				};
+				for (var i = 0; i < this.obj.totalYear; i++) {
+					var getyear = year - Math.floor(this.obj.totalYear / 2) + i;
+					if (i === 0) yearDatas.firstYear = getyear;
+					if (i === this.obj.totalYear - 1) yearDatas.lastYear = getyear;
+					yearDatas.datalist.push({
+						class: '',
+						year: getyear
+					});
+				}
+				this.judgeCalendarRender('year', yearDatas);
+			}
+
+			// 上一年
+
+		}, {
+			key: "perYear",
+			value: function perYear(year) {
+				year = year - this.obj.totalYear;
+				this.getYearHtml(year);
+			}
+
+			// 下一年
+
+		}, {
+			key: "nextYear",
+			value: function nextYear(year) {
+				year = year + this.obj.totalYear;
+				this.getYearHtml(year);
+			}
+
+			// 获得年
+
+		}, {
+			key: "getYear",
+			value: function getYear() {
+				var _this = this;
+				var objs = this.$obj.querySelector('.main-check-year').querySelectorAll('td');
+				this.on(objs, 'click', function (e) {
+					var year = e.target.getAttribute('data-year');
+
+					var fulldate = year + "/" + _this.obj.fulldatas.month + "/" + _this.obj.fulldatas.today;
+					if (_this.config.type === 'year') {
+						_this.getYearMonthAndDay(year, false);
+					} else {
+						_this.judgeCalendarRender('day', fulldate);
+					}
+				});
+			}
+
+			// 获得month html
+
+		}, {
+			key: "getMonthHtml",
+			value: function getMonthHtml(month) {
+				var date = new Date();
+				var year = this.obj.fulldatas.year || date.getFullYear();
+				month = month || date.getMonth() + 1;
+
+				var monthDatas = {
+					nowmonth: month,
+					year: year,
+					datalist: this.obj.lang.month
+				};
+				this.judgeCalendarRender('month', monthDatas);
+			}
+
+			// 上一月
+
+		}, {
+			key: "perMonthYear",
+			value: function perMonthYear(year, month) {
+				var monthDatas = {
+					nowmonth: month,
+					year: year - 1,
+					datalist: this.obj.lang.month
+				};
+				this.judgeCalendarRender('month', monthDatas);
+			}
+
+			// 下一月
+
+		}, {
+			key: "nextMonthYear",
+			value: function nextMonthYear(year, month) {
+				var monthDatas = {
+					nowmonth: month,
+					year: year + 1,
+					datalist: this.obj.lang.month
+				};
+				this.judgeCalendarRender('month', monthDatas);
+			}
+
+			// 获得月
+
+		}, {
+			key: "getMonth",
+			value: function getMonth() {
+				var _this = this;
+				var objs = this.$obj.querySelector('.main-check-month').querySelectorAll('td');
+				this.on(objs, 'click', function (e) {
+					var year = e.target.getAttribute('data-year');
+					var month = e.target.getAttribute('data-month');
+
+					var fulldate = year + "/" + month + "/" + _this.obj.fulldatas.today;
+					if (_this.config.type === 'month') {
+						_this.getYearMonthAndDay(month, false);
+					} else {
+						_this.judgeCalendarRender('day', fulldate);
+					}
+				});
+			}
+
+			// 选择时间
+
+		}, {
+			key: "getTimeHtml",
+			value: function getTimeHtml() {
+				var date = new Date();
+				var hour = date.getHours();
+				var minute = date.getMinutes();
+				var second = date.getSeconds();
+				hour = (hour + '').length < 2 ? '0' + hour : hour;
+				minute = (minute + '').length < 2 ? '0' + minute : minute;
+				second = (second + '').length < 2 ? '0' + second : second;
+
+				this.obj.fulldatas.hour = this.obj.fulldatas.hour || hour;
+				this.obj.fulldatas.minute = this.obj.fulldatas.hour || minute;
+				this.obj.fulldatas.second = this.obj.fulldatas.hour || second;
+
+				var datas = {
+					hour: this.obj.fulldatas.hour,
+					minute: this.obj.fulldatas.minute,
+					second: this.obj.fulldatas.second,
+					hours: [],
+					minutes: [],
+					seconds: []
+				};
+				for (var i = 0; i < 24; i++) {
+					if (i < 10) {
+						datas.hours.push('0' + i);
+					} else {
+						datas.hours.push(i + '');
+					}
+				}
+				for (var i = 0; i < 60; i++) {
+					if (i < 10) {
+						datas.minutes.push('0' + i);
+						datas.seconds.push('0' + i);
+					} else {
+						datas.minutes.push(i + '');
+						datas.seconds.push(i + '');
+					}
+				}
+				this.judgeCalendarRender('time', datas);
+			}
+
+			// 选择时间
+
+		}, {
+			key: "selectTime",
+			value: function selectTime() {
+				var _this = this;
+				var hourObjs = this.$obj.querySelector('ul.hour').querySelectorAll('li');
+				var minuteObjs = this.$obj.querySelector('ul.minute').querySelectorAll('li');
+				var secondObjs = this.$obj.querySelector('ul.second').querySelectorAll('li');
+
+				this.on(hourObjs, 'click', function (e) {
+					_this.forEach(hourObjs, function (index, item) {
+						_this.removeClass(item, 'active');
+					});
+					_this.addClass(this, 'active');
+					_this.obj.fulldatas.hour = this.getAttribute('data-time');
+				});
+
+				this.on(minuteObjs, 'click', function (e) {
+					_this.forEach(minuteObjs, function (index, item) {
+						_this.removeClass(item, 'active');
+					});
+					_this.addClass(this, 'active');
+					_this.obj.fulldatas.minute = this.getAttribute('data-time');
+				});
+
+				this.on(secondObjs, 'click', function (e) {
+					_this.forEach(secondObjs, function (index, item) {
+						_this.removeClass(item, 'active');
+					});
+					_this.addClass(this, 'active');
+					_this.obj.fulldatas.second = this.getAttribute('data-time');
+				});
+			}
+
+			// 返回日期
+
+		}, {
+			key: "backDateHtml",
+			value: function backDateHtml() {
+				this.obj.handleType = 'date';
+				var bottomHTML = this.bottomCheckTimeHTML();
+				this.$obj.querySelector('.btn-select-time').innerHTML = bottomHTML;
+				this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
+				this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
+				this.$obj.querySelector('.main-check-day').style.display = 'block';
+				this.$obj.querySelector('.top-check-day').style.display = 'block';
+			}
+
+			// 今天
+
+		}, {
+			key: "changeToToday",
+			value: function changeToToday() {
+				var json = this.getTimeDates();
+				var value = null;
+				var isFormat = true;
+				if (this.config.showtime) {
+					value = json.year + "/" + json.month + "/" + json.today + " " + json.hour + ":" + json.minute + ":" + json.second;
+				} else if (this.config.type == 'time') {
+					isFormat = false;
+					value = json.hour + ":" + json.minute + ":" + json.second;
+				} else {
+					value = json.year + "/" + json.month + "/" + json.today;
+				}
+				this.getYearMonthAndDay(value, isFormat);
+			}
+
+			// 清空
+
+		}, {
+			key: "cleanInputVal",
+			value: function cleanInputVal() {
+				var value = "";
+				this.getYearMonthAndDay(value, false);
+			}
+
+			// 确定
+
+		}, {
+			key: "makeSureSelectTime",
+			value: function makeSureSelectTime() {
+				var value = null;
+				var isFormat = true;
+				if (this.config.showtime) {
+					value = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today + " " + this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute + ":" + this.obj.fulldatas.second;
+				} else if (this.config.type == 'time') {
+					isFormat = false;
+					value = this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute + ":" + this.obj.fulldatas.second;
+				} else {
+					value = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today;
+				}
+				this.getYearMonthAndDay(value, isFormat);
+			}
+
+			// 确定年月日的值并在input里面显示，时间选择器隐藏
+
+		}, {
+			key: "getYearMonthAndDay",
+			value: function getYearMonthAndDay(datatime) {
+				var isFormat = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+				var formatTime = isFormat ? new Date(datatime).Format(this.config.format) : datatime;
+				document.querySelector(this.config.elem).value = formatTime;
+				this.$obj.style.display = "none";
+
+				this.config.done && this.config.done(formatTime);
+				if (this.obj.initVal != formatTime && this.config.change) this.config.change(formatTime);
+			}
+
+			// 判断插件渲染类型 day | year | month | time
+
+		}, {
+			key: "judgeCalendarRender",
+			value: function judgeCalendarRender(type, any) {
+				var mainHTML = void 0,
+				    topHTML = void 0,
+				    bottomHTML = void 0;
+				switch (type) {
+					case 'day':
+						this.obj.handleType = 'day';
+						var json = this.getTimeDates(any);
+						this.obj.fulldatas = json;
+						topHTML = this.topCheckDayHTML(json);
+						mainHTML = this.mainCheckDayHTML(json);
+						this.$obj.querySelector('.top-check-day').innerHTML = topHTML;
+						this.$obj.querySelector('.main-check-day').innerHTML = mainHTML;
+						this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
+						this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
+						this.$obj.querySelector('.main-check-day').style.display = 'block';
+						this.$obj.querySelector('.top-check-day').style.display = 'block';
+						// 计算表格高度
+						this.countHeight('.main-check-day', 7);
+						this.getDay();
+						break;
+					case 'year':
+						this.obj.handleType = 'year';
+						mainHTML = this.mainCheckYearHTML(any);
+						topHTML = this.topCheckYearHTML(any);
+						this.$obj.querySelector('.main-check-year').innerHTML = mainHTML;
+						this.$obj.querySelector('.top-check-year').innerHTML = topHTML;
+						this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
+						this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
+						this.$obj.querySelector('.main-check-year').style.display = 'block';
+						this.$obj.querySelector('.top-check-year').style.display = 'block';
+						// 计算表格高度
+						this.countHeight('.main-check-year', 6);
+						this.getYear();
+						break;
+					case 'month':
+						this.obj.handleType = 'month';
+						mainHTML = this.mainCheckMonthHTML(any);
+						topHTML = this.topCheckMonthHTML(any);
+						this.$obj.querySelector('.main-check-month').innerHTML = mainHTML;
+						this.$obj.querySelector('.top-check-month').innerHTML = topHTML;
+						this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
+						this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
+						this.$obj.querySelector('.main-check-month').style.display = 'block';
+						this.$obj.querySelector('.top-check-month').style.display = 'block';
+						// 计算表格高度
+						this.countHeight('.main-check-month', 4);
+						this.getMonth();
+						break;
+					case 'time':
+						this.obj.handleType = 'time';
+						mainHTML = this.mainCheckTimeHTML(any);
+						topHTML = this.topCheckTimeHTML();
+						bottomHTML = this.bottomCheckTimeHTML();
+						this.$obj.querySelector('.main-check-time').innerHTML = mainHTML;
+						this.$obj.querySelector('.top-check-time').innerHTML = topHTML;
+						this.$obj.querySelector('.btn-select-time').innerHTML = bottomHTML;
+						this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
+						this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
+						this.$obj.querySelector('.main-check-time').style.display = 'block';
+						this.$obj.querySelector('.top-check-time').style.display = 'block';
+						var hourScrollTop = this.$obj.querySelector('ul.hour').querySelector('li.active').offsetTop;
+						var minuteScrollTop = this.$obj.querySelector('ul.minute').querySelector('li.active').offsetTop;
+						var secondScrollTop = this.$obj.querySelector('ul.second').querySelector('li.active').offsetTop;
+						this.$obj.querySelector('ul.hour').scrollTop = hourScrollTop - 150;
+						this.$obj.querySelector('ul.minute').scrollTop = minuteScrollTop - 150;
+						this.$obj.querySelector('ul.second').scrollTop = secondScrollTop - 150;
+						this.selectTime();
+						break;
+				}
+			}
+
+			//插件自身点击阻止冒泡
+
+		}, {
+			key: "calendarClick",
+			value: function calendarClick() {
+				this.on(this.obj.calendar, 'click', function (e) {
+					e.preventDefault();
+					e.stopPropagation();
+				});
+			}
+
+			// 继承方法
+
+		}, {
+			key: "extend",
+			value: function extend(obj1, obj2) {
+				return Object.assign(obj1, obj2);
+			}
+		}, {
+			key: "hasClass",
+			value: function hasClass(obj, cls) {
+				return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+			}
+		}, {
+			key: "addClass",
+			value: function addClass(obj, cls) {
+				if (!this.hasClass(obj, cls)) obj.className += " " + cls;
+			}
+		}, {
+			key: "removeClass",
+			value: function removeClass(obj, cls) {
+				if (this.hasClass(obj, cls)) {
+					var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+					obj.className = obj.className.replace(reg, ' ');
+				}
+			}
+
+			//对象遍历
+
+		}, {
+			key: "forEach",
+			value: function forEach(obj, fn) {
+				var key = void 0;
+				if (typeof fn !== 'function') return this;
+				obj = obj || [];
+				if (Object.prototype.toString.call(obj) == '[object Object]') {
+					for (key in obj) {
+						if (fn.call(obj[key], key, obj[key])) break;
+					}
+				} else if (Object.prototype.toString.call(obj) == '[object NodeList]' || Object.prototype.toString.call(obj) == '[object Array]') {
+					for (key = 0; key < obj.length; key++) {
+						if (fn.call(obj[key], key, obj[key])) break;
+					}
+				} else {
+					fn.call(obj, 0, obj);
+				}
+				return this;
+			}
+		}, {
+			key: "on",
+
+
+			//事件绑定
+			value: function on(obj, eventName, fn) {
+				return this.forEach(obj, function (index, item) {
+					item.attachEvent ? item.attachEvent('on' + eventName, function (e) {
+						e.target = e.srcElement;
+						fn.call(item, e);
+					}) : item.addEventListener(eventName, fn, false);
+				});
+			}
+		}, {
+			key: "weekToEn",
+
+
+			//中英文月份枚举
+			value: function weekToEn(val) {
+				var num = typeof val == 'string' ? parseInt(val) : val;
+				return this.obj.en.month[num - 1];
+			}
+
+			// 
+
+		}, {
+			key: "showOrHide",
+			value: function showOrHide(obj, type) {
+				for (var i = 0, len = obj.length; i < len; i++) {
+					if (type === 'hide') {
+						obj[i].style.display = 'none';
+					} else {
+						obj[i].style.display = 'block';
+					}
+				}
+			}
+
+			//解除事件
+
+		}, {
+			key: "off",
+			value: function off(obj, eventName, fn) {
+				return this.forEach(obj, function (index, item) {
+					item.detachEvent ? item.detachEvent('on' + eventName, fn) : item.removeEventListener(eventName, fn, false);
+				});
+			}
+		}, {
+			key: "countHeight",
+
+
+			// 计算table tr高度
+			value: function countHeight(elename, length) {
+				var mainH = this.$obj.querySelector('.main').offsetHeight;
+				var trObj = this.$obj.querySelector(elename).querySelectorAll('tr');
+				var itemH = Math.floor(mainH / length);
+				this.forEach(trObj, function (index, item) {
+					item.style.height = itemH + 'px';
+				});
+			}
+
+			// document点击隐藏插件
+
+		}, {
+			key: "documentClick",
+			value: function documentClick() {
+				var _this3 = this;
+
+				this.on(document, 'click', function (e) {
+					if (!_this3.obj.calendar) return;
+					_this3.obj.calendar.style.display = 'none';
+				});
+			}
+		}]);
+
+		return calendar;
+	}();
+
+	;
+
+	// 实例化日期插件
+	var zaneDate = function zaneDate(option) {
+		var calendarName = option.elem.substring(1);
+		calendarName = calendarName.replace(/[_-]/g, '').toUpperCase();
+		option.calendarName = calendarName;
+		option.width = option.width < 260 ? 260 : option.width;
+		option.width = option.width > 500 ? 500 : option.width;
+		window[calendarName] = new calendar(option);
+	};
+	if (!noGlobal) window.zaneDate = zaneDate;
+
+	return zaneDate;
+});

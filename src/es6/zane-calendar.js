@@ -1,4 +1,28 @@
-;if(!new Date().Format){
+/*!
+ * zaneDate Javascript Library 1.0.0
+ * https://github.com/wangweianger/zane-data-time-calendar
+ * Date : 2017-09-22
+ * auther :zane
+ */
+;( function( global, factory ) {
+	"use strict";
+	if ( typeof module === "object" && typeof module.exports === "object" ) {
+		module.exports = global.document ?
+			factory( global, true ) :
+			function( w ) {
+				if ( !w.document ) {
+					throw new Error( "zaneDate requires a window with a document" );
+				}
+				return factory( w );
+			};
+	} else {
+		factory( global );
+	}
+
+} )( typeof window !== "undefined" ? window : this, function( window, noGlobal ) {
+
+
+if(!new Date().Format){
 	Date.prototype.Format = function (fmt) { //author: meizz 
 	    var o = {
 	        "M+": this.getMonth() + 1, //月份 
@@ -16,7 +40,6 @@
 	    return fmt;
 	}
 };
-
 
 // 日期插件
 class calendar{
@@ -960,7 +983,7 @@ class calendar{
 };
 
 // 实例化日期插件
-var zaneDate = function(option){
+let zaneDate = function(option){
 	let calendarName 		= option.elem.substring(1);
 	calendarName 			= calendarName.replace(/[_-]/g,'').toUpperCase();
 	option.calendarName 	= calendarName;
@@ -968,5 +991,8 @@ var zaneDate = function(option){
 	option.width = option.width>500?500:option.width
 	window[calendarName] 	= new calendar(option)
 }
+if ( !noGlobal ) window.zaneDate = zaneDate;
 
+return zaneDate;
 
+});
