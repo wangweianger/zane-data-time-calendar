@@ -1005,16 +1005,16 @@ class doubleCalendar{
 	}
 }
 
-// 实例化日期插件
+// 实例化日期插件 双选择器DOUBLE区分
 let zaneDate = function(option){
 	option.type = option.type || 'day'
 
 	if(option.type.indexOf('double') != -1){
-		option.type = 'day'
-		createCalendar()
-		createCalendar('DOUBLE')
+		option.type = 'day';
+		createCalendar();
+		createCalendar('DOUBLE');
 	}else{
-		createCalendar()
+		createCalendar();
 	}
 	
 	// 新建日期插件

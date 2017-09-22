@@ -1093,7 +1093,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		_classCallCheck(this, doubleCalendar);
 	};
 
-	// 实例化日期插件
+	// 实例化日期插件 双选择器DOUBLE区分
 
 
 	var zaneDate = function zaneDate(option) {
