@@ -135,20 +135,21 @@
 	<script>
 		zaneDate({
 			elem:'#zane-calendar',
-			showtime:false,
-			lang:'en',
+			type:'time',
+			// showtime:false,
+			// haveBotBtns:false,
+			// showclean:false,
+			// shownow:false,
+			// showsubmit:false,
 			width:260,
-			mounted:()=>{
-				console.log('-------')
-			},
 			change:(time)=>{
 				console.log(time)
 			},
 			done:(time)=>{
-				console.log(time)
 			}
 		})
 		zaneDate({
+			lang:'en',
 			elem:'#zane-calendar-1',
 			value:'2017-08-20 12:23:22'
 		})

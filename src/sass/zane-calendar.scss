@@ -65,14 +65,12 @@ ul,li{
 		}
 		.main{
 			overflow:hidden;
-			height:200px;
+			height:220px;
 			.week-day{
-				padding:10px;
 				table.day{
 					width:100%;
 				}
 				th,td{
-					padding:3px 0;
 					text-align:center; 
 				}
 				th.light,td.light{
@@ -95,9 +93,7 @@ ul,li{
 			}
 			.main-check-month{
 				.week-day{
-					padding:12px;
 					td{
-						padding:13px 0;
 						width: 33.333%;
 						&.calendar-disabled{
 							cursor:not-allowed;
@@ -108,9 +104,7 @@ ul,li{
 			}
 			.main-check-year{
 				.week-day{
-					padding:6px;
 					td{
-						padding:6px 0;
 						width: 33.333%;
 						&.calendar-disabled{
 							cursor:not-allowed;

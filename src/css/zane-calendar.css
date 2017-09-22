@@ -56,42 +56,33 @@ ul, li {
         margin-right: 8px; }
     .zane-calendar .zane-calendar-one .main {
       overflow: hidden;
-      height: 200px; }
-      .zane-calendar .zane-calendar-one .main .week-day {
-        padding: 10px; }
-        .zane-calendar .zane-calendar-one .main .week-day table.day {
-          width: 100%; }
-        .zane-calendar .zane-calendar-one .main .week-day th, .zane-calendar .zane-calendar-one .main .week-day td {
-          padding: 3px 0;
-          text-align: center; }
-        .zane-calendar .zane-calendar-one .main .week-day th.light, .zane-calendar .zane-calendar-one .main .week-day td.light {
-          color: #cacaca; }
-        .zane-calendar .zane-calendar-one .main .week-day td {
-          cursor: pointer; }
-          .zane-calendar .zane-calendar-one .main .week-day td.calendar-disabled {
-            cursor: not-allowed;
-            color: #ccc; }
-        .zane-calendar .zane-calendar-one .main .week-day td:hover {
-          background: #f4f4f4; }
-        .zane-calendar .zane-calendar-one .main .week-day td.active {
-          background: #34a9da;
-          color: #fff; }
-      .zane-calendar .zane-calendar-one .main .main-check-month .week-day {
-        padding: 12px; }
-        .zane-calendar .zane-calendar-one .main .main-check-month .week-day td {
-          padding: 13px 0;
-          width: 33.333%; }
-          .zane-calendar .zane-calendar-one .main .main-check-month .week-day td.calendar-disabled {
-            cursor: not-allowed;
-            color: #ccc; }
-      .zane-calendar .zane-calendar-one .main .main-check-year .week-day {
-        padding: 6px; }
-        .zane-calendar .zane-calendar-one .main .main-check-year .week-day td {
-          padding: 6px 0;
-          width: 33.333%; }
-          .zane-calendar .zane-calendar-one .main .main-check-year .week-day td.calendar-disabled {
-            cursor: not-allowed;
-            color: #ccc; }
+      height: 220px; }
+      .zane-calendar .zane-calendar-one .main .week-day table.day {
+        width: 100%; }
+      .zane-calendar .zane-calendar-one .main .week-day th, .zane-calendar .zane-calendar-one .main .week-day td {
+        text-align: center; }
+      .zane-calendar .zane-calendar-one .main .week-day th.light, .zane-calendar .zane-calendar-one .main .week-day td.light {
+        color: #cacaca; }
+      .zane-calendar .zane-calendar-one .main .week-day td {
+        cursor: pointer; }
+        .zane-calendar .zane-calendar-one .main .week-day td.calendar-disabled {
+          cursor: not-allowed;
+          color: #ccc; }
+      .zane-calendar .zane-calendar-one .main .week-day td:hover {
+        background: #f4f4f4; }
+      .zane-calendar .zane-calendar-one .main .week-day td.active {
+        background: #34a9da;
+        color: #fff; }
+      .zane-calendar .zane-calendar-one .main .main-check-month .week-day td {
+        width: 33.333%; }
+        .zane-calendar .zane-calendar-one .main .main-check-month .week-day td.calendar-disabled {
+          cursor: not-allowed;
+          color: #ccc; }
+      .zane-calendar .zane-calendar-one .main .main-check-year .week-day td {
+        width: 33.333%; }
+        .zane-calendar .zane-calendar-one .main .main-check-year .week-day td.calendar-disabled {
+          cursor: not-allowed;
+          color: #ccc; }
       .zane-calendar .zane-calendar-one .main .main-check-time .week-day {
         padding: 5px; }
         .zane-calendar .zane-calendar-one .main .main-check-time .week-day .nav {

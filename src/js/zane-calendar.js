@@ -36,8 +36,8 @@ var calendar = function () {
 			calendarName: '',
 			//控件的dom原生仅限制于id
 			elem: '#zane-calendar',
-			//year month date time datetime
-			type: 'year',
+			//day year month time datetime
+			type: 'day',
 			//absolute , fixed   
 			position: 'absolute',
 			//cn , en 
@@ -45,13 +45,11 @@ var calendar = function () {
 			// 宽度
 			width: 280,
 			// 格式化
-			format: 'yyyy-MM-dd',
+			format: 'yyyy-MM-dd HH:mm:ss',
 			// 初始默认值
 			value: '',
-			// min:'1900-10-01',
-			// max: '2099-12-31',
-			min: '',
-			max: '',
+			min: '', //'1900-10-01',
+			max: '', //'2099-12-31',
 			//click , focus
 			event: 'click',
 			//是否显示选择时间
@@ -62,6 +60,8 @@ var calendar = function () {
 			shownow: true,
 			//是否显示提交按钮
 			showsubmit: true,
+			// 是否有底部按钮列表
+			haveBotBtns: true,
 			// 插件加载完成之后调用
 			mounted: function mounted() {},
 			//时间变更之后调用
@@ -80,6 +80,7 @@ var calendar = function () {
 			input: document.querySelector(this.config.elem),
 			calendar: null,
 			id: "#zane-calendar-" + this.config.elem.substring(1),
+			$obj: null,
 			fulldatas: {},
 			handleType: 'date',
 			initVal: '', //每次进来的初始值
@@ -117,7 +118,18 @@ var calendar = function () {
 				}
 			}
 		};
+
+		this.vision = '1.0.0';
+		this.auther = 'zane';
+
 		this.obj.lang = this.obj[this.config.lang];
+
+		if (this.config.type == 'year' || this.config.type == 'month') {
+			this.config.haveBotBtns = false;
+		}
+
+		this.config.showtime = this.config.type == 'time' ? false : true;
+
 		// 初始化
 		this.init();
 	}
@@ -134,18 +146,32 @@ var calendar = function () {
 				if (!_this2.obj.calendar) {
 					//没有calendar为第一次生成
 					// 获得年月日
-					var json = _this2.getTimeDates(_this2.config.value); //生成时间选择器日期数据
-					var html = _this2.objHTML(json); //生成时间选择器HTML
-					_this2.obj.fulldatas = json;
-
+					var html = _this2.objHTML(); //生成时间选择器HTML
 					var divElement = document.createElement("div");
 					divElement.innerHTML = html;
 					document.body.appendChild(divElement);
 
-					_this2.elemEventPoint(e); //定位并显示选择器
+					_this2.$obj = document.querySelector(_this2.obj.id);
+
+					switch (_this2.config.type) {
+						case 'day':
+							_this2.judgeCalendarRender('day', _this2.config.value);
+							break;
+						case 'year':
+							_this2.getYearHtml();
+							break;
+						case 'month':
+							_this2.getMonthHtml();
+							break;
+						case 'time':
+							_this2.getTimeHtml();
+							break;
+					}
+
+					//定位并显示选择器
+					_this2.elemEventPoint(e);
 					_this2.documentClick();
 					_this2.calendarClick();
-					_this2.getDay();
 				} else {
 					_this2.elemEventPoint(e); //定位并显示选择器
 				};
@@ -161,12 +187,13 @@ var calendar = function () {
 			});
 			this.config.mounted && this.config.mounted();
 		}
+
 		//生成时间选择器区域
 
 	}, {
 		key: "objHTML",
 		value: function objHTML(json) {
-			var html = "<div class=\"zane-calendar\" style=\"width:" + this.config.width + "px;\" id=\"zane-calendar-" + this.config.elem.substring(1) + "\">\n\t\t\t\t\t<div class=\"zane-calendar-one left\" style=\"width:" + this.config.width + "px;\">\n\t\t\t\t\t\t<div class=\"top\">\n\t\t\t\t\t\t\t<div class=\"common-top top-check-day\">" + this.topCheckDayHTML(json) + "</div>\n\t\t\t\t\t\t\t<div class=\"common-top top-check-year\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-month\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-time\"></div>\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"main\">\n\t\t\t\t\t\t\t<div class=\"common-main main-check-day\">" + this.mainCheckDayHTML(json) + ("</div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-year\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-month\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-time\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"bottom\">\n\t\t\t\t\t\t\t<div class=\"btn-select-time\">\n\t\t\t\t\t\t\t\t<div class=\"left button btn-select-time-item\" onclick=\"" + this.config.calendarName + ".getTimeHtml()\">" + this.obj.lang.timeTips + "</div>\n\t\t\t\t\t\t\t</div>\t\n\t\t\t\t \t\t\t<div class=\"right\">\n\t\t\t\t\t\t\t\t<div class=\"button no-right-line\" onclick=\"" + this.config.calendarName + ".cleanInputVal()\">" + this.obj.lang.tools.clear + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button no-right-line\" onclick=\"" + this.config.calendarName + ".changeToToday()\">" + this.obj.lang.tools.now + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button\" onclick=\"" + this.config.calendarName + ".makeSureSelectTime()\">" + this.obj.lang.tools.confirm + "</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>");
+			var html = "<div class=\"zane-calendar\" style=\"width:" + this.config.width + "px;\" id=\"zane-calendar-" + this.config.elem.substring(1) + "\">\n\t\t\t\t\t<div class=\"zane-calendar-one left\" style=\"width:" + this.config.width + "px;\">\n\t\t\t\t\t\t<div class=\"top\">\n\t\t\t\t\t\t\t<div class=\"common-top top-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-top top-check-year\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-month\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-time\"></div>\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"main\">\n\t\t\t\t\t\t\t<div class=\"common-main main-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-year\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-month\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-time\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"bottom\" style=\"display:" + (this.config.haveBotBtns ? 'block' : 'none') + "\">\n\t\t\t\t\t\t\t<div class=\"btn-select-time\" style=\"display:" + (this.config.showtime ? 'blcok' : 'none') + "\">\n\t\t\t\t\t\t\t\t<div class=\"left button btn-select-time-item\" onclick=\"" + this.config.calendarName + ".getTimeHtml()\">" + this.obj.lang.timeTips + "</div>\n\t\t\t\t\t\t\t</div>\t\n\t\t\t\t \t\t\t<div class=\"right\">\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.shownow ? 'no-right-line' : '') + "\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showclean ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".cleanInputVal()\">" + this.obj.lang.tools.clear + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.showsubmit ? 'no-right-line' : '') + "\"\n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.shownow ? 'blcok' : 'none') + "\" \n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".changeToToday()\">" + this.obj.lang.tools.now + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showsubmit ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".makeSureSelectTime()\">" + this.obj.lang.tools.confirm + "</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>";
 			return html;
 		}
 		// day - top html   时间选择器选择年月块
@@ -190,12 +217,11 @@ var calendar = function () {
 	}, {
 		key: "mainCheckDayHTML",
 		value: function mainCheckDayHTML(json) {
-			var html = "\n\t\t<div class=\"week-day\"><table class=\"day\">\n\t\t\t<tr>";
+			var html = "\n\t\t<div class=\"week-day\"><table class=\"day\" border=\"0\" cellspacing=\"0\">\n\t\t\t<tr>";
 			for (var j = 0, len = 7; j < len; j++) {
 				html += "<th>" + this.obj.lang.weeks[j] + "</th>";
 			}
-			html += "</tr>\n\t\t\t<tbody class=\"tbody\">";
-
+			html += "</tr>";
 			for (var i = 0, _len = json.datalist.length; i < _len; i++) {
 				var className = json.datalist[i].class || "";
 				if (json.datalist[i].day === json.today && json.datalist[i].daytype === 'now') {
@@ -219,7 +245,7 @@ var calendar = function () {
 				}
 			}
 
-			html += "</tbody></table></div>";
+			html += "</table></div>";
 			return html;
 		}
 
@@ -236,7 +262,7 @@ var calendar = function () {
 	}, {
 		key: "mainCheckYearHTML",
 		value: function mainCheckYearHTML(json) {
-			var html = "<div class=\"week-day\">\n\t\t\t<table class=\"day\">";
+			var html = "<div class=\"week-day\">\n\t\t\t<table class=\"day\" border=\"0\" cellspacing=\"0\">";
 			for (var i = 0, len = json.datalist.length; i < len; i++) {
 				var className = json.datalist[i].class || "";
 				if (json.datalist[i].year === json.nowyear) {
@@ -271,7 +297,7 @@ var calendar = function () {
 	}, {
 		key: "mainCheckMonthHTML",
 		value: function mainCheckMonthHTML(json) {
-			var html = "<div class=\"week-day\">\n\t\t\t<table class=\"day\">";
+			var html = "<div class=\"week-day\">\n\t\t\t<table class=\"day\" border=\"0\" cellspacing=\"0\">";
 			for (var i = 0, len = json.datalist.length; i < len; i++) {
 				var className = json.datalist[i].class || "";
 				if (i + 1 === json.nowmonth) {
@@ -347,7 +373,7 @@ var calendar = function () {
 	}, {
 		key: "elemEventPoint",
 		value: function elemEventPoint(e) {
-			this.obj.calendar = document.querySelector(this.obj.id);
+			this.obj.calendar = this.$obj;
 			var screenClientHeight = document.documentElement.clientHeight;
 			var screenScrolTop = document.documentElement.scrollTop;
 			var objOffsetTop = e.target.offsetTop;
@@ -483,14 +509,7 @@ var calendar = function () {
 				year = year - 1;
 			}
 			var fulldate = year + "/" + month + "/" + this.obj.fulldatas.today;
-			var json = this.getTimeDates(fulldate);
-			var mainHTML = this.mainCheckDayHTML(json);
-			var topHTML = this.topCheckDayHTML(json);
-			this.obj.fulldatas = json;
-
-			document.querySelector(this.obj.id).querySelector('.main-check-day').innerHTML = mainHTML;
-			document.querySelector(this.obj.id).querySelector('.top-check-day').innerHTML = topHTML;
-			this.getDay();
+			this.judgeCalendarRender('day', fulldate);
 		}
 
 		// 选择下一月
@@ -504,13 +523,7 @@ var calendar = function () {
 				year = year + 1;
 			}
 			var fulldate = year + "/" + month + "/" + this.obj.fulldatas.today;
-			var json = this.getTimeDates(fulldate);
-			var mainHTML = this.mainCheckDayHTML(json);
-			var topHTML = this.topCheckDayHTML(json);
-			this.obj.fulldatas = json;
-			document.querySelector(this.obj.id).querySelector('.main-check-day').innerHTML = mainHTML;
-			document.querySelector(this.obj.id).querySelector('.top-check-day').innerHTML = topHTML;
-			this.getDay();
+			this.judgeCalendarRender('day', fulldate);
 		}
 
 		// 获得年月日,如果showtime=true,日期加样式，如果为false,直接设置当前选择的日期
@@ -519,7 +532,7 @@ var calendar = function () {
 		key: "getDay",
 		value: function getDay() {
 			var _this = this;
-			var objs = document.querySelector(this.obj.id).querySelector('.main-check-day').querySelectorAll('td');
+			var objs = this.$obj.querySelector('.main-check-day').querySelectorAll('td');
 			this.on(objs, 'click', function (e) {
 				if (!_this.hasClass(e.target, 'calendar-disabled')) {
 					//有calendar-disabled样式的不赋予事件
@@ -548,6 +561,7 @@ var calendar = function () {
 	}, {
 		key: "getYearHtml",
 		value: function getYearHtml(year) {
+			year = year || new Date().getFullYear();
 			var yearDatas = {
 				nowyear: year,
 				datalist: []
@@ -561,21 +575,7 @@ var calendar = function () {
 					year: getyear
 				});
 			}
-
-			var mainHTML = this.mainCheckYearHTML(yearDatas);
-			var topHTML = this.topCheckYearHTML(yearDatas);
-
-			document.querySelector(this.obj.id).querySelector('.main-check-year').innerHTML = mainHTML;
-			document.querySelector(this.obj.id).querySelector('.top-check-year').innerHTML = topHTML;
-
-			this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-top'), 'hide');
-			this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-main'), 'hide');
-
-			document.querySelector(this.obj.id).querySelector('.main-check-year').style.display = 'block';
-			document.querySelector(this.obj.id).querySelector('.top-check-year').style.display = 'block';
-
-			this.obj.handleType = 'year';
-			this.getYear();
+			this.judgeCalendarRender('year', yearDatas);
 		}
 
 		// 上一年
@@ -602,12 +602,16 @@ var calendar = function () {
 		key: "getYear",
 		value: function getYear() {
 			var _this = this;
-			var objs = document.querySelector(this.obj.id).querySelector('.main-check-year').querySelectorAll('td');
+			var objs = this.$obj.querySelector('.main-check-year').querySelectorAll('td');
 			this.on(objs, 'click', function (e) {
 				var year = e.target.getAttribute('data-year');
 
 				var fulldate = year + "/" + _this.obj.fulldatas.month + "/" + _this.obj.fulldatas.today;
-				_this.monthYearCommon(fulldate);
+				if (_this.config.type === 'year') {
+					_this.getYearMonthAndDay(year, false);
+				} else {
+					_this.judgeCalendarRender('day', fulldate);
+				}
 			});
 		}
 
@@ -616,15 +620,20 @@ var calendar = function () {
 	}, {
 		key: "getMonthHtml",
 		value: function getMonthHtml(month) {
+			var date = new Date();
+			var year = this.obj.fulldatas.year || date.getFullYear();
+			month = month || date.getMonth() + 1;
+
 			var monthDatas = {
 				nowmonth: month,
-				year: this.obj.fulldatas.year,
+				year: year,
 				datalist: this.obj.lang.month
 			};
-
-			this.obj.handleType = 'month';
-			this.monthHTML(monthDatas);
+			this.judgeCalendarRender('month', monthDatas);
 		}
+
+		// 上一月
+
 	}, {
 		key: "perMonthYear",
 		value: function perMonthYear(year, month) {
@@ -633,8 +642,11 @@ var calendar = function () {
 				year: year - 1,
 				datalist: this.obj.lang.month
 			};
-			this.monthHTML(monthDatas);
+			this.judgeCalendarRender('month', monthDatas);
 		}
+
+		// 下一月
+
 	}, {
 		key: "nextMonthYear",
 		value: function nextMonthYear(year, month) {
@@ -643,20 +655,7 @@ var calendar = function () {
 				year: year + 1,
 				datalist: this.obj.lang.month
 			};
-			this.monthHTML(monthDatas);
-		}
-	}, {
-		key: "monthHTML",
-		value: function monthHTML(monthDatas) {
-			var mainHTML = this.mainCheckMonthHTML(monthDatas);
-			var topHTML = this.topCheckMonthHTML(monthDatas);
-			document.querySelector(this.obj.id).querySelector('.main-check-month').innerHTML = mainHTML;
-			document.querySelector(this.obj.id).querySelector('.top-check-month').innerHTML = topHTML;
-			this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-top'), 'hide');
-			this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-main'), 'hide');
-			document.querySelector(this.obj.id).querySelector('.main-check-month').style.display = 'block';
-			document.querySelector(this.obj.id).querySelector('.top-check-month').style.display = 'block';
-			this.getMonth();
+			this.judgeCalendarRender('month', monthDatas);
 		}
 
 		// 获得月
@@ -665,38 +664,18 @@ var calendar = function () {
 		key: "getMonth",
 		value: function getMonth() {
 			var _this = this;
-			var objs = document.querySelector(this.obj.id).querySelector('.main-check-month').querySelectorAll('td');
+			var objs = this.$obj.querySelector('.main-check-month').querySelectorAll('td');
 			this.on(objs, 'click', function (e) {
 				var year = e.target.getAttribute('data-year');
 				var month = e.target.getAttribute('data-month');
 
 				var fulldate = year + "/" + month + "/" + _this.obj.fulldatas.today;
-				_this.monthYearCommon(fulldate);
+				if (_this.config.type === 'month') {
+					_this.getYearMonthAndDay(month, false);
+				} else {
+					_this.judgeCalendarRender('day', fulldate);
+				}
 			});
-		}
-
-		// 选择月份公共代码
-
-	}, {
-		key: "monthYearCommon",
-		value: function monthYearCommon(fulldate) {
-			var json = this.getTimeDates(fulldate);
-			var mainHTML = this.mainCheckDayHTML(json);
-			var topHTML = this.topCheckDayHTML(json);
-
-			this.obj.fulldatas = json;
-
-			document.querySelector(this.obj.id).querySelector('.main-check-day').innerHTML = mainHTML;
-			document.querySelector(this.obj.id).querySelector('.top-check-day').innerHTML = topHTML;
-
-			this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-top'), 'hide');
-			this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-main'), 'hide');
-
-			document.querySelector(this.obj.id).querySelector('.main-check-day').style.display = 'block';
-			document.querySelector(this.obj.id).querySelector('.top-check-day').style.display = 'block';
-
-			this.obj.handleType = 'date';
-			this.getDay();
 		}
 
 		// 选择时间
@@ -704,6 +683,18 @@ var calendar = function () {
 	}, {
 		key: "getTimeHtml",
 		value: function getTimeHtml() {
+			var date = new Date();
+			var hour = date.getHours();
+			var minute = date.getMinutes();
+			var second = date.getSeconds();
+			hour = (hour + '').length < 2 ? '0' + hour : hour;
+			minute = (minute + '').length < 2 ? '0' + minute : minute;
+			second = (second + '').length < 2 ? '0' + second : second;
+
+			this.obj.fulldatas.hour = this.obj.fulldatas.hour || hour;
+			this.obj.fulldatas.minute = this.obj.fulldatas.hour || minute;
+			this.obj.fulldatas.second = this.obj.fulldatas.hour || second;
+
 			var datas = {
 				hour: this.obj.fulldatas.hour,
 				minute: this.obj.fulldatas.minute,
@@ -728,29 +719,7 @@ var calendar = function () {
 					datas.seconds.push(i + '');
 				}
 			}
-			this.obj.handleType = 'time';
-
-			var mainHTML = this.mainCheckTimeHTML(datas);
-			var topHTML = this.topCheckTimeHTML();
-			var bottomHTML = this.bottomCheckTimeHTML();
-			document.querySelector(this.obj.id).querySelector('.main-check-time').innerHTML = mainHTML;
-			document.querySelector(this.obj.id).querySelector('.top-check-time').innerHTML = topHTML;
-			document.querySelector(this.obj.id).querySelector('.btn-select-time').innerHTML = bottomHTML;
-
-			this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-top'), 'hide');
-			this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-main'), 'hide');
-			document.querySelector(this.obj.id).querySelector('.main-check-time').style.display = 'block';
-			document.querySelector(this.obj.id).querySelector('.top-check-time').style.display = 'block';
-
-			var hourScrollTop = document.querySelector(this.obj.id).querySelector('ul.hour').querySelector('li.active').offsetTop;
-			var minuteScrollTop = document.querySelector(this.obj.id).querySelector('ul.minute').querySelector('li.active').offsetTop;
-			var secondScrollTop = document.querySelector(this.obj.id).querySelector('ul.second').querySelector('li.active').offsetTop;
-
-			document.querySelector(this.obj.id).querySelector('ul.hour').scrollTop = hourScrollTop - 150;
-			document.querySelector(this.obj.id).querySelector('ul.minute').scrollTop = minuteScrollTop - 150;
-			document.querySelector(this.obj.id).querySelector('ul.second').scrollTop = secondScrollTop - 150;
-
-			this.selectTime();
+			this.judgeCalendarRender('time', datas);
 		}
 
 		// 选择时间
@@ -759,9 +728,9 @@ var calendar = function () {
 		key: "selectTime",
 		value: function selectTime() {
 			var _this = this;
-			var hourObjs = document.querySelector(this.obj.id).querySelector('ul.hour').querySelectorAll('li');
-			var minuteObjs = document.querySelector(this.obj.id).querySelector('ul.minute').querySelectorAll('li');
-			var secondObjs = document.querySelector(this.obj.id).querySelector('ul.second').querySelectorAll('li');
+			var hourObjs = this.$obj.querySelector('ul.hour').querySelectorAll('li');
+			var minuteObjs = this.$obj.querySelector('ul.minute').querySelectorAll('li');
+			var secondObjs = this.$obj.querySelector('ul.second').querySelectorAll('li');
 
 			this.on(hourObjs, 'click', function (e) {
 				_this.forEach(hourObjs, function (index, item) {
@@ -795,12 +764,11 @@ var calendar = function () {
 		value: function backDateHtml() {
 			this.obj.handleType = 'date';
 			var bottomHTML = this.bottomCheckTimeHTML();
-			document.querySelector(this.obj.id).querySelector('.btn-select-time').innerHTML = bottomHTML;
-
-			this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-top'), 'hide');
-			this.showOrHide(document.querySelector(this.obj.id).querySelectorAll('.common-main'), 'hide');
-			document.querySelector(this.obj.id).querySelector('.main-check-day').style.display = 'block';
-			document.querySelector(this.obj.id).querySelector('.top-check-day').style.display = 'block';
+			this.$obj.querySelector('.btn-select-time').innerHTML = bottomHTML;
+			this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
+			this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
+			this.$obj.querySelector('.main-check-day').style.display = 'block';
+			this.$obj.querySelector('.top-check-day').style.display = 'block';
 		}
 
 		// 今天
@@ -810,13 +778,16 @@ var calendar = function () {
 		value: function changeToToday() {
 			var json = this.getTimeDates();
 			var value = null;
-
+			var isFormat = true;
 			if (this.config.showtime) {
 				value = json.year + "/" + json.month + "/" + json.today + " " + json.hour + ":" + json.minute + ":" + json.second;
+			} else if (this.config.type == 'time') {
+				isFormat = false;
+				value = json.hour + ":" + json.minute + ":" + json.second;
 			} else {
 				value = json.year + "/" + json.month + "/" + json.today;
 			}
-			this.getYearMonthAndDay(value);
+			this.getYearMonthAndDay(value, isFormat);
 		}
 
 		// 清空
@@ -825,7 +796,7 @@ var calendar = function () {
 		key: "cleanInputVal",
 		value: function cleanInputVal() {
 			var value = "";
-			this.getYearMonthAndDay(value);
+			this.getYearMonthAndDay(value, false);
 		}
 
 		// 确定
@@ -834,12 +805,16 @@ var calendar = function () {
 		key: "makeSureSelectTime",
 		value: function makeSureSelectTime() {
 			var value = null;
+			var isFormat = true;
 			if (this.config.showtime) {
 				value = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today + " " + this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute + ":" + this.obj.fulldatas.second;
+			} else if (this.config.type == 'time') {
+				isFormat = false;
+				value = this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute + ":" + this.obj.fulldatas.second;
 			} else {
 				value = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today;
 			}
-			this.getYearMonthAndDay(value);
+			this.getYearMonthAndDay(value, isFormat);
 		}
 
 		// 确定年月日的值并在input里面显示，时间选择器隐藏
@@ -847,12 +822,90 @@ var calendar = function () {
 	}, {
 		key: "getYearMonthAndDay",
 		value: function getYearMonthAndDay(datatime) {
-			var formatTime = datatime ? new Date(datatime).Format(this.config.format) : datatime;
+			var isFormat = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+			var formatTime = isFormat ? new Date(datatime).Format(this.config.format) : datatime;
 			document.querySelector(this.config.elem).value = formatTime;
-			document.querySelector(this.obj.id).style.display = "none";
+			this.$obj.style.display = "none";
 
 			this.config.done && this.config.done(formatTime);
 			if (this.obj.initVal != formatTime && this.config.change) this.config.change(formatTime);
+		}
+
+		// 判断插件渲染类型 day | year | month | time
+
+	}, {
+		key: "judgeCalendarRender",
+		value: function judgeCalendarRender(type, any) {
+			var mainHTML = void 0,
+			    topHTML = void 0,
+			    bottomHTML = void 0;
+			switch (type) {
+				case 'day':
+					this.obj.handleType = 'day';
+					var json = this.getTimeDates(any);
+					this.obj.fulldatas = json;
+					topHTML = this.topCheckDayHTML(json);
+					mainHTML = this.mainCheckDayHTML(json);
+					this.$obj.querySelector('.top-check-day').innerHTML = topHTML;
+					this.$obj.querySelector('.main-check-day').innerHTML = mainHTML;
+					this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
+					this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
+					this.$obj.querySelector('.main-check-day').style.display = 'block';
+					this.$obj.querySelector('.top-check-day').style.display = 'block';
+					// 计算表格高度
+					this.countHeight('.main-check-day', 7);
+					this.getDay();
+					break;
+				case 'year':
+					this.obj.handleType = 'year';
+					mainHTML = this.mainCheckYearHTML(any);
+					topHTML = this.topCheckYearHTML(any);
+					this.$obj.querySelector('.main-check-year').innerHTML = mainHTML;
+					this.$obj.querySelector('.top-check-year').innerHTML = topHTML;
+					this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
+					this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
+					this.$obj.querySelector('.main-check-year').style.display = 'block';
+					this.$obj.querySelector('.top-check-year').style.display = 'block';
+					// 计算表格高度
+					this.countHeight('.main-check-year', 6);
+					this.getYear();
+					break;
+				case 'month':
+					this.obj.handleType = 'month';
+					mainHTML = this.mainCheckMonthHTML(any);
+					topHTML = this.topCheckMonthHTML(any);
+					this.$obj.querySelector('.main-check-month').innerHTML = mainHTML;
+					this.$obj.querySelector('.top-check-month').innerHTML = topHTML;
+					this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
+					this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
+					this.$obj.querySelector('.main-check-month').style.display = 'block';
+					this.$obj.querySelector('.top-check-month').style.display = 'block';
+					// 计算表格高度
+					this.countHeight('.main-check-month', 4);
+					this.getMonth();
+					break;
+				case 'time':
+					this.obj.handleType = 'time';
+					mainHTML = this.mainCheckTimeHTML(any);
+					topHTML = this.topCheckTimeHTML();
+					bottomHTML = this.bottomCheckTimeHTML();
+					this.$obj.querySelector('.main-check-time').innerHTML = mainHTML;
+					this.$obj.querySelector('.top-check-time').innerHTML = topHTML;
+					this.$obj.querySelector('.btn-select-time').innerHTML = bottomHTML;
+					this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
+					this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
+					this.$obj.querySelector('.main-check-time').style.display = 'block';
+					this.$obj.querySelector('.top-check-time').style.display = 'block';
+					var hourScrollTop = this.$obj.querySelector('ul.hour').querySelector('li.active').offsetTop;
+					var minuteScrollTop = this.$obj.querySelector('ul.minute').querySelector('li.active').offsetTop;
+					var secondScrollTop = this.$obj.querySelector('ul.second').querySelector('li.active').offsetTop;
+					this.$obj.querySelector('ul.hour').scrollTop = hourScrollTop - 150;
+					this.$obj.querySelector('ul.minute').scrollTop = minuteScrollTop - 150;
+					this.$obj.querySelector('ul.second').scrollTop = secondScrollTop - 150;
+					this.selectTime();
+					break;
+			}
 		}
 
 		//插件自身点击阻止冒泡
@@ -960,10 +1013,23 @@ var calendar = function () {
 			});
 		}
 	}, {
-		key: "documentClick",
+		key: "countHeight",
 
+
+		// 计算table tr高度
+		value: function countHeight(elename, length) {
+			var mainH = this.$obj.querySelector('.main').offsetHeight;
+			var trObj = this.$obj.querySelector(elename).querySelectorAll('tr');
+			var itemH = Math.floor(mainH / length);
+			this.forEach(trObj, function (index, item) {
+				item.style.height = itemH + 'px';
+			});
+		}
 
 		// document点击隐藏插件
+
+	}, {
+		key: "documentClick",
 		value: function documentClick() {
 			var _this3 = this;
 
