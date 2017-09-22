@@ -6,7 +6,9 @@
 插件不兼容低版本的IE浏览器，IE浏览器请慎重使用
 暂时只支持单个时间段选择，后期会推出多个时间段选择方式。
 
-## 使用方式
+### demo地址 ： https://github.com/wangweianger/zane-data-time-calendar
+
+### 使用方式
 
 ### 浏览器端直接引用插件css 和 js
 ```
