@@ -561,6 +561,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function getDay() {
 				var _this = this;
 				var objs = this.$obj.querySelector('.main-check-day').querySelectorAll('td');
+				// 绑定单击
 				this.on(objs, 'click', function (e) {
 					if (!_this.hasClass(e.target, 'calendar-disabled')) {
 						//有calendar-disabled样式的不赋予事件
@@ -581,6 +582,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							_this.getYearMonthAndDay(value);
 						}
 					}
+				});
+				// 绑定双击
+				this.on(objs, 'dblclick', function (e) {
+					_this.makeSureSelectTime();
 				});
 			}
 

@@ -558,6 +558,7 @@ class calendar{
 		let _this=this;
 		let objs = this.$obj
 		.querySelector('.main-check-day').querySelectorAll('td');
+		// 绑定单击
 		this.on(objs,'click',function(e){
 			if(!_this.hasClass(e.target,'calendar-disabled')){//有calendar-disabled样式的不赋予事件
 				let dataTime 				= 	this.getAttribute('data-time');
@@ -577,6 +578,10 @@ class calendar{
 					_this.getYearMonthAndDay(value)
 				}
 			}
+		})
+		// 绑定双击
+		this.on(objs,'dblclick',function(e){
+			_this.makeSureSelectTime()
 		})
 	}
 
