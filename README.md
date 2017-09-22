@@ -7,25 +7,26 @@
 暂时只支持单个时间段选择，后期会推出多个时间段选择方式。
 
 ###使用方式
+
+浏览器端直接引用插件css 和 js
 ```
-	浏览器端直接引用插件css 和 js
-	<link href="./dist/zane-calendar.css">
-	<script src="./dist/zane-calendar.js"></script>
+<link href="./dist/zane-calendar.css">
+<script src="./dist/zane-calendar.js"></script>
+```
 
-	webpack 引用的方式
-
-	const zaneDate = require('./dist/zane-calendar.js')
-	或
-	import zaneDate from './dist/zane-calendar.js'
-
+webpack 引用的方式
+```
+const zaneDate = require('./dist/zane-calendar.js')
+或
+import zaneDate from './dist/zane-calendar.js'
 ```
 
 ###项目运行方法
 ```
-	git clone https://github.com/wangweianger/zane-data-time-calendar.git
-	npm install
-	npm run dev
-	npm run build
+git clone https://github.com/wangweianger/zane-data-time-calendar.git
+npm install
+npm run dev
+npm run build
 
 ```
 
