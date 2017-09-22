@@ -94,7 +94,8 @@ class calendar{
 		this.obj={
 			input:document.querySelector(this.config.elem),
 			calendar:null,
-			id:`#zane-calendar-${this.config.elem.substring(1)}`,
+			// id:`#zane-calendar-${this.config.elem.substring(1)}`,
+			id:`#zane-calendar-${this.config.calendarName}`,
 			$obj:null,
 			fulldatas:{},
 			handleType:'date',
@@ -146,7 +147,7 @@ class calendar{
 		if(this.config.type == 'time'){
 			this.config.showtime =false;
 		}
-		
+
 		// 初始化
 		this.init();
 	}
@@ -193,7 +194,7 @@ class calendar{
 			// 隐藏其他时间插件框
 			let objs = document.querySelectorAll('.zane-calendar');
 			this.forEach(objs,(index,item)=>{
-				if('#'+item.getAttribute('id') !== this.obj.id){
+				if(('#'+item.getAttribute('id')).replace(/DOUBLE/,'') !== this.obj.id.replace(/DOUBLE/,'') ){
 					item.style.display 	= 	"none";
 				}
 			})
@@ -203,7 +204,7 @@ class calendar{
 	
 	//生成时间选择器区域
 	objHTML(json){
-		let html =`<div class="zane-calendar" style="width:${this.config.width}px;" id="zane-calendar-${this.config.elem.substring(1)}">
+		let html =`<div class="zane-calendar" style="width:${this.config.width}px;" id="${this.obj.id.substring(1)}">
 					<div class="zane-calendar-one left" style="width:${this.config.width}px;">
 						<div class="top">
 							<div class="common-top top-check-day"></div>
@@ -420,7 +421,12 @@ class calendar{
 		this.obj.calendar.style.display = 'block';
 		this.obj.calendarHeight = this.$obj.offsetHeight
 		// 设置插件point位置
-		this.obj.calendar.style.left 	=	objOffsetLeft+'px';
+		if(this.config.calendarName.indexOf('DOUBLE') !== -1){
+			this.obj.calendar.style.left 	=	objOffsetLeft+this.config.width+'px';
+		}else{
+			this.obj.calendar.style.left 	=	objOffsetLeft+'px';
+		};
+		
 		objBotton > this.obj.calendarHeight?
 			//插件在input框之下 
 			this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.obj.behindTop+'px':
@@ -992,14 +998,38 @@ class calendar{
   	}
 };
 
+// double 事件选择器
+class doubleCalendar{
+	constructor(){
+
+	}
+}
+
 // 实例化日期插件
 let zaneDate = function(option){
-	let calendarName 		= option.elem.substring(1);
-	calendarName 			= calendarName.replace(/[_-]/g,'').toUpperCase();
-	option.calendarName 	= calendarName;
-	option.width = option.width<260?260:option.width
-	option.width = option.width>500?500:option.width
-	window[calendarName] 	= new calendar(option)
+	option.type = option.type || 'day'
+
+	if(option.type.indexOf('double') != -1){
+		option.type = 'day'
+		createCalendar()
+		createCalendar('DOUBLE')
+	}else{
+		createCalendar()
+	}
+	
+	// 新建日期插件
+	function createCalendar(str=''){
+		let calendarName 		= option.elem.substring(1);
+		calendarName 			= calendarName.replace(/[_-]/g,'').toUpperCase();
+
+		option.calendarName 	= calendarName+str;
+		if(option.width){
+			option.width = option.width<260?260:option.width
+			option.width = option.width>500?500:option.width
+		}
+		window[option.calendarName] 	= new calendar(option)
+	}
+	
 }
 if ( !noGlobal ) window.zaneDate = zaneDate;
 

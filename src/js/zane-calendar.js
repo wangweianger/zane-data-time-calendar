@@ -106,7 +106,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			this.obj = {
 				input: document.querySelector(this.config.elem),
 				calendar: null,
-				id: "#zane-calendar-" + this.config.elem.substring(1),
+				// id:`#zane-calendar-${this.config.elem.substring(1)}`,
+				id: "#zane-calendar-" + this.config.calendarName,
 				$obj: null,
 				fulldatas: {},
 				handleType: 'date',
@@ -209,7 +210,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					// 隐藏其他时间插件框
 					var objs = document.querySelectorAll('.zane-calendar');
 					_this2.forEach(objs, function (index, item) {
-						if ('#' + item.getAttribute('id') !== _this2.obj.id) {
+						if (('#' + item.getAttribute('id')).replace(/DOUBLE/, '') !== _this2.obj.id.replace(/DOUBLE/, '')) {
 							item.style.display = "none";
 						}
 					});
@@ -222,7 +223,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: "objHTML",
 			value: function objHTML(json) {
-				var html = "<div class=\"zane-calendar\" style=\"width:" + this.config.width + "px;\" id=\"zane-calendar-" + this.config.elem.substring(1) + "\">\n\t\t\t\t\t<div class=\"zane-calendar-one left\" style=\"width:" + this.config.width + "px;\">\n\t\t\t\t\t\t<div class=\"top\">\n\t\t\t\t\t\t\t<div class=\"common-top top-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-top top-check-year\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-month\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-time\"></div>\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"main\">\n\t\t\t\t\t\t\t<div class=\"common-main main-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-year\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-month\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-time\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"bottom\" style=\"display:" + (this.config.haveBotBtns ? 'block' : 'none') + "\">\n\t\t\t\t\t\t\t<div class=\"btn-select-time\" style=\"display:" + (this.config.showtime ? 'blcok' : 'none') + "\">\n\t\t\t\t\t\t\t\t<div class=\"left button btn-select-time-item\" onclick=\"" + this.config.calendarName + ".getTimeHtml()\">" + this.obj.lang.timeTips + "</div>\n\t\t\t\t\t\t\t</div>\t\n\t\t\t\t \t\t\t<div class=\"right\">\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.shownow ? 'no-right-line' : '') + "\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showclean ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".cleanInputVal()\">" + this.obj.lang.tools.clear + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.showsubmit ? 'no-right-line' : '') + "\"\n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.shownow ? 'blcok' : 'none') + "\" \n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".changeToToday()\">" + this.obj.lang.tools.now + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showsubmit ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".makeSureSelectTime()\">" + this.obj.lang.tools.confirm + "</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>";
+				var html = "<div class=\"zane-calendar\" style=\"width:" + this.config.width + "px;\" id=\"" + this.obj.id.substring(1) + "\">\n\t\t\t\t\t<div class=\"zane-calendar-one left\" style=\"width:" + this.config.width + "px;\">\n\t\t\t\t\t\t<div class=\"top\">\n\t\t\t\t\t\t\t<div class=\"common-top top-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-top top-check-year\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-month\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-time\"></div>\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"main\">\n\t\t\t\t\t\t\t<div class=\"common-main main-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-year\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-month\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-time\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"bottom\" style=\"display:" + (this.config.haveBotBtns ? 'block' : 'none') + "\">\n\t\t\t\t\t\t\t<div class=\"btn-select-time\" style=\"display:" + (this.config.showtime ? 'blcok' : 'none') + "\">\n\t\t\t\t\t\t\t\t<div class=\"left button btn-select-time-item\" onclick=\"" + this.config.calendarName + ".getTimeHtml()\">" + this.obj.lang.timeTips + "</div>\n\t\t\t\t\t\t\t</div>\t\n\t\t\t\t \t\t\t<div class=\"right\">\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.shownow ? 'no-right-line' : '') + "\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showclean ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".cleanInputVal()\">" + this.obj.lang.tools.clear + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.showsubmit ? 'no-right-line' : '') + "\"\n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.shownow ? 'blcok' : 'none') + "\" \n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".changeToToday()\">" + this.obj.lang.tools.now + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showsubmit ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".makeSureSelectTime()\">" + this.obj.lang.tools.confirm + "</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>";
 				return html;
 			}
 			// day - top html   时间选择器选择年月块
@@ -412,7 +413,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				this.obj.calendar.style.display = 'block';
 				this.obj.calendarHeight = this.$obj.offsetHeight;
 				// 设置插件point位置
-				this.obj.calendar.style.left = objOffsetLeft + 'px';
+				if (this.config.calendarName.indexOf('DOUBLE') !== -1) {
+					this.obj.calendar.style.left = objOffsetLeft + this.config.width + 'px';
+				} else {
+					this.obj.calendar.style.left = objOffsetLeft + 'px';
+				};
+
 				objBotton > this.obj.calendarHeight ?
 				//插件在input框之下 
 				this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.obj.behindTop + 'px' :
@@ -1081,14 +1087,40 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	;
 
+	// double 事件选择器
+
+	var doubleCalendar = function doubleCalendar() {
+		_classCallCheck(this, doubleCalendar);
+	};
+
 	// 实例化日期插件
+
+
 	var zaneDate = function zaneDate(option) {
-		var calendarName = option.elem.substring(1);
-		calendarName = calendarName.replace(/[_-]/g, '').toUpperCase();
-		option.calendarName = calendarName;
-		option.width = option.width < 260 ? 260 : option.width;
-		option.width = option.width > 500 ? 500 : option.width;
-		window[calendarName] = new calendar(option);
+		option.type = option.type || 'day';
+
+		if (option.type.indexOf('double') != -1) {
+			option.type = 'day';
+			createCalendar();
+			createCalendar('DOUBLE');
+		} else {
+			createCalendar();
+		}
+
+		// 新建日期插件
+		function createCalendar() {
+			var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+			var calendarName = option.elem.substring(1);
+			calendarName = calendarName.replace(/[_-]/g, '').toUpperCase();
+
+			option.calendarName = calendarName + str;
+			if (option.width) {
+				option.width = option.width < 260 ? 260 : option.width;
+				option.width = option.width > 500 ? 500 : option.width;
+			}
+			window[option.calendarName] = new calendar(option);
+		}
 	};
 	if (!noGlobal) window.zaneDate = zaneDate;
 

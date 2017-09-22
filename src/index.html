@@ -65,9 +65,10 @@
 
 	<h1 class="h1">示例</h1>
 	<div class="main">
+	<div class="demo"><span>DIV框:</span><div class="input" id="demo21">我是double框</div></div>
+
 		<div class="demo"><span>input框:</span><input id="demo20" type="text" class="input" placeholder="我是input框"></div>
 		<div class="demo"><span>DIV框:</span><div class="input" id="demo19">我是div框</div></div>
-
 		<div class="demo"><span>中文版:</span><input id="demo1" type="text" class="input" placeholder="yyyy-MM-dd"></div>
 		<div class="demo"><span>英文版:</span><input id="demo2" type="text" class="input" placeholder="yyyy-MM-dd"></div>
 		<div class="demo"><span>完整版:</span><input id="demo3" type="text" class="input" placeholder="yyyy-MM-dd HH:mm:ss"></div>
@@ -91,94 +92,99 @@
 
 	<script>
 		zaneDate({
+			elem:'#demo21',
+			format:'yyyy-MM-dd',
+			type:'doubleday'
+		})
+		zaneDate({
 			elem:'#demo1',
 			format:'yyyy-MM-dd',
 		})
-		zaneDate({
-			elem:'#demo2',
-			format:'yyyy-MM-dd',
-			lang:'en'
-		})
-		zaneDate({
-			elem:'#demo3',
-		})
-		zaneDate({
-			elem:'#demo4',
-			type:'year'
-		})
-		zaneDate({
-			elem:'#demo5',
-			type:'month'
-		})
-		zaneDate({
-			elem:'#demo6',
-			type:'time'
-		})
-		zaneDate({
-			elem:'#demo7',
-			width:350,
-		})
-		zaneDate({
-			elem:'#demo8',
-			format:'yyyy年MM月dd日 HH时mm分ss秒',
-		})
-		zaneDate({
-			elem:'#demo9',
-			value:'2018-01-01',
-		})
-		zaneDate({
-			elem:'#demo10',
-			min:'2017-09-01',
-			max:'2017-09-20'
-		})
-		zaneDate({
-			elem:'#demo11',
-			showtime:false
-		})
-		zaneDate({
-			elem:'#demo12',
-			showclean:false
-		})
-		zaneDate({
-			elem:'#demo13',
-			shownow:false
-		})
-		zaneDate({
-			elem:'#demo14',
-			showsubmit:false
-		})
-		zaneDate({
-			elem:'#demo15',
-			format:'yyyy-MM-dd',
-			showtime:false,
-			haveBotBtns:false
-		})
-		zaneDate({
-			elem:'#demo16',
-			mounted:function(){
-				document.getElementById('demo16').value="初始化完成！"
-			}
-		})
-		zaneDate({
-			elem:'#demo17',
-			change:function(time){
-				alert('我改变的值是'+time)
-			}
-		})
-		zaneDate({
-			elem:'#demo18',
-			done:function(time){
-				alert('我完成的值是'+time)
-			}
-		})
-		zaneDate({
-			elem:'#demo19',
-			showtime:false,
-		})
-		zaneDate({
-			elem:'#demo20',
-			showtime:false,
-		})
+		// zaneDate({
+		// 	elem:'#demo2',
+		// 	format:'yyyy-MM-dd',
+		// 	lang:'en'
+		// })
+		// zaneDate({
+		// 	elem:'#demo3',
+		// })
+		// zaneDate({
+		// 	elem:'#demo4',
+		// 	type:'year'
+		// })
+		// zaneDate({
+		// 	elem:'#demo5',
+		// 	type:'month'
+		// })
+		// zaneDate({
+		// 	elem:'#demo6',
+		// 	type:'time'
+		// })
+		// zaneDate({
+		// 	elem:'#demo7',
+		// 	width:350,
+		// })
+		// zaneDate({
+		// 	elem:'#demo8',
+		// 	format:'yyyy年MM月dd日 HH时mm分ss秒',
+		// })
+		// zaneDate({
+		// 	elem:'#demo9',
+		// 	value:'2018-01-01',
+		// })
+		// zaneDate({
+		// 	elem:'#demo10',
+		// 	min:'2017-09-01',
+		// 	max:'2017-09-20'
+		// })
+		// zaneDate({
+		// 	elem:'#demo11',
+		// 	showtime:false
+		// })
+		// zaneDate({
+		// 	elem:'#demo12',
+		// 	showclean:false
+		// })
+		// zaneDate({
+		// 	elem:'#demo13',
+		// 	shownow:false
+		// })
+		// zaneDate({
+		// 	elem:'#demo14',
+		// 	showsubmit:false
+		// })
+		// zaneDate({
+		// 	elem:'#demo15',
+		// 	format:'yyyy-MM-dd',
+		// 	showtime:false,
+		// 	haveBotBtns:false
+		// })
+		// zaneDate({
+		// 	elem:'#demo16',
+		// 	mounted:function(){
+		// 		document.getElementById('demo16').value="初始化完成！"
+		// 	}
+		// })
+		// zaneDate({
+		// 	elem:'#demo17',
+		// 	change:function(time){
+		// 		alert('我改变的值是'+time)
+		// 	}
+		// })
+		// zaneDate({
+		// 	elem:'#demo18',
+		// 	done:function(time){
+		// 		alert('我完成的值是'+time)
+		// 	}
+		// })
+		// zaneDate({
+		// 	elem:'#demo19',
+		// 	showtime:false,
+		// })
+		// zaneDate({
+		// 	elem:'#demo20',
+		// 	showtime:false,
+		// })
 
 	</script>
 </body>
