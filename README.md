@@ -6,6 +6,20 @@
 插件不兼容低版本的IE浏览器，IE浏览器请慎重使用
 暂时只支持单个时间段选择，后期会推出多个时间段选择方式。
 
+###使用方式
+```
+	浏览器端直接引用插件css 和 js
+	<link href="./dist/zane-calendar.css">
+	<script src="./dist/zane-calendar.js"></script>
+
+	webpack 引用的方式
+
+	const zaneDate = require('./dist/zane-calendar.js')
+	或
+	import zaneDate from './dist/zane-calendar.js'
+
+```
+
 ###项目运行方法
 ```
 	git clone https://github.com/wangweianger/zane-data-time-calendar.git
@@ -20,72 +34,83 @@
 参数配置
 ```
 {
-	//控件的dom原生 注意：仅限制于id选择器
-	elem:'#zane-calendar',
-
-	//可选类型day year month time datetime
-	type:'day', 
-
-	//可选择语言类型 cn , en 
-	lang:'cn', 
-
-	// 插件宽度配置
-	width:280,
-
-	// 时间格式化
-	format:'yyyy-MM-dd HH:mm:ss',
-
-	// 插件初始默认值
-	value:'',
-
-	// 可选取时间最小范围
-	min:'', //'1900-10-01',
-
-	// 可选取时间最大范围
-	max: '', //'2099-12-31',
-
-	// 定位方式  暂时只支持 fixed
-	position:'fixed', 
-
-	//事件方式 暂时只支持 click 
-	event:'click',  
-
-	//是否显示选择时间
-	showtime:true, 
-
-	//是否显示清除按钮
-	showclean:true, 
-
-	//是否显示当前按钮
-	shownow:true, 
-
-	//是否显示提交按钮
-	showsubmit:true,
-
-	// 是否有底部按钮列表
-	haveBotBtns:true,
-
-	//此参数勿动 表示当前时间插件实例化对象
-	calendarName:'',
-
-	// 插件加载完成之后调用
-	mounted:()=>{},
-
-	//时间变更之后调用
-	change:()=>{},
-
-	//选择完成之后调用
-	done:()=>{},
+	
+	elem:'#zane-calendar',   控件的dom原生 注意：仅限制于id选择器
+	type:'day',   可选类型 day year month time datetime
+	lang:'cn',   可选择语言类型 cn , en 
+	width:280,  插件宽度配置
+	format:'yyyy-MM-dd HH:mm:ss',  时间格式化
+	value:'',  插件初始默认值
+	min:'',  可选取时间最小范围 1900-10-01
+	max: '',  可选取时间最大范围 2099-12-31
+	position:'fixed',  定位方式  暂时只支持 fixed
+	event:'click',   事件方式 暂时只支持 click 
+	showtime:true,  是否显示选择时间
+	showclean:true,  是否显示清除按钮
+	shownow:true,  是否显示当前按钮
+	showsubmit:true, 是否显示提交按钮
+	haveBotBtns:true, 是否有底部按钮列表
+	calendarName:'', 此参数勿动 表示当前时间插件实例化对象
+	mounted:()=>{}, 插件加载完成之后调用
+	change:()=>{}, 时间变更之后调用
+	done:()=>{}, 选择完成之后调用
 }	
 
 ```
 ### 案例调用方式
 
 ```
-	<!-- 默认完整选项 -->
+	默认完整选项
 	zaneDate({
 		elem:'#zane-calendar',
 	})
+
+	只选择年月日
+	zaneDate({
+		elem:'#zane-calendar',
+		showtime:false,
+	})
+
+	使用英文
+	zaneDate({
+		elem:'#zane-calendar',
+		lang:'en',
+	})
+
+	只选择年
+	zaneDate({
+		elem:'#zane-calendar',
+		type:'year',
+	})
+
+	只选择月
+	zaneDate({
+		elem:'#zane-calendar',
+		type:'month',
+	})
+
+	只选择时间
+	zaneDate({
+		elem:'#zane-calendar',
+		type:'time',
+	})
+
+	格式化方式
+	zaneDate({
+		elem:'#zane-calendar',
+		format:'yyyy年MM月dd日 HH时mm分ss秒',
+	})
+
+	限定能选择的最小最大区间
+	zaneDate({
+		elem:'#zane-calendar',
+		min:'2017-08-01',
+		max:'2017-08-20',
+	})
+
+	......
+
+	具体的请查看demo
 
 ```
 
