@@ -4,11 +4,22 @@
 ### 说明：
 此插件不依赖任何第三方插件，因此可以在任何地方单独使用
 插件不兼容低版本的IE浏览器，IE浏览器请慎重使用
+暂时只支持单个时间段选择，后期会推出多个时间段选择方式。
+
+###项目运行方法
+```
+	git clone https://github.com/wangweianger/zane-data-time-calendar.git
+	npm install
+	npm run dev
+	npm run build
+
+```
 
 ### 参数说明
 
 参数配置
 ```
+{
 	//控件的dom原生 注意：仅限制于id选择器
 	elem:'#zane-calendar',
 
@@ -65,8 +76,30 @@
 
 	//选择完成之后调用
 	done:()=>{},
+}	
 
 ```
+### 案例调用方式
+
+```
+	<!-- 默认完整选项 -->
+	zaneDate({
+		elem:'#zane-calendar',
+	})
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

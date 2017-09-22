@@ -4,7 +4,8 @@
   "description": "",
   "main": "zane-calendar.js",
   "scripts": {
-    "dev": "gulp"
+    "dev": "gulp",
+    "build": "gulp build"
   },
   "author": "",
   "license": "ISC",

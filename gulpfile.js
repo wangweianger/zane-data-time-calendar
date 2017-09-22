@@ -43,3 +43,21 @@ gulp.task('babel', () =>
 
 gulp.task('default', ['connect', 'watch','sass','babel']);
 
+
+// build
+gulp.task('minCss',()=>{
+    return gulp.src([baseRrl+'css/*.css'])
+    .pipe(minifyCss())
+    .pipe(gulp.dest('dist'));
+})
+gulp.task('miJS',()=>{
+    return gulp.src([baseRrl+'js/*.js'])
+    .pipe(uglify())
+    .pipe(gulp.dest('dist'));
+})
+
+gulp.task('build', ['minCss', 'miJS']);
+
+
+
+
