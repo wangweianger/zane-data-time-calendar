@@ -77,6 +77,7 @@ class calendar{
 			// 是否有底部按钮列表
 			haveBotBtns:true,
 			calendarName:'',
+			isDouble:false,
 			// 插件加载完成之后调用
 			mounted:()=>{},
 			//时间变更之后调用
@@ -94,10 +95,11 @@ class calendar{
 		this.obj={
 			input:document.querySelector(this.config.elem),
 			calendar:null,
-			// id:`#zane-calendar-${this.config.elem.substring(1)}`,
 			id:`#zane-calendar-${this.config.calendarName}`,
 			$obj:null,
 			fulldatas:{},
+			$noDoubleObj:null,
+			isDoubleOne:false,
 			handleType:'date',
 			initVal:'',//每次进来的初始值
 			//插件于输入框的高度 
@@ -158,6 +160,14 @@ class calendar{
 			e.stopPropagation();
 
 			if(!this.obj.calendar){//没有calendar为第一次生成
+				// double 赋值
+				this.obj.isDoubleOne = this.config.calendarName.indexOf('DOUBLE') != -1?true:false;
+				if(this.obj.isDoubleOne ){
+					let noDoubleObj 		=  this.config.calendarName.replace(/DOUBLE/,'')
+					this.obj.$noDoubleObj 	=  window[noDoubleObj];
+					window[noDoubleObj].obj.$noDoubleObj = this;
+				};
+
 				// 获得年月日
 				let html 	= this.objHTML();//生成时间选择器HTML
 				var divElement = document.createElement("div");
@@ -218,7 +228,8 @@ class calendar{
 							<div class="common-main main-check-month"></div>
 							<div class="common-main main-check-time"></div>
 						</div>
-						<div class="bottom" style="display:${this.config.haveBotBtns?'block':'none'}">
+						<div class="bottom" style="display:${this.config.haveBotBtns?'block':'none'};
+												border-left:${this.obj.isDoubleOne?'none':'solid 1px #ddd'};">
 							<div class="btn-select-time" style="display:${this.config.showtime?'blcok':'none'}">
 								<div class="left button btn-select-time-item" onclick="${this.config.calendarName}.getTimeHtml()">${this.obj.lang.timeTips}</div>
 							</div>	
@@ -421,7 +432,7 @@ class calendar{
 		this.obj.calendar.style.display = 'block';
 		this.obj.calendarHeight = this.$obj.offsetHeight
 		// 设置插件point位置
-		if(this.config.calendarName.indexOf('DOUBLE') !== -1){
+		if(this.obj.isDoubleOne){
 			this.obj.calendar.style.left 	=	objOffsetLeft+this.config.width+'px';
 		}else{
 			this.obj.calendar.style.left 	=	objOffsetLeft+'px';
@@ -445,6 +456,17 @@ class calendar{
 		let hour 		= date.getHours()
 		let minute 		= date.getMinutes()
 		let second 		= date.getSeconds()
+
+		// double 处理
+		if(this.obj.isDoubleOne){
+			if(month >= 12){
+				year 	= year + 1;
+				month 	= 1;
+			}else{
+				month = month + 1;
+			}
+		};
+
 		month 			= (month+'').length<2? '0'+month : month;
 		toDate 			= (toDate+'').length<2? '0'+toDate : toDate;
 		hour 			= (hour+'').length<2? '0'+hour : hour;
@@ -545,7 +567,7 @@ class calendar{
 			year 	= year-1
 		}
 		let fulldate 	= `${year}/${month}/${this.obj.fulldatas.today}`
-		this.judgeCalendarRender('day',fulldate)
+		this.judgeCalendarRender('day',fulldate,true)
 	}
 
 	// 选择下一月
@@ -556,7 +578,7 @@ class calendar{
 			year 	= year+1
 		}
 		let fulldate 	= `${year}/${month}/${this.obj.fulldatas.today}`
-		this.judgeCalendarRender('day',fulldate)
+		this.judgeCalendarRender('day',fulldate,true)
 	}
 
 	// 获得年月日,如果showtime=true,日期加样式，如果为false,直接设置当前选择的日期
@@ -579,9 +601,10 @@ class calendar{
 				})
 				_this.addClass(this,'active');
 
-				if(!_this.config.showtime){
+				// double 处理
+				if(!_this.config.showtime && !_this.config.isDouble){
 					let value = `${_this.obj.fulldatas.year}/${_this.obj.fulldatas.month}/${_this.obj.fulldatas.today}`
-					_this.getYearMonthAndDay(value)
+					_this.getYearMonthAndDay(value,true)
 				}
 			}
 		})
@@ -634,7 +657,7 @@ class calendar{
 			if(_this.config.type === 'year'){
 				_this.getYearMonthAndDay(year,false)
 			}else{
-				_this.judgeCalendarRender('day',fulldate)
+				_this.judgeCalendarRender('day',fulldate,true)
 			}
 		})
 	}
@@ -802,37 +825,75 @@ class calendar{
 		let value 		= null;
 		let isFormat 	= true;
 		if(this.config.showtime){
-			value = `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today} ${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`					
+			// double 处理
+			if(this.config.isDouble){
+				console.log('------')
+			}else{
+				value = `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today} ${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`					
+			}
 		}else if(this.config.type == 'time'){
 			isFormat 	= false;
 			value = `${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`
 		}else{
-			value = `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today}`
+			//doubule 处理
+			if(this.config.isDouble){
+				let noDoubleData 	=  this.obj.$noDoubleObj.obj.fulldatas;
+				let noDoubleStr		=  `${noDoubleData.year}/${noDoubleData.month}/${noDoubleData.today}`
+				let haveDoubleStr	=  `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today}`
+				value				= noDoubleStr +'|'+ haveDoubleStr
+			}else{
+				value = `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today}`
+			}
 		}
 		this.getYearMonthAndDay(value,isFormat)
 	}
 
 	// 确定年月日的值并在input里面显示，时间选择器隐藏
 	getYearMonthAndDay(datatime,isFormat=true){
-		let formatTime = isFormat?new Date(datatime).Format(this.config.format):datatime;
+		let formatTime = null;
+		//doubule 处理
+		if(datatime&&datatime.indexOf('|') != -1){
+			let arr 	= datatime.split('|');
+			let val1 	= null
+			let val2 	= null
+			if(isFormat){
+				val1 = new Date(arr[0]).Format(this.config.format)
+				val2 = new Date(arr[1]).Format(this.config.format)
+			}else{
+				val1 = arr[0]
+				val2 = arr[1]
+			}
+			formatTime = val1 +' - '+ val2
+		}else{
+			formatTime = isFormat?new Date(datatime).Format(this.config.format):datatime;
+		}
+		 
 		if(this.obj.input.nodeName !== 'INPUT'){
 			this.obj.input.textContent	=	formatTime;
 		}else{
 			this.obj.input.value  		= formatTime;
 		}
+
 		this.$obj.style.display 	= 	"none";
+		//doubule 处理
+		if(this.obj.isDoubleOne) document.querySelector(this.obj.$noDoubleObj.obj.id).style.display = "none";
+
 		this.config.done&&this.config.done(formatTime);
 		if(this.obj.initVal!=formatTime&&this.config.change)this.config.change(formatTime)
 	}
 
 	// 判断插件渲染类型 day | year | month | time
-	judgeCalendarRender(type,any){
+	judgeCalendarRender(type,any,isreset){
 		let mainHTML,topHTML,bottomHTML
 		switch(type){
 			case 'day':
 				this.obj.handleType = 'day';
 				let json 			= this.getTimeDates(any);
 				this.obj.fulldatas 	= json;
+
+				// double 处理
+				this.compareSize(isreset);
+				
 				topHTML 			= this.topCheckDayHTML(json)
 				mainHTML 			= this.mainCheckDayHTML(json);
 				this.$obj.querySelector('.top-check-day').innerHTML = topHTML;
@@ -894,6 +955,43 @@ class calendar{
 				this.selectTime();
 				break;		
 		}
+		
+	}
+
+	// 比较double数据之间的大小，并从新赋值
+	compareSize(isreset){
+		if(!isreset) return;
+
+		// double 处理
+		let prev = this.obj.fulldatas
+		let next = this.obj.$noDoubleObj
+
+		if(this.config.isDouble&&prev&&next){
+			next = next.obj.fulldatas
+			if(this.obj.isDoubleOne){
+				if(this.config.type === 'day'){
+					// let nextfullstr = `${prev.year}/${prev.month}/${prev.today} ${prev.hour}:${prev.minute}:${prev.second}`
+					// let prefullstr = `${next.year}/${next.month}/${next.today} ${next.hour}:${next.minute}:${next.second}`
+					// let perTime 	= new Date(prefullstr).getTime()
+					// let nextTime 	= new Date(nextfullstr).getTime()
+					// if(perTime >= nextTime-86400000) {
+					// 	this.judgeCalendarRender('day',perTime)
+					// }
+				}
+
+				return null
+			}else{
+				if(this.config.type === 'day'){
+					let prefullstr  = `${prev.year}/${prev.month}/${prev.today} ${prev.hour}:${prev.minute}:${prev.second}`
+					let nextfullstr = `${next.year}/${next.month}/${next.today} ${next.hour}:${next.minute}:${next.second}`
+					let perTime 	= new Date(prefullstr).getTime()
+					let nextTime 	= new Date(nextfullstr).getTime()
+					if(perTime >= nextTime-86400000) {
+						this.obj.$noDoubleObj.judgeCalendarRender('day',perTime)
+					}
+				}
+			}
+		};
 	}
 
 	//插件自身点击阻止冒泡
@@ -1003,24 +1101,35 @@ let zaneDate = function(option){
 	option.type = option.type || 'day'
 
 	if(option.type.indexOf('double') != -1){
-		option.type = 'day';
-		createCalendar();
-		createCalendar('DOUBLE');
+		option.type = option.type.replace(/double/,'');
+		createCalendar({
+			showclean:false,
+			shownow:false,
+			showsubmit:false,
+			isDouble:true,
+		});
+		createCalendar({
+			shownow:false,
+			showtime:false,
+			isDouble:true,
+			double:'DOUBLE',
+		});
+		
 	}else{
 		createCalendar();
 	}
 	
 	// 新建日期插件
-	function createCalendar(str=''){
+	function createCalendar(json={}){
 		let calendarName 		= option.elem.substring(1);
 		calendarName 			= calendarName.replace(/[_-]/g,'').toUpperCase();
-
-		option.calendarName 	= calendarName+str;
+		option.calendarName 	= json&&json.double ?calendarName+json.double:calendarName;
 		if(option.width){
 			option.width = option.width<260?260:option.width
 			option.width = option.width>500?500:option.width
 		}
-		window[option.calendarName] 	= new calendar(option)
+		let cloneOption = Object.assign(JSON.parse(JSON.stringify(option)),json);
+		window[option.calendarName] 	= new calendar(cloneOption)
 	}
 	
 }

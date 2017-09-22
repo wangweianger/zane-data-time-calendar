@@ -13,6 +13,7 @@ ul, li {
   font-size: 14px;
   width: 280px;
   border: solid 1px #ddd;
+  border-left: none;
   background: #fff;
   overflow: hidden;
   -moz-user-select: none;
@@ -33,6 +34,7 @@ ul, li {
       position: relative;
       text-align: center;
       border-bottom: solid 1px #ddd;
+      border-left: solid 1px #ddd;
       font-size: 16px; }
       .zane-calendar .zane-calendar-one .top .icom {
         width: 40px;
@@ -56,7 +58,8 @@ ul, li {
         margin-right: 8px; }
     .zane-calendar .zane-calendar-one .main {
       overflow: hidden;
-      height: 220px; }
+      height: 220px;
+      border-left: solid 1px #ddd; }
       .zane-calendar .zane-calendar-one .main .week-day table.day {
         width: 100%; }
       .zane-calendar .zane-calendar-one .main .week-day th, .zane-calendar .zane-calendar-one .main .week-day td {
@@ -127,8 +130,10 @@ ul, li {
             background: rgba(0, 0, 0, 0.1); }
     .zane-calendar .zane-calendar-one .bottom {
       border-top: solid 1px #ddd;
+      border-left: solid 1px #ddd;
       overflow: hidden;
-      padding: 8px;
+      height: 43px;
+      padding: 0 8px;
       font-size: 12px; }
       .zane-calendar .zane-calendar-one .bottom .left {
         float: left; }
@@ -137,6 +142,7 @@ ul, li {
         .zane-calendar .zane-calendar-one .bottom .right .button.no-right-line {
           border-right: none; }
       .zane-calendar .zane-calendar-one .bottom .button {
+        margin-top: 8px;
         cursor: pointer;
         border: solid 1px #ddd;
         padding: 6px 8px;
