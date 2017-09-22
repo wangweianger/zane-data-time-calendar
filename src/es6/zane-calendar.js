@@ -998,13 +998,6 @@ class calendar{
   	}
 };
 
-// double 事件选择器
-class doubleCalendar{
-	constructor(){
-
-	}
-}
-
 // 实例化日期插件 双选择器DOUBLE区分
 let zaneDate = function(option){
 	option.type = option.type || 'day'
