@@ -18,7 +18,7 @@
 <!-- 需要加时间插件的输入框 -->
 <input type="" name="" id="zane-calendar">
 
-### 初始化
+初始化
 zaneDate({
 	elem:'#zane-calendar',
 })
@@ -43,7 +43,7 @@ zaneDate({
 
 ```
 
-###项目运行方法
+### 项目运行方法
 ```
 git clone https://github.com/wangweianger/zane-data-time-calendar.git
 npm install

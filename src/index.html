@@ -3,23 +3,83 @@
 <head>
 	<title></title>
 	<style>
-		input{
-			display: block;
-			margin: 100px auto;
-			height: 40px;
+		*{padding:0;margin:0;}
+		body{
+			width: 1000px;
+			margin: 0 auto;
+			background: #eee;
+		}
+		.navdemo{
+			margin-top: 50px;
+			overflow: hidden;
+		}
+		.navdemo li{
+			float: left;
+			width: 150px;
+			text-align: center;
+			font-size: 18px;
+		}
+		a{
+			text-decoration: none;
+		}
+		.h1{
+			font-size: 22px;
+			margin: 30px 0;
+		}
+		.main{
+			overflow: hidden;
+		}
+		.main .demo{
+			float: left;
+			width: 48%;
+			font-size: 16px;
+			margin: 40px 0;
+		}
+		.main .demo span{
+			display: inline-block;
+			width: 80px;
+		}
+		.main .demo input{
+			height: 35px;
+			line-height: 35px;
+			padding-left: 10px;
+			width: 280px;
+			margin-left: 10px;
 		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="./dist/zane-calendar.css">
+	<script src="./dist/zane-calendar.js"></script>
 </head>
 <body>
-	<div style="height:100px;background:#ccc;"></div>
-	<div style="height:100px;margin-top:100px;">
-		<input type="" name="" id="zane-calendar">
+	
+	<ul class="navdemo">
+		<li><a target="_blank" href="http://blog.seosiwei.com/">zane博客</a></li>
+		<li><a target="_blank" href="http://www.seosiwei.com/zjkf/166.html">文档</a></li>
+		<li><a target="_blank" href="https://github.com/wangweianger/zane-data-time-calendar">github</a></li>
+	</ul>
+
+	<h1 class="h1">示例</h1>
+	<div class="main">
+		<div class="demo"><span>中文版:</span><input id="demo1" type="text" class="input" placeholder="yyyy-MM-dd"></div>
+		<div class="demo"><span>英文版:</span><input id="demo2" type="text" class="input" placeholder="yyyy-MM-dd"></div>
+		<div class="demo"><span>完整版:</span><input id="demo3" type="text" class="input" placeholder="yyyy-MM-dd HH:mm:ss"></div>
+		<div class="demo"><span>选择年:</span><input id="demo4" type="text" class="input" placeholder="yyyy"></div>
+		<div class="demo"><span>选择月:</span><input id="demo5" type="text" class="input" placeholder="mm"></div>
+		<div class="demo"><span>选择时间:</span><input id="demo6" type="text" class="input" placeholder="HH:mm:ss"></div>
+		<div class="demo"><span>改变宽度:</span><input id="demo7" type="text" class="input" placeholder="350"></div>
+		<div class="demo"><span>格式化:</span><input id="demo8" type="text" class="input" placeholder="yyyy年MM月dd日 HH时mm分ss秒"></div>
+		<div class="demo"><span>初始默认值:</span><input id="demo9" type="text" class="input" placeholder="2018-01-01"></div>
+		<div class="demo"><span>时间范围:</span><input id="demo10" type="text" class="input" placeholder="2017-09-01 2017-09-20"></div>
+		<div class="demo"><span>不显示时分秒:</span><input id="demo11" type="text" class="input" placeholder="yyyy-MM-dd"></div>
+		<div class="demo"><span>不显示清除按钮:</span><input id="demo12" type="text" class="input" placeholder="yyyy-MM-dd"></div>
+		<div class="demo"><span>不显示今天按钮:</span><input id="demo13" type="text" class="input" placeholder="yyyy-MM-dd"></div>
+		<div class="demo"><span>不显示确定按钮:</span><input id="demo14" type="text" class="input" placeholder="yyyy-MM-dd"></div>
+		<div class="demo"><span>不显所有按钮:</span><input id="demo15" type="text" class="input" placeholder="yyyy-MM-dd"></div>
+		<div class="demo"><span>初始化回调:</span><input id="demo16" type="text" class="input" placeholder="yyyy-MM-dd"></div>
+		<div class="demo"><span>改变值回调:</span><input id="demo17" type="text" class="input" placeholder="yyyy-MM-dd"></div>
+		<div class="demo"><span>完成回调:</span><input id="demo18" type="text" class="input" placeholder="yyyy-MM-dd"></div>
 	</div>
-	<div>
-		<input type="" name="" id="zane-calendar-1">
-	</div>
-		
+
 	<!-- <div class="zane-calendar" id="zane-calendar-obj">
 		<div class="zane-calendar-one left">
 			<div class="top">
@@ -130,29 +190,88 @@
 			</div>
 		</div>
 	</div> -->
-
-	<script src="./dist/zane-calendar.js"></script>
+	
 	<script>
 		zaneDate({
-			elem:'#zane-calendar',
-			type:'day',
-			// showtime:false,
-			// haveBotBtns:false,
-			// showclean:false,
-			// shownow:false,
-			// showsubmit:false,
-			width:260,
-			change:(time)=>{
-				console.log(time)
-			},
-			done:(time)=>{
+			elem:'#demo1',
+			format:'yyyy-MM-dd',
+		})
+		zaneDate({
+			elem:'#demo2',
+			format:'yyyy-MM-dd',
+			lang:'en'
+		})
+		zaneDate({
+			elem:'#demo3',
+		})
+		zaneDate({
+			elem:'#demo4',
+			type:'year'
+		})
+		zaneDate({
+			elem:'#demo5',
+			type:'month'
+		})
+		zaneDate({
+			elem:'#demo6',
+			type:'time'
+		})
+		zaneDate({
+			elem:'#demo7',
+			width:350,
+		})
+		zaneDate({
+			elem:'#demo8',
+			format:'yyyy年MM月dd日 HH时mm分ss秒',
+		})
+		zaneDate({
+			elem:'#demo9',
+			value:'2018-01-11',
+		})
+		zaneDate({
+			elem:'#demo10',
+			min:'2017-09-01',
+			max:'2017-09-20'
+		})
+		zaneDate({
+			elem:'#demo11',
+			showtime:false
+		})
+		zaneDate({
+			elem:'#demo12',
+			showclean:false
+		})
+		zaneDate({
+			elem:'#demo13',
+			shownow:false
+		})
+		zaneDate({
+			elem:'#demo14',
+			showsubmit:false
+		})
+		zaneDate({
+			elem:'#demo15',
+			haveBotBtns:false
+		})
+		zaneDate({
+			elem:'#demo16',
+			mounted:function(){
+				document.getElementById('demo16').value="初始化完成！"
 			}
 		})
 		zaneDate({
-			lang:'en',
-			elem:'#zane-calendar-1',
-			value:'2017-08-20 12:23:22'
+			elem:'#demo17',
+			change:function(time){
+				alert('我改变的值是'+time)
+			}
 		})
+		zaneDate({
+			elem:'#demo18',
+			done:function(time){
+				alert('我完成的值是'+time)
+			}
+		})
+
 	</script>
 </body>
 </html>
