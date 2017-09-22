@@ -143,7 +143,9 @@ class calendar{
 			this.config.haveBotBtns = false;
 		}
 
-		this.config.showtime = this.config.type == 'time'? false:true;
+		if(this.config.type == 'time'){
+			this.config.showtime =false;
+		}
 		
 		// 初始化
 		this.init();
@@ -414,10 +416,9 @@ class calendar{
 		let objOffsetTop		= e.target.offsetTop
 		let objOffsetLeft		= e.target.offsetLeft
 		let objOffsetHeight		= e.target.offsetHeight
-
 		let objBotton = screenClientHeight-(objOffsetTop+objOffsetHeight+this.obj.behindTop-screenScrolTop)
-
 		this.obj.calendar.style.display = 'block';
+		this.obj.calendarHeight = this.$obj.offsetHeight
 		// 设置插件point位置
 		this.obj.calendar.style.left 	=	objOffsetLeft+'px';
 		objBotton > this.obj.calendarHeight?

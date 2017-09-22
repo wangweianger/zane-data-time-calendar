@@ -155,7 +155,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				this.config.haveBotBtns = false;
 			}
 
-			this.config.showtime = this.config.type == 'time' ? false : true;
+			if (this.config.type == 'time') {
+				this.config.showtime = false;
+			}
 
 			// 初始化
 			this.init();
@@ -406,10 +408,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var objOffsetTop = e.target.offsetTop;
 				var objOffsetLeft = e.target.offsetLeft;
 				var objOffsetHeight = e.target.offsetHeight;
-
 				var objBotton = screenClientHeight - (objOffsetTop + objOffsetHeight + this.obj.behindTop - screenScrolTop);
-
 				this.obj.calendar.style.display = 'block';
+				this.obj.calendarHeight = this.$obj.offsetHeight;
 				// 设置插件point位置
 				this.obj.calendar.style.left = objOffsetLeft + 'px';
 				objBotton > this.obj.calendarHeight ?
