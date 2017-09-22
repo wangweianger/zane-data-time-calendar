@@ -1,4 +1,4 @@
-if(!new Date().Format){
+;if(!new Date().Format){
 	Date.prototype.Format = function (fmt) { //author: meizz 
 	    var o = {
 	        "M+": this.getMonth() + 1, //月份 
@@ -21,15 +21,13 @@ if(!new Date().Format){
 // 日期插件
 class calendar{
 	constructor(json={}){
-
 		this.config={
-			calendarName:'',
 			//控件的dom原生仅限制于id
 			elem:'#zane-calendar',
 			//day year month time datetime
 			type:'day', 
 			//absolute , fixed   
-			position:'absolute', 
+			position:'fixed', 
 			//cn , en 
 			lang:'cn', 
 			// 宽度
@@ -38,9 +36,11 @@ class calendar{
 			format:'yyyy-MM-dd HH:mm:ss',
 			// 初始默认值
 			value:'',
+			// 可选取时间最小范围
 			min:'', //'1900-10-01',
+			// 可选取时间最大范围
 			max: '', //'2099-12-31',
-			//click , focus
+			//时间方式 click 
 			event:'click',  
 			//是否显示选择时间
 			showtime:true,  
@@ -52,6 +52,7 @@ class calendar{
 			showsubmit:true,
 			// 是否有底部按钮列表
 			haveBotBtns:true,
+			calendarName:'',
 			// 插件加载完成之后调用
 			mounted:()=>{},
 			//时间变更之后调用
