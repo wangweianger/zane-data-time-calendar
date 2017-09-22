@@ -21,6 +21,7 @@
 
 } )( typeof window !== "undefined" ? window : this, function( window, noGlobal ) {
 
+if(noGlobal) require ('./zane-calendar.css')
 
 if(!new Date().Format){
 	Date.prototype.Format = function (fmt) { //author: meizz 
