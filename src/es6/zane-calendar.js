@@ -804,9 +804,12 @@ class calendar{
 	// 确定年月日的值并在input里面显示，时间选择器隐藏
 	getYearMonthAndDay(datatime,isFormat=true){
 		let formatTime = isFormat?new Date(datatime).Format(this.config.format):datatime;
-		document.querySelector(this.config.elem).value		=	formatTime;
+		if(this.obj.input.nodeName !== 'INPUT'){
+			this.obj.input.textContent	=	formatTime;
+		}else{
+			this.obj.input.value  		= formatTime;
+		}
 		this.$obj.style.display 	= 	"none";
-
 		this.config.done&&this.config.done(formatTime);
 		if(this.obj.initVal!=formatTime&&this.config.change)this.config.change(formatTime)
 	}

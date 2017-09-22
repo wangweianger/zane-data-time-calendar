@@ -41,12 +41,15 @@
 			display: inline-block;
 			width: 80px;
 		}
-		.main .demo input{
+		.main .demo .input{
 			height: 35px;
 			line-height: 35px;
 			padding-left: 10px;
 			width: 280px;
 			margin-left: 10px;
+			border: solid 1px #ddd;
+			background: #fff;
+			display: inline-block;
 		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="./css/zane-calendar.css">
@@ -62,6 +65,9 @@
 
 	<h1 class="h1">示例</h1>
 	<div class="main">
+		<div class="demo"><span>input框:</span><input id="demo20" type="text" class="input" placeholder="我是input框"></div>
+		<div class="demo"><span>DIV框:</span><div class="input" id="demo19">我是div框</div></div>
+
 		<div class="demo"><span>中文版:</span><input id="demo1" type="text" class="input" placeholder="yyyy-MM-dd"></div>
 		<div class="demo"><span>英文版:</span><input id="demo2" type="text" class="input" placeholder="yyyy-MM-dd"></div>
 		<div class="demo"><span>完整版:</span><input id="demo3" type="text" class="input" placeholder="yyyy-MM-dd HH:mm:ss"></div>
@@ -80,6 +86,7 @@
 		<div class="demo"><span>初始化回调:</span><input id="demo16" type="text" class="input" placeholder="yyyy-MM-dd"></div>
 		<div class="demo"><span>改变值回调:</span><input id="demo17" type="text" class="input" placeholder="yyyy-MM-dd"></div>
 		<div class="demo"><span>完成回调:</span><input id="demo18" type="text" class="input" placeholder="yyyy-MM-dd"></div>
+
 	</div>
 
 	<script>
@@ -163,6 +170,12 @@
 			done:function(time){
 				alert('我完成的值是'+time)
 			}
+		})
+		zaneDate({
+			elem:'#demo19',
+		})
+		zaneDate({
+			elem:'#demo20',
 		})
 
 	</script>

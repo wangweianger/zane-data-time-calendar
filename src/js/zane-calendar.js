@@ -853,9 +853,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var isFormat = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
 				var formatTime = isFormat ? new Date(datatime).Format(this.config.format) : datatime;
-				document.querySelector(this.config.elem).value = formatTime;
+				if (this.obj.input.nodeName !== 'INPUT') {
+					this.obj.input.textContent = formatTime;
+				} else {
+					this.obj.input.value = formatTime;
+				}
 				this.$obj.style.display = "none";
-
 				this.config.done && this.config.done(formatTime);
 				if (this.obj.initVal != formatTime && this.config.change) this.config.change(formatTime);
 			}
