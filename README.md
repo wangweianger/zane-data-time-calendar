@@ -6,9 +6,9 @@
 插件不兼容低版本的IE浏览器，IE浏览器请慎重使用
 暂时只支持单个时间段选择，后期会推出多个时间段选择方式。
 
-###使用方式
+## 使用方式
 
-浏览器端直接引用插件css 和 js
+### 浏览器端直接引用插件css 和 js
 ```
 <link href="./dist/zane-calendar.css">
 <script src="./dist/zane-calendar.js"></script>
@@ -16,7 +16,7 @@
 <!-- 需要加时间插件的输入框 -->
 <input type="" name="" id="zane-calendar">
 
-初始化
+### 初始化
 zaneDate({
 	elem:'#zane-calendar',
 })
