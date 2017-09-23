@@ -216,24 +216,24 @@ class calendar{
 	objHTML(json){
 		let html =`<div class="zane-calendar" style="width:${this.config.width}px;" id="${this.obj.id.substring(1)}">
 					<div class="zane-calendar-one left" style="width:${this.config.width}px;">
-						<div class="top">
+						<div class="zane-date-top">
 							<div class="common-top top-check-day"></div>
 							<div class="common-top top-check-year"></div>	
 							<div class="common-top top-check-month"></div>	
 							<div class="common-top top-check-time"></div>		
 						</div>
-						<div class="main">
+						<div class="zane-date-main">
 							<div class="common-main main-check-day"></div>
 							<div class="common-main main-check-year"></div>
 							<div class="common-main main-check-month"></div>
 							<div class="common-main main-check-time"></div>
 						</div>
-						<div class="bottom" style="display:${this.config.haveBotBtns||this.config.isDouble?'block':'none'};
+						<div class="zane-date-bottom" style="display:${this.config.haveBotBtns||this.config.isDouble?'block':'none'};
 												border-left:${this.obj.isDoubleOne?'none':'solid 1px #ddd'};">
 							<div class="btn-select-time" style="display:${this.config.showtime?'blcok':'none'}">
-								<div class="left button btn-select-time-item" onclick="${this.config.calendarName}.getTimeHtml()">${this.obj.lang.timeTips}</div>
+								<div class="zane-date-left button btn-select-time-item" onclick="${this.config.calendarName}.getTimeHtml()">${this.obj.lang.timeTips}</div>
 							</div>	
-				 			<div class="right">
+				 			<div class="zane-date-right">
 								<div class="button ${this.config.shownow?'no-right-line':''}" 
 									style="display:${this.config.showclean?'blcok':'none'}"
 									onclick="${this.config.calendarName}.cleanInputVal()">${this.obj.lang.tools.clear}</div>
@@ -252,19 +252,19 @@ class calendar{
 	// day - top html   时间选择器选择年月块
 	topCheckDayHTML(json){
 		let html =`	
-		<div onclick="${this.config.calendarName}.preMonth(${json.year},${json.month})" class="icom left"></div>`
+		<div onclick="${this.config.calendarName}.preMonth(${json.year},${json.month})" class="zane-date-icom zane-icon-left"></div>`
 		if (this.config.lang == 'cn'){
-			html += `<div class="center">
+			html += `<div class="zane-icon-center">
 				<span onclick="${this.config.calendarName}.getYearHtml(${json.year})">${json.year}年</span>
 				<span onclick="${this.config.calendarName}.getMonthHtml(${json.month})">${json.month}月</span>
 			</div>`
 		}else{
-			html += `<div class="center">
+			html += `<div class="zane-icon-center">
 				<span onclick="${this.config.calendarName}.getMonthHtml(${json.month})">${this.weekToEn(json.month)}</span>
 				<span onclick="${this.config.calendarName}.getYearHtml(${json.year})">${json.year}</span>
 			</div>`
 		}
-		html +=`<div onclick="${this.config.calendarName}.nextMonth(${json.year},${json.month})" class="icom right"></div>`
+		html +=`<div onclick="${this.config.calendarName}.nextMonth(${json.year},${json.month})" class="zane-date-icom zane-icon-right"></div>`
 		
 		return html;
 	}
@@ -309,12 +309,12 @@ class calendar{
 	// year - top html 时间选择器选择年份状态头部
 	topCheckYearHTML(json){
 		let html=`
-		<div class="icom left" onclick="${this.config.calendarName}.perYear(${json.nowyear})"></div>
-		<div class="center">
+		<div class="zane-date-icom zane-icon-left" onclick="${this.config.calendarName}.perYear(${json.nowyear})"></div>
+		<div class="zane-icon-center">
 			<span>${json.firstYear}${this.config.lang=='cn'?'年':''}</span>-
 			<span>${json.lastYear}${this.config.lang=='cn'?'年':''}</span>
 		</div>
-		<div class="icom right" onclick="${this.config.calendarName}.nextYear(${json.nowyear})"></div>`
+		<div class="zane-date-icom zane-icon-right" onclick="${this.config.calendarName}.nextYear(${json.nowyear})"></div>`
 		return html;
 	}
 	// year - main html 时间选择器选择年份状态内容块
@@ -346,11 +346,11 @@ class calendar{
 	// month -top html 时间选择器选择月份头部
 	topCheckMonthHTML(json){
 		let html=`
-		<div class="icom left" onclick="${this.config.calendarName}.perMonthYear(${json.year},${json.nowmonth})"></div>
-		<div class="center">
+		<div class="zane-date-icom zane-icon-left" onclick="${this.config.calendarName}.perMonthYear(${json.year},${json.nowmonth})"></div>
+		<div class="zane-icon-center">
 			<span>${json.year}年</span>
 		</div>
-		<div class="icom right" onclick="${this.config.calendarName}.nextMonthYear(${json.year},${json.nowmonth})"></div>`
+		<div class="zane-date-icom zane-icon-right" onclick="${this.config.calendarName}.nextMonthYear(${json.year},${json.nowmonth})"></div>`
 		return html;	
 	}
 	// month -main html 时间选择器选择月份状态内容块
@@ -381,7 +381,7 @@ class calendar{
 
 	// time -top  html 时间选择器选择时间状态头部
 	topCheckTimeHTML(){
-		let html=`<div class="center"><span>${this.obj.lang.timeTips}</span></div>`
+		let html=`<div class="zane-icon-center"><span>${this.obj.lang.timeTips}</span></div>`
 		return html;	
 	}
 	// time -main html 时间选择器选择时间状态内容块
@@ -413,9 +413,9 @@ class calendar{
 	bottomCheckTimeHTML(){
 		let html = '';
 		if(this.obj.handleType === 'time'){
-			html+= `<div class="left button" onclick="${this.config.calendarName}.backDateHtml()">${this.obj.lang.dateTips}</div>`
+			html+= `<div class="zane-date-left button" onclick="${this.config.calendarName}.backDateHtml()">${this.obj.lang.dateTips}</div>`
 		}else{
-			html+= `<div class="left button" onclick="${this.config.calendarName}.getTimeHtml()">${this.obj.lang.timeTips}</div>`
+			html+= `<div class="zane-date-left button" onclick="${this.config.calendarName}.getTimeHtml()">${this.obj.lang.timeTips}</div>`
 		}
 		return html;
 	}
@@ -759,8 +759,8 @@ class calendar{
 		second 			= (second+'').length<2? '0'+second:second;
 
 		this.obj.fulldatas.hour = this.obj.fulldatas.hour||hour
-		this.obj.fulldatas.minute = this.obj.fulldatas.hour||minute
-		this.obj.fulldatas.second = this.obj.fulldatas.hour||second
+		this.obj.fulldatas.minute = this.obj.fulldatas.minute||minute
+		this.obj.fulldatas.second = this.obj.fulldatas.second||second
 
 		let datas ={
 			hour:this.obj.fulldatas.hour,
@@ -1147,7 +1147,7 @@ class calendar{
 
   	// 计算table tr高度
   	countHeight(elename,length){
-  		let mainH  		=  	this.$obj.querySelector('.main').offsetHeight;
+  		let mainH  		=  	this.$obj.querySelector('.zane-date-main').offsetHeight;
   		let trObj		= 	this.$obj.querySelector(elename).querySelectorAll('tr')
   		let itemH 		=  Math.floor(mainH/length)
   		this.forEach(trObj,(index,item)=>{
