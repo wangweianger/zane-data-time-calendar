@@ -824,12 +824,8 @@ class calendar{
 	// 返回日期
 	backDateHtml(){
 		this.obj.handleType = 'date';
-		let bottomHTML  = this.bottomCheckTimeHTML();
-		this.$obj.querySelector('.btn-select-time').innerHTML = bottomHTML;
-		this.showOrHide(this.$obj.querySelectorAll('.common-top'),'hide')
-		this.showOrHide(this.$obj.querySelectorAll('.common-main'),'hide')
-		this.$obj.querySelector('.main-check-day').style.display = 'block'
-		this.$obj.querySelector('.top-check-day').style.display = 'block'
+		let bottomHTML  	= this.bottomCheckTimeHTML();
+		this.renderCommonHtml('day','','',bottomHTML,false);
 	}
 
 	// 今天
@@ -947,15 +943,11 @@ class calendar{
 				this.obj.fulldatas 	= json;
 				// double 处理
 				this.compareSize(isreset,clickType);
-				
+
 				topHTML 			= this.topCheckDayHTML(json)
 				mainHTML 			= this.mainCheckDayHTML(json);
-				this.$obj.querySelector('.top-check-day').innerHTML = topHTML;
-				this.$obj.querySelector('.main-check-day').innerHTML = mainHTML;
-				this.showOrHide(this.$obj.querySelectorAll('.common-top'),'hide')
-				this.showOrHide(this.$obj.querySelectorAll('.common-main'),'hide')
-				this.$obj.querySelector('.main-check-day').style.display = 'block'
-				this.$obj.querySelector('.top-check-day').style.display = 'block'
+
+				this.renderCommonHtml('day',topHTML,mainHTML);
 				// 计算表格高度
 				this.countHeight('.main-check-day',7);
 				this.getDay();
@@ -967,12 +959,9 @@ class calendar{
 
 				mainHTML 	= this.mainCheckYearHTML(any);
 				topHTML		= this.topCheckYearHTML(any);
-				this.$obj.querySelector('.main-check-year').innerHTML = mainHTML;
-				this.$obj.querySelector('.top-check-year').innerHTML = topHTML;
-				this.showOrHide(this.$obj.querySelectorAll('.common-top'),'hide')
-				this.showOrHide(this.$obj.querySelectorAll('.common-main'),'hide')
-				this.$obj.querySelector('.main-check-year').style.display = 'block'
-				this.$obj.querySelector('.top-check-year').style.display = 'block'
+
+				this.renderCommonHtml('year',topHTML,mainHTML);
+
 				// 计算表格高度
 				this.countHeight('.main-check-year',6);
 				this.getYear();
@@ -981,12 +970,9 @@ class calendar{
 				this.obj.handleType = 'month';
 				mainHTML 	= this.mainCheckMonthHTML(any);
 				topHTML		= this.topCheckMonthHTML(any);
-				this.$obj.querySelector('.main-check-month').innerHTML = mainHTML;
-				this.$obj.querySelector('.top-check-month').innerHTML = topHTML;
-				this.showOrHide(this.$obj.querySelectorAll('.common-top'),'hide')
-				this.showOrHide(this.$obj.querySelectorAll('.common-main'),'hide')
-				this.$obj.querySelector('.main-check-month').style.display = 'block'
-				this.$obj.querySelector('.top-check-month').style.display = 'block'
+
+				this.renderCommonHtml('month',topHTML,mainHTML);
+
 				// 计算表格高度
 				this.countHeight('.main-check-month',4);
 				this.getMonth();
@@ -996,13 +982,9 @@ class calendar{
 				mainHTML 	= this.mainCheckTimeHTML(any);
 				topHTML		= this.topCheckTimeHTML();
 				bottomHTML  = this.bottomCheckTimeHTML();
-				this.$obj.querySelector('.main-check-time').innerHTML = mainHTML;
-				this.$obj.querySelector('.top-check-time').innerHTML = topHTML;
-				this.$obj.querySelector('.btn-select-time').innerHTML = bottomHTML;
-				this.showOrHide(this.$obj.querySelectorAll('.common-top'),'hide')
-				this.showOrHide(this.$obj.querySelectorAll('.common-main'),'hide')
-				this.$obj.querySelector('.main-check-time').style.display = 'block'
-				this.$obj.querySelector('.top-check-time').style.display = 'block'
+
+				this.renderCommonHtml('time',topHTML,mainHTML,bottomHTML);
+
 				let hourScrollTop = this.$obj.querySelector('ul.hour').querySelector('li.active').offsetTop
 				let minuteScrollTop = this.$obj.querySelector('ul.minute').querySelector('li.active').offsetTop
 				let secondScrollTop = this.$obj.querySelector('ul.second').querySelector('li.active').offsetTop
@@ -1013,6 +995,18 @@ class calendar{
 				break;		
 		}
 		
+	}
+
+	renderCommonHtml(type,topHTML,mainHTML,bottomHTML,isrender=true){
+		if(type == 'time'|| !isrender) this.$obj.querySelector(`.btn-select-time`).innerHTML = bottomHTML;
+		if(isrender){
+			this.$obj.querySelector(`.top-check-${type}`).innerHTML 	= topHTML;
+			this.$obj.querySelector(`.main-check-${type}`).innerHTML 	= mainHTML;
+		};
+		this.showOrHide(this.$obj.querySelectorAll('.common-top'),'hide')
+		this.showOrHide(this.$obj.querySelectorAll('.common-main'),'hide')
+		this.$obj.querySelector(`.main-check-${type}`).style.display 	= 'block'
+		this.$obj.querySelector(`.top-check-${type}`).style.display 	= 'block'
 	}
 
 	// 比较double数据之间的大小，并从新赋值
@@ -1044,7 +1038,7 @@ class calendar{
 		switch(this.config.type){
 			case 'day':
 				nextfullstr = `${json.prev.year}/${json.prev.month}/${json.prev.today} ${json.prev.hour}:${json.prev.minute}:${json.prev.second}`
-				prefullstr = `${json.next.year}/${json.next.month}/${json.next.today} ${json.next.hour}:${json.next.minute}:${json.next.second}`
+				prefullstr 	= `${json.next.year}/${json.next.month}/${json.next.today} ${json.next.hour}:${json.next.minute}:${json.next.second}`
 				perTime 	= new Date(prefullstr).getTime()
 				nextTime 	= new Date(nextfullstr).getTime()
 				if(perTime >= nextTime-86400000) {
@@ -1052,8 +1046,8 @@ class calendar{
 				}
 				break;
 			case 'year':
-				perTime = `${json.prev.year}`
-				nextTime = `${json.next.year}`
+				perTime 	= `${json.prev.year}`
+				nextTime 	= `${json.next.year}`
 				if(perTime >= nextTime) {
 					this.obj.$noDoubleObj.getYearHtml(nextTime,false,json.clickType)
 				}

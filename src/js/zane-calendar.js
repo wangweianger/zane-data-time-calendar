@@ -858,11 +858,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function backDateHtml() {
 				this.obj.handleType = 'date';
 				var bottomHTML = this.bottomCheckTimeHTML();
-				this.$obj.querySelector('.btn-select-time').innerHTML = bottomHTML;
-				this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
-				this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
-				this.$obj.querySelector('.main-check-day').style.display = 'block';
-				this.$obj.querySelector('.top-check-day').style.display = 'block';
+				this.renderCommonHtml('day', '', '', bottomHTML, false);
 			}
 
 			// 今天
@@ -1003,12 +999,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 						topHTML = this.topCheckDayHTML(json);
 						mainHTML = this.mainCheckDayHTML(json);
-						this.$obj.querySelector('.top-check-day').innerHTML = topHTML;
-						this.$obj.querySelector('.main-check-day').innerHTML = mainHTML;
-						this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
-						this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
-						this.$obj.querySelector('.main-check-day').style.display = 'block';
-						this.$obj.querySelector('.top-check-day').style.display = 'block';
+
+						this.renderCommonHtml('day', topHTML, mainHTML);
 						// 计算表格高度
 						this.countHeight('.main-check-day', 7);
 						this.getDay();
@@ -1020,12 +1012,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 						mainHTML = this.mainCheckYearHTML(any);
 						topHTML = this.topCheckYearHTML(any);
-						this.$obj.querySelector('.main-check-year').innerHTML = mainHTML;
-						this.$obj.querySelector('.top-check-year').innerHTML = topHTML;
-						this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
-						this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
-						this.$obj.querySelector('.main-check-year').style.display = 'block';
-						this.$obj.querySelector('.top-check-year').style.display = 'block';
+
+						this.renderCommonHtml('year', topHTML, mainHTML);
+
 						// 计算表格高度
 						this.countHeight('.main-check-year', 6);
 						this.getYear();
@@ -1034,12 +1023,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						this.obj.handleType = 'month';
 						mainHTML = this.mainCheckMonthHTML(any);
 						topHTML = this.topCheckMonthHTML(any);
-						this.$obj.querySelector('.main-check-month').innerHTML = mainHTML;
-						this.$obj.querySelector('.top-check-month').innerHTML = topHTML;
-						this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
-						this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
-						this.$obj.querySelector('.main-check-month').style.display = 'block';
-						this.$obj.querySelector('.top-check-month').style.display = 'block';
+
+						this.renderCommonHtml('month', topHTML, mainHTML);
+
 						// 计算表格高度
 						this.countHeight('.main-check-month', 4);
 						this.getMonth();
@@ -1049,13 +1035,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						mainHTML = this.mainCheckTimeHTML(any);
 						topHTML = this.topCheckTimeHTML();
 						bottomHTML = this.bottomCheckTimeHTML();
-						this.$obj.querySelector('.main-check-time').innerHTML = mainHTML;
-						this.$obj.querySelector('.top-check-time').innerHTML = topHTML;
-						this.$obj.querySelector('.btn-select-time').innerHTML = bottomHTML;
-						this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
-						this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
-						this.$obj.querySelector('.main-check-time').style.display = 'block';
-						this.$obj.querySelector('.top-check-time').style.display = 'block';
+
+						this.renderCommonHtml('time', topHTML, mainHTML, bottomHTML);
+
 						var hourScrollTop = this.$obj.querySelector('ul.hour').querySelector('li.active').offsetTop;
 						var minuteScrollTop = this.$obj.querySelector('ul.minute').querySelector('li.active').offsetTop;
 						var secondScrollTop = this.$obj.querySelector('ul.second').querySelector('li.active').offsetTop;
@@ -1065,6 +1047,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						this.selectTime();
 						break;
 				}
+			}
+		}, {
+			key: "renderCommonHtml",
+			value: function renderCommonHtml(type, topHTML, mainHTML, bottomHTML) {
+				var isrender = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
+
+				if (type == 'time' || !isrender) this.$obj.querySelector(".btn-select-time").innerHTML = bottomHTML;
+				if (isrender) {
+					this.$obj.querySelector(".top-check-" + type).innerHTML = topHTML;
+					this.$obj.querySelector(".main-check-" + type).innerHTML = mainHTML;
+				};
+				this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
+				this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
+				this.$obj.querySelector(".main-check-" + type).style.display = 'block';
+				this.$obj.querySelector(".top-check-" + type).style.display = 'block';
 			}
 
 			// 比较double数据之间的大小，并从新赋值

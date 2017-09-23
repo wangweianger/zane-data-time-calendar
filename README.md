@@ -140,7 +140,7 @@ npm run build
 
 ```
 
-### 新增double选择器 
+### 1.1.0 版本新增 double选择器 
 
 ```
 config.type  新增double类型  可选类型如下：day year month time doubleday doubleyear doublemonth doubletime
