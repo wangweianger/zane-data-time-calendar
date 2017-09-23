@@ -67,7 +67,7 @@ class calendar{
 			//事件方式 click 
 			event:'click',  
 			//是否显示选择时间
-			showtime:true,  
+			showtime:false,  
 			//是否显示清除按钮
 			showclean:true, 
 			//是否显示当前按钮
@@ -228,7 +228,7 @@ class calendar{
 							<div class="common-main main-check-month"></div>
 							<div class="common-main main-check-time"></div>
 						</div>
-						<div class="bottom" style="display:${this.config.haveBotBtns?'block':'none'};
+						<div class="bottom" style="display:${this.config.haveBotBtns||this.config.isDouble?'block':'none'};
 												border-left:${this.obj.isDoubleOne?'none':'solid 1px #ddd'};">
 							<div class="btn-select-time" style="display:${this.config.showtime?'blcok':'none'}">
 								<div class="left button btn-select-time-item" onclick="${this.config.calendarName}.getTimeHtml()">${this.obj.lang.timeTips}</div>
@@ -446,7 +446,7 @@ class calendar{
 	}
 
 	// 插件数据渲染
-	getTimeDates(deraultDay){
+	getTimeDates(deraultDay,clickType){
 		let timeDatas 	= [];
 		let date    	= deraultDay?new Date(deraultDay):new Date()
 		let year		= date.getFullYear()
@@ -458,14 +458,21 @@ class calendar{
 		let second 		= date.getSeconds()
 
 		// double 处理
-		if(this.obj.isDoubleOne){
+		if(this.config.isDouble&&this.obj.isDoubleOne&&clickType!='pre'){
 			if(month >= 12){
 				year 	= year + 1;
 				month 	= 1;
 			}else{
 				month = month + 1;
 			}
-		};
+		}else if(this.config.isDouble&&!this.obj.isDoubleOne&&clickType=='pre'){
+			if(month <= 1){
+				year 	= year - 1;
+				month 	= 12;
+			}else{
+				month = month - 1;
+			}
+		}
 
 		month 			= (month+'').length<2? '0'+month : month;
 		toDate 			= (toDate+'').length<2? '0'+toDate : toDate;
@@ -567,7 +574,7 @@ class calendar{
 			year 	= year-1
 		}
 		let fulldate 	= `${year}/${month}/${this.obj.fulldatas.today}`
-		this.judgeCalendarRender('day',fulldate,true)
+		this.judgeCalendarRender('day',fulldate,true,'pre')
 	}
 
 	// 选择下一月
@@ -615,8 +622,17 @@ class calendar{
 	}
 
 	// 获得年html
-	getYearHtml(year){
+	getYearHtml(year,isreset,clickType){
 		year = year || new Date().getFullYear();
+		year = parseInt(year)
+
+		// double 处理
+		if(this.config.isDouble&&this.obj.isDoubleOne&&clickType!='pre'){
+			year 	= year + 1;
+		}else if(this.config.isDouble&&!this.obj.isDoubleOne&&clickType=='pre'){
+			year 	= year - 1;
+		}
+
 		let yearDatas 	= {
 			nowyear:year,
 			datalist:[]
@@ -630,19 +646,22 @@ class calendar{
 				year:getyear
 			})
 		}
-		this.judgeCalendarRender('year',yearDatas);
+
+		this.obj.fulldatas.year = this.config.isDouble?yearDatas.nowyear:''
+
+		this.judgeCalendarRender('year',yearDatas,isreset,clickType);
 	}
 
 	// 上一年
 	perYear(year){
 		year = year-this.obj.totalYear
-		this.getYearHtml(year)
+		this.getYearHtml(year,true,'pre')
 	}
 
 	// 下一年
 	nextYear(year){
 		year = year+this.obj.totalYear
-		this.getYearHtml(year)
+		this.getYearHtml(year,true)
 	}
 
 	// 获得年
@@ -653,11 +672,19 @@ class calendar{
 		this.on(objs,'click',function(e){
 			let year = e.target.getAttribute('data-year')
 
+			//选择具体日期添加样式
+			_this.forEach(objs,(index,item)=>{
+				_this.removeClass(item,'active');
+			})
+			_this.addClass(this,'active');
+
 			let fulldate 	= `${year}/${_this.obj.fulldatas.month}/${_this.obj.fulldatas.today}`
 			if(_this.config.type === 'year'){
-				_this.getYearMonthAndDay(year,false)
+				_this.config.isDouble ? _this.obj.fulldatas.year = year : _this.getYearMonthAndDay(year,false)
 			}else{
-				_this.judgeCalendarRender('day',fulldate,true)
+				//double 处理
+				let clickType = _this.obj.isDoubleOne?'pre':'';
+				_this.judgeCalendarRender('day',fulldate,true,clickType)
 			}
 		})
 	}
@@ -667,12 +694,12 @@ class calendar{
 		let date 	= new Date();
 		let year 	= this.obj.fulldatas.year || date.getFullYear();
 		month 		= month || date.getMonth()+1
-
 		let monthDatas 	= {
 			nowmonth:month,
 			year:year,
 			datalist:this.obj.lang.month
 		};
+		this.obj.fulldatas.month = this.config.isDouble?monthDatas.nowmonth:''
 		this.judgeCalendarRender('month',monthDatas);
 	}
 
@@ -705,9 +732,16 @@ class calendar{
 			let year 	= e.target.getAttribute('data-year')
 			let month 	= e.target.getAttribute('data-month')
 
+			//选择具体日期添加样式
+			_this.forEach(objs,(index,item)=>{
+				_this.removeClass(item,'active');
+			})
+			_this.addClass(this,'active');
+
 			let fulldate 	= `${year}/${month}/${_this.obj.fulldatas.today}`
 			if(_this.config.type === 'month'){
-				_this.getYearMonthAndDay(month,false)
+				_this.config.isDouble ? _this.obj.fulldatas.month = month : _this.getYearMonthAndDay(month,false)
+
 			}else{
 				_this.judgeCalendarRender('day',fulldate)
 			}
@@ -831,16 +865,37 @@ class calendar{
 			}else{
 				value = `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today} ${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`					
 			}
-		}else if(this.config.type == 'time'){
+		}else if(this.config.type == 'time'&&!this.config.isDouble){
 			isFormat 	= false;
 			value = `${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`
 		}else{
 			//doubule 处理
 			if(this.config.isDouble){
 				let noDoubleData 	=  this.obj.$noDoubleObj.obj.fulldatas;
-				let noDoubleStr		=  `${noDoubleData.year}/${noDoubleData.month}/${noDoubleData.today}`
-				let haveDoubleStr	=  `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today}`
-				value				= noDoubleStr +'|'+ haveDoubleStr
+				let noDoubleStr,haveDoubleStr
+
+				switch(this.config.type){
+					case 'day':
+						noDoubleStr		=  `${noDoubleData.year}/${noDoubleData.month}/${noDoubleData.today}`
+						haveDoubleStr	=  `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today}`
+						break;
+					case 'year':
+						isFormat = false
+						noDoubleStr 	=  `${noDoubleData.year}`
+						haveDoubleStr 	=  `${this.obj.fulldatas.year}`
+						break;
+					case 'month':
+						isFormat = false
+						noDoubleStr 	=  `${noDoubleData.month}`
+						haveDoubleStr 	=  `${this.obj.fulldatas.month}`
+						break;	
+					case 'time' :		
+						isFormat = false
+						noDoubleStr 	=  `${noDoubleData.hour}:${noDoubleData.minute}:${noDoubleData.second}`
+						haveDoubleStr 	=  `${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`
+						break;		
+				};
+				value					=  noDoubleStr +'|'+ haveDoubleStr
 			}else{
 				value = `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today}`
 			}
@@ -883,16 +938,15 @@ class calendar{
 	}
 
 	// 判断插件渲染类型 day | year | month | time
-	judgeCalendarRender(type,any,isreset){
+	judgeCalendarRender(type,any,isreset,clickType){
 		let mainHTML,topHTML,bottomHTML
 		switch(type){
 			case 'day':
 				this.obj.handleType = 'day';
-				let json 			= this.getTimeDates(any);
+				let json 			= this.getTimeDates(any,clickType);
 				this.obj.fulldatas 	= json;
-
 				// double 处理
-				this.compareSize(isreset);
+				this.compareSize(isreset,clickType);
 				
 				topHTML 			= this.topCheckDayHTML(json)
 				mainHTML 			= this.mainCheckDayHTML(json);
@@ -908,6 +962,9 @@ class calendar{
 				break;
 			case 'year':
 				this.obj.handleType = 'year';
+				// double 处理
+				this.compareSize(isreset,clickType);
+
 				mainHTML 	= this.mainCheckYearHTML(any);
 				topHTML		= this.topCheckYearHTML(any);
 				this.$obj.querySelector('.main-check-year').innerHTML = mainHTML;
@@ -959,39 +1016,50 @@ class calendar{
 	}
 
 	// 比较double数据之间的大小，并从新赋值
-	compareSize(isreset){
+	compareSize(isreset,clickType){
 		if(!isreset) return;
-
 		// double 处理
 		let prev = this.obj.fulldatas
 		let next = this.obj.$noDoubleObj
-
 		if(this.config.isDouble&&prev&&next){
 			next = next.obj.fulldatas
 			if(this.obj.isDoubleOne){
-				if(this.config.type === 'day'){
-					// let nextfullstr = `${prev.year}/${prev.month}/${prev.today} ${prev.hour}:${prev.minute}:${prev.second}`
-					// let prefullstr = `${next.year}/${next.month}/${next.today} ${next.hour}:${next.minute}:${next.second}`
-					// let perTime 	= new Date(prefullstr).getTime()
-					// let nextTime 	= new Date(nextfullstr).getTime()
-					// if(perTime >= nextTime-86400000) {
-					// 	this.judgeCalendarRender('day',perTime)
-					// }
-				}
-
-				return null
+				this.getDoubleTime({
+					prev:next,
+					next:prev,
+					clickType:clickType
+				})
 			}else{
-				if(this.config.type === 'day'){
-					let prefullstr  = `${prev.year}/${prev.month}/${prev.today} ${prev.hour}:${prev.minute}:${prev.second}`
-					let nextfullstr = `${next.year}/${next.month}/${next.today} ${next.hour}:${next.minute}:${next.second}`
-					let perTime 	= new Date(prefullstr).getTime()
-					let nextTime 	= new Date(nextfullstr).getTime()
-					if(perTime >= nextTime-86400000) {
-						this.obj.$noDoubleObj.judgeCalendarRender('day',perTime)
-					}
-				}
+				this.getDoubleTime({
+					prev:prev,
+					next:next,
+					clickType:clickType
+				})
 			}
 		};
+	}
+
+	getDoubleTime(json){
+		let nextfullstr,prefullstr,perTime,nextTime
+		switch(this.config.type){
+			case 'day':
+				nextfullstr = `${json.prev.year}/${json.prev.month}/${json.prev.today} ${json.prev.hour}:${json.prev.minute}:${json.prev.second}`
+				prefullstr = `${json.next.year}/${json.next.month}/${json.next.today} ${json.next.hour}:${json.next.minute}:${json.next.second}`
+				perTime 	= new Date(prefullstr).getTime()
+				nextTime 	= new Date(nextfullstr).getTime()
+				if(perTime >= nextTime-86400000) {
+					this.obj.$noDoubleObj.judgeCalendarRender('day',nextTime,false,json.clickType)
+				}
+				break;
+			case 'year':
+				perTime = `${json.prev.year}`
+				nextTime = `${json.next.year}`
+				if(perTime >= nextTime) {
+					this.obj.$noDoubleObj.getYearHtml(nextTime,false,json.clickType)
+				}
+				break;	
+		}
+
 	}
 
 	//插件自身点击阻止冒泡
@@ -1099,7 +1167,6 @@ class calendar{
 // 实例化日期插件 双选择器DOUBLE区分
 let zaneDate = function(option){
 	option.type = option.type || 'day'
-
 	if(option.type.indexOf('double') != -1){
 		option.type = option.type.replace(/double/,'');
 		createCalendar({
@@ -1128,10 +1195,26 @@ let zaneDate = function(option){
 			option.width = option.width<260?260:option.width
 			option.width = option.width>500?500:option.width
 		}
-		let cloneOption = Object.assign(JSON.parse(JSON.stringify(option)),json);
+
+		let cloneOption = Object.assign(extendDeep(option),json);
 		window[option.calendarName] 	= new calendar(cloneOption)
 	}
-	
+	//深度复制
+	function extendDeep(parent, child) {
+		child = child || {};
+		for(var i in parent) {
+			if(parent.hasOwnProperty(i)) {
+				if(typeof parent[i] === "object") {
+					child[i] = (Object.prototype.toString.call(parent[i]) === "[object Array]") ? [] : {};
+					extendDeep(parent[i], child[i]);
+				} else {
+					child[i] = parent[i];
+				}
+			}
+		}
+		return child;
+	};
+		
 }
 if ( !noGlobal ) window.zaneDate = zaneDate;
 
