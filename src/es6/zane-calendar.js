@@ -1,5 +1,5 @@
 /*!
- * zaneDate Javascript Library 1.0.0
+ * zaneDate Javascript Library 1.1.0
  * https://github.com/wangweianger/zane-data-time-calendar
  * Date : 2017-09-22
  * auther :zane
@@ -48,7 +48,7 @@ class calendar{
 		this.config={
 			//控件的dom原生仅限制于id
 			elem:'#zane-calendar',
-			//day year month time datetime
+			//可选 day year month time doubleday doubleyear doublemonth doubletime
 			type:'day', 
 			//absolute , fixed   
 			position:'fixed', 

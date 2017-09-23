@@ -7,7 +7,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /*!
- * zaneDate Javascript Library 1.0.0
+ * zaneDate Javascript Library 1.1.0
  * https://github.com/wangweianger/zane-data-time-calendar
  * Date : 2017-09-22
  * auther :zane
@@ -60,7 +60,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			this.config = {
 				//控件的dom原生仅限制于id
 				elem: '#zane-calendar',
-				//day year month time datetime
+				//可选 day year month time doubleday doubleyear doublemonth doubletime
 				type: 'day',
 				//absolute , fixed   
 				position: 'fixed',

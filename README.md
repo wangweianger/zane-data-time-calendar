@@ -61,7 +61,7 @@ npm run build
 {
 	
 	elem:'#zane-calendar',   控件的dom原生 注意：仅限制于id选择器
-	type:'day',   可选类型 day year month time datetime
+	type:'day',   可选类型 day year month time doubleday doubleyear doublemonth doubletime
 	lang:'cn',   可选择语言类型 cn , en 
 	width:280,  插件宽度配置
 	format:'yyyy-MM-dd HH:mm:ss',  时间格式化
@@ -80,6 +80,7 @@ npm run build
 	change:()=>{}, 时间变更之后调用
 	done:()=>{}, 选择完成之后调用
 }	
+
 
 ```
 ### 案例调用方式
@@ -139,7 +140,38 @@ npm run build
 
 ```
 
+### 新增double选择器 
 
+```
+config.type  新增double类型  可选类型如下：day year month time doubleday doubleyear doublemonth doubletime
+
+双日期范围选择
+zaneDate({
+	elem:'#demo21',
+	type:'doubleday',
+	showtime:false
+})
+
+双年范围选择
+zaneDate({
+	elem:'#demo22',
+	type:'doubleyear',
+})
+
+双月范围选择
+zaneDate({
+	elem:'#demo23',
+	type:'doublemonth',
+})
+
+双时间选择
+zaneDate({
+	elem:'#demo24',
+	type:'doubletime',
+})
+
+
+```
 
 
 
