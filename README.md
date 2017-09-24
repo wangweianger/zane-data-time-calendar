@@ -148,8 +148,7 @@ config.type  新增double类型  可选类型如下：day year month time double
 双日期范围选择
 zaneDate({
 	elem:'#demo21',
-	type:'doubleday',
-	showtime:false
+	type:'doubleday'
 })
 
 双年范围选择
@@ -170,6 +169,23 @@ zaneDate({
 	type:'doubletime',
 })
 
+
+```
+
+### 1.2.0  
+### 1.doubleday类型新增选择时间，支持时分秒选择
+### 2.double类型检测距离右边window边线的距离，若不足，自动排列为上下两个日期
+
+```
+config.type doubleday支持选择时间范围
+
+双日期范围选择
+zaneDate({
+	elem:'#demo25',
+	format:'yyyy-MM-dd HH:mm:ss',
+	type:'doubleday',
+	showtime:true
+})
 
 ```
 

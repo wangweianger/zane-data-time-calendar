@@ -57,7 +57,7 @@ class calendar{
 			// 宽度
 			width:280,
 			// 格式化
-			format:'yyyy-MM-dd',
+			format:'yyyy-MM-dd', //'yyyy-MM-dd HH:mm:ss'
 			// 初始默认值
 			value:'',
 			// 可选取时间最小范围
@@ -137,7 +137,7 @@ class calendar{
 		      }
 		}
 
-		this.vision = '1.0.0'
+		this.vision = '1.2.0'
 		this.auther = 'zane'	
 
 		this.obj.lang = this.obj[this.config.lang];
@@ -423,26 +423,35 @@ class calendar{
 	// 插件位置定位并显示
 	elemEventPoint(e){
 		this.obj.calendar = this.$obj;
+		let winWidth  			= document.documentElement.clientWidth
 		let screenClientHeight 	= document.documentElement.clientHeight
 		let screenScrolTop	 	= document.documentElement.scrollTop
 		let objOffsetTop		= e.target.offsetTop
 		let objOffsetLeft		= e.target.offsetLeft
 		let objOffsetHeight		= e.target.offsetHeight
 		let objBotton = screenClientHeight-(objOffsetTop+objOffsetHeight+this.obj.behindTop-screenScrolTop)
+		let betweenRight 		=  winWidth-objOffsetLeft-this.config.width
 		this.obj.calendar.style.display = 'block';
 		this.obj.calendarHeight = this.$obj.offsetHeight
+
 		// 设置插件point位置
-		if(this.obj.isDoubleOne){
+		if(this.obj.isDoubleOne&&betweenRight>=this.config.width){
 			this.obj.calendar.style.left 	=	objOffsetLeft+this.config.width+'px';
 		}else{
 			this.obj.calendar.style.left 	=	objOffsetLeft+'px';
 		};
-		
-		objBotton > this.obj.calendarHeight?
+		//double 处理
+		if(objBotton > this.obj.calendarHeight){
 			//插件在input框之下 
-			this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.obj.behindTop+'px':
+			this.config.isDouble&&this.obj.isDoubleOne&&betweenRight<this.config.width?
+			this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.obj.behindTop+this.obj.calendarHeight-2+'px'
+			:this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.obj.behindTop+'px';
+		}else{
 			//插件在input框之上
-			this.obj.calendar.style.top = objOffsetTop-this.obj.behindTop-this.obj.calendarHeight+'px';
+			this.config.isDouble&&!this.obj.isDoubleOne&&betweenRight<this.config.width?
+			this.obj.calendar.style.top = objOffsetTop-this.obj.behindTop-this.obj.calendarHeight*2+'px'
+			:this.obj.calendar.style.top = objOffsetTop-this.obj.behindTop-this.obj.calendarHeight+'px';
+		}
 	}
 
 	// 插件数据渲染
@@ -574,7 +583,8 @@ class calendar{
 			year 	= year-1
 		}
 		let fulldate 	= `${year}/${month}/${this.obj.fulldatas.today}`
-		this.judgeCalendarRender('day',fulldate,true,'pre')
+		let isreset 	= this.config.isDouble&&this.obj.isDoubleOne?true:false
+		this.judgeCalendarRender('day',fulldate,isreset,'pre')
 	}
 
 	// 选择下一月
@@ -585,7 +595,8 @@ class calendar{
 			year 	= year+1
 		}
 		let fulldate 	= `${year}/${month}/${this.obj.fulldatas.today}`
-		this.judgeCalendarRender('day',fulldate,true)
+		let isreset 	= this.config.isDouble&&!this.obj.isDoubleOne?true:false
+		this.judgeCalendarRender('day',fulldate,isreset)
 	}
 
 	// 获得年月日,如果showtime=true,日期加样式，如果为false,直接设置当前选择的日期
@@ -616,7 +627,7 @@ class calendar{
 			}
 		})
 		// 绑定双击
-		this.on(objs,'dblclick',function(e){
+		!this.config.isDouble&&this.on(objs,'dblclick',function(e){
 			if(e.type === 'dblclick') _this.makeSureSelectTime();
 		})
 	}
@@ -655,13 +666,15 @@ class calendar{
 	// 上一年
 	perYear(year){
 		year = year-this.obj.totalYear
-		this.getYearHtml(year,true,'pre')
+		let isreset 	= this.config.isDouble&&this.obj.isDoubleOne?true:false
+		this.getYearHtml(year,isreset,'pre')
 	}
 
 	// 下一年
 	nextYear(year){
 		year = year+this.obj.totalYear
-		this.getYearHtml(year,true)
+		let isreset 	= this.config.isDouble&&!this.obj.isDoubleOne?true:false
+		this.getYearHtml(year,isreset)
 	}
 
 	// 获得年
@@ -748,8 +761,11 @@ class calendar{
 		})
 	}
 
-	// 选择时间
+	// 获得时间HTML
 	getTimeHtml(){
+		//double 处理
+		if(this.config.isDouble&&!this.obj.isDoubleOne&&this.config.type=='day') this.obj.$noDoubleObj.getTimeHtml();
+
 		let date 	= new Date();
 		let hour 	= date.getHours();
 		let minute 	= date.getMinutes();
@@ -823,6 +839,9 @@ class calendar{
 
 	// 返回日期
 	backDateHtml(){
+		//double 处理
+		if(this.config.isDouble&&!this.obj.isDoubleOne&&this.config.type=='day') this.obj.$noDoubleObj.backDateHtml();
+
 		this.obj.handleType = 'date';
 		let bottomHTML  	= this.bottomCheckTimeHTML();
 		this.renderCommonHtml('day','','',bottomHTML,false);
@@ -855,25 +874,25 @@ class calendar{
 		let value 		= null;
 		let isFormat 	= true;
 		if(this.config.showtime){
-			// double 处理
-			if(this.config.isDouble){
-				console.log('------')
-			}else{
-				value = `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today} ${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`					
-			}
+			value = `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today} ${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`					
 		}else if(this.config.type == 'time'&&!this.config.isDouble){
 			isFormat 	= false;
 			value = `${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`
 		}else{
 			//doubule 处理
 			if(this.config.isDouble){
-				let noDoubleData 	=  this.obj.$noDoubleObj.obj.fulldatas;
+				let noDoubleData 		=  this.obj.$noDoubleObj.obj.fulldatas;
 				let noDoubleStr,haveDoubleStr
 
 				switch(this.config.type){
 					case 'day':
-						noDoubleStr		=  `${noDoubleData.year}/${noDoubleData.month}/${noDoubleData.today}`
-						haveDoubleStr	=  `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today}`
+						if(this.obj.$noDoubleObj.config.showtime){
+							noDoubleStr		=  `${noDoubleData.year}/${noDoubleData.month}/${noDoubleData.today} ${noDoubleData.hour}:${noDoubleData.minute}:${noDoubleData.second}`
+							haveDoubleStr	=  `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today} ${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`
+						}else{
+							noDoubleStr		=  `${noDoubleData.year}/${noDoubleData.month}/${noDoubleData.today}`
+							haveDoubleStr	=  `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today}`
+						};
 						break;
 					case 'year':
 						isFormat = false
@@ -1037,10 +1056,10 @@ class calendar{
 		let nextfullstr,prefullstr,perTime,nextTime
 		switch(this.config.type){
 			case 'day':
-				nextfullstr = `${json.prev.year}/${json.prev.month}/${json.prev.today} ${json.prev.hour}:${json.prev.minute}:${json.prev.second}`
-				prefullstr 	= `${json.next.year}/${json.next.month}/${json.next.today} ${json.next.hour}:${json.next.minute}:${json.next.second}`
-				perTime 	= new Date(prefullstr).getTime()
-				nextTime 	= new Date(nextfullstr).getTime()
+				prefullstr 		= `${json.prev.year}/${json.prev.month}/${json.prev.today}`
+				nextfullstr 	= `${json.next.year}/${json.next.month}/${json.next.today}`
+				perTime 		= new Date(prefullstr).getTime()
+				nextTime 		= new Date(nextfullstr).getTime()
 				if(perTime >= nextTime-86400000) {
 					this.obj.$noDoubleObj.judgeCalendarRender('day',nextTime,false,json.clickType)
 				}

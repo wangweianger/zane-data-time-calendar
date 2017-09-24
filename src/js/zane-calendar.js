@@ -69,7 +69,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				// 宽度
 				width: 280,
 				// 格式化
-				format: 'yyyy-MM-dd',
+				format: 'yyyy-MM-dd', //'yyyy-MM-dd HH:mm:ss'
 				// 初始默认值
 				value: '',
 				// 可选取时间最小范围
@@ -149,7 +149,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 			};
 
-			this.vision = '1.0.0';
+			this.vision = '1.2.0';
 			this.auther = 'zane';
 
 			this.obj.lang = this.obj[this.config.lang];
@@ -414,26 +414,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "elemEventPoint",
 			value: function elemEventPoint(e) {
 				this.obj.calendar = this.$obj;
+				var winWidth = document.documentElement.clientWidth;
 				var screenClientHeight = document.documentElement.clientHeight;
 				var screenScrolTop = document.documentElement.scrollTop;
 				var objOffsetTop = e.target.offsetTop;
 				var objOffsetLeft = e.target.offsetLeft;
 				var objOffsetHeight = e.target.offsetHeight;
 				var objBotton = screenClientHeight - (objOffsetTop + objOffsetHeight + this.obj.behindTop - screenScrolTop);
+				var betweenRight = winWidth - objOffsetLeft - this.config.width;
 				this.obj.calendar.style.display = 'block';
 				this.obj.calendarHeight = this.$obj.offsetHeight;
+
 				// 设置插件point位置
-				if (this.obj.isDoubleOne) {
+				if (this.obj.isDoubleOne && betweenRight >= this.config.width) {
 					this.obj.calendar.style.left = objOffsetLeft + this.config.width + 'px';
 				} else {
 					this.obj.calendar.style.left = objOffsetLeft + 'px';
 				};
-
-				objBotton > this.obj.calendarHeight ?
-				//插件在input框之下 
-				this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.obj.behindTop + 'px' :
-				//插件在input框之上
-				this.obj.calendar.style.top = objOffsetTop - this.obj.behindTop - this.obj.calendarHeight + 'px';
+				//double 处理
+				if (objBotton > this.obj.calendarHeight) {
+					//插件在input框之下 
+					this.config.isDouble && this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.obj.behindTop + this.obj.calendarHeight - 2 + 'px' : this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.obj.behindTop + 'px';
+				} else {
+					//插件在input框之上
+					this.config.isDouble && !this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop - this.obj.behindTop - this.obj.calendarHeight * 2 + 'px' : this.obj.calendar.style.top = objOffsetTop - this.obj.behindTop - this.obj.calendarHeight + 'px';
+				}
 			}
 
 			// 插件数据渲染
@@ -571,7 +576,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					year = year - 1;
 				}
 				var fulldate = year + "/" + month + "/" + this.obj.fulldatas.today;
-				this.judgeCalendarRender('day', fulldate, true, 'pre');
+				var isreset = this.config.isDouble && this.obj.isDoubleOne ? true : false;
+				this.judgeCalendarRender('day', fulldate, isreset, 'pre');
 			}
 
 			// 选择下一月
@@ -585,7 +591,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					year = year + 1;
 				}
 				var fulldate = year + "/" + month + "/" + this.obj.fulldatas.today;
-				this.judgeCalendarRender('day', fulldate, true);
+				var isreset = this.config.isDouble && !this.obj.isDoubleOne ? true : false;
+				this.judgeCalendarRender('day', fulldate, isreset);
 			}
 
 			// 获得年月日,如果showtime=true,日期加样式，如果为false,直接设置当前选择的日期
@@ -619,7 +626,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					}
 				});
 				// 绑定双击
-				this.on(objs, 'dblclick', function (e) {
+				!this.config.isDouble && this.on(objs, 'dblclick', function (e) {
 					if (e.type === 'dblclick') _this.makeSureSelectTime();
 				});
 			}
@@ -664,7 +671,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "perYear",
 			value: function perYear(year) {
 				year = year - this.obj.totalYear;
-				this.getYearHtml(year, true, 'pre');
+				var isreset = this.config.isDouble && this.obj.isDoubleOne ? true : false;
+				this.getYearHtml(year, isreset, 'pre');
 			}
 
 			// 下一年
@@ -673,7 +681,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "nextYear",
 			value: function nextYear(year) {
 				year = year + this.obj.totalYear;
-				this.getYearHtml(year, true);
+				var isreset = this.config.isDouble && !this.obj.isDoubleOne ? true : false;
+				this.getYearHtml(year, isreset);
 			}
 
 			// 获得年
@@ -772,11 +781,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				});
 			}
 
-			// 选择时间
+			// 获得时间HTML
 
 		}, {
 			key: "getTimeHtml",
 			value: function getTimeHtml() {
+				//double 处理
+				if (this.config.isDouble && !this.obj.isDoubleOne && this.config.type == 'day') this.obj.$noDoubleObj.getTimeHtml();
+
 				var date = new Date();
 				var hour = date.getHours();
 				var minute = date.getMinutes();
@@ -856,6 +868,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: "backDateHtml",
 			value: function backDateHtml() {
+				//double 处理
+				if (this.config.isDouble && !this.obj.isDoubleOne && this.config.type == 'day') this.obj.$noDoubleObj.backDateHtml();
+
 				this.obj.handleType = 'date';
 				var bottomHTML = this.bottomCheckTimeHTML();
 				this.renderCommonHtml('day', '', '', bottomHTML, false);
@@ -897,12 +912,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var value = null;
 				var isFormat = true;
 				if (this.config.showtime) {
-					// double 处理
-					if (this.config.isDouble) {
-						console.log('------');
-					} else {
-						value = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today + " " + this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute + ":" + this.obj.fulldatas.second;
-					}
+					value = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today + " " + this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute + ":" + this.obj.fulldatas.second;
 				} else if (this.config.type == 'time' && !this.config.isDouble) {
 					isFormat = false;
 					value = this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute + ":" + this.obj.fulldatas.second;
@@ -915,8 +925,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 						switch (this.config.type) {
 							case 'day':
-								noDoubleStr = noDoubleData.year + "/" + noDoubleData.month + "/" + noDoubleData.today;
-								haveDoubleStr = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today;
+								if (this.obj.$noDoubleObj.config.showtime) {
+									noDoubleStr = noDoubleData.year + "/" + noDoubleData.month + "/" + noDoubleData.today + " " + noDoubleData.hour + ":" + noDoubleData.minute + ":" + noDoubleData.second;
+									haveDoubleStr = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today + " " + this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute + ":" + this.obj.fulldatas.second;
+								} else {
+									noDoubleStr = noDoubleData.year + "/" + noDoubleData.month + "/" + noDoubleData.today;
+									haveDoubleStr = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today;
+								};
 								break;
 							case 'year':
 								isFormat = false;
@@ -1099,8 +1114,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				    nextTime = void 0;
 				switch (this.config.type) {
 					case 'day':
-						nextfullstr = json.prev.year + "/" + json.prev.month + "/" + json.prev.today + " " + json.prev.hour + ":" + json.prev.minute + ":" + json.prev.second;
-						prefullstr = json.next.year + "/" + json.next.month + "/" + json.next.today + " " + json.next.hour + ":" + json.next.minute + ":" + json.next.second;
+						prefullstr = json.prev.year + "/" + json.prev.month + "/" + json.prev.today;
+						nextfullstr = json.next.year + "/" + json.next.month + "/" + json.next.today;
 						perTime = new Date(prefullstr).getTime();
 						nextTime = new Date(nextfullstr).getTime();
 						if (perTime >= nextTime - 86400000) {
