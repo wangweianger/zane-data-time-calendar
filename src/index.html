@@ -80,6 +80,7 @@
 		<div class="demo"><span>双选择器doubletime:</span><input id="demo24" type="text" class="input" placeholder="HH:mm:ss"></div>
 		<div class="demo"><span>双选择器doubleday支持时分秒:</span><input id="demo25" type="text" class="input" placeholder="HH:mm:ss"></div>
 
+		<div class="demo"><span>z-index值:</span><input id="demo26" type="text" class="input" placeholder="zindex:500"></div>
 		<div class="demo"><span>改变宽度:</span><input id="demo7" type="text" class="input" placeholder="350"></div>
 		<div class="demo"><span>格式化:</span><input id="demo8" type="text" class="input" placeholder="yyyy年MM月dd日 HH时mm分ss秒"></div>
 		<div class="demo"><span>初始默认值:</span><input id="demo9" type="text" class="input" placeholder="2018-01-01"></div>
@@ -191,8 +192,6 @@
 		zaneDate({
 			elem:'#demo21',
 			type:'doubleday',
-			// min:'2017-09-10',
-			// max:'2017-10-10'
 		})
 		zaneDate({
 			elem:'#demo22',
@@ -212,7 +211,10 @@
 			type:'doubleday',
 			showtime:true
 		})
-
+		zaneDate({
+			elem:'#demo1',
+			zindex:500
+		})
 	</script>
 </body>
 </html>
