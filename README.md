@@ -28,15 +28,17 @@ zaneDate({
 ```
 
 webpack 引用的方式
-```
-把zane-calendar.css，zane-calendar.js 引入到通一个目录 
 
-const zaneDate = require('./dist/zane-calendar.js')
+```
+
+const zaneDate = require('zane-calendar')
 或
-import zaneDate from './dist/zane-calendar.js'
+import zaneDate from 'zane-calendar'
+
 
 <!-- 需要加时间插件的输入框 -->
 <input type="" name="" id="zane-calendar">
+
 
 初始化
 zaneDate({

@@ -27,7 +27,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	}
 })(typeof window !== "undefined" ? window : undefined, function (window, noGlobal) {
 
-	if (noGlobal) require('./zane-calendar.css');
+	if (noGlobal) require('./zane-calendar.min.css');
 
 	if (!new Date().Format) {
 		Date.prototype.Format = function (fmt) {
