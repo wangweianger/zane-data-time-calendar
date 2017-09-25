@@ -49,6 +49,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		};
 	};
 
+	var doc = document,
+	    query = 'querySelector',
+	    quall = 'querySelectorAll';
+
 	// 日期插件
 
 	var calendar = function () {
@@ -105,7 +109,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			if (isNaN(new Date(this.config.max))) this.config.max = '';
 
 			this.obj = {
-				input: document.querySelector(this.config.elem),
+				input: doc[query](this.config.elem),
 				calendar: null,
 				id: "#zane-calendar-" + this.config.calendarName,
 				$obj: null,
@@ -187,11 +191,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 						// 获得年月日
 						var html = _this2.objHTML(); //生成时间选择器HTML
-						var divElement = document.createElement("div");
+						var divElement = doc.createElement("div");
 						divElement.innerHTML = html;
-						document.body.appendChild(divElement);
+						doc.body.appendChild(divElement);
 
-						_this2.$obj = document.querySelector(_this2.obj.id);
+						_this2.$obj = doc[query](_this2.obj.id);
 
 						switch (_this2.config.type) {
 							case 'day':
@@ -218,7 +222,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					_this2.obj.initVal = _this2.obj.input.value;
 
 					// 隐藏其他时间插件框
-					var objs = document.querySelectorAll('.zane-calendar');
+					var objs = doc[quall]('.zane-calendar');
 					_this2.forEach(objs, function (index, item) {
 						if (('#' + item.getAttribute('id')).replace(/DOUBLE/, '') !== _this2.obj.id.replace(/DOUBLE/, '')) {
 							item.style.display = "none";
@@ -414,9 +418,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "elemEventPoint",
 			value: function elemEventPoint(e) {
 				this.obj.calendar = this.$obj;
-				var winWidth = document.documentElement.clientWidth;
-				var screenClientHeight = document.documentElement.clientHeight;
-				var screenScrolTop = document.documentElement.scrollTop;
+				var winWidth = doc.documentElement.clientWidth;
+				var screenClientHeight = doc.documentElement.clientHeight;
+				var screenScrolTop = doc.documentElement.scrollTop;
 				var objOffsetTop = e.target.offsetTop;
 				var objOffsetLeft = e.target.offsetLeft;
 				var objOffsetHeight = e.target.offsetHeight;
@@ -601,7 +605,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "getDay",
 			value: function getDay() {
 				var _this = this;
-				var objs = this.$obj.querySelector('.main-check-day').querySelectorAll('td');
+				var objs = this.$obj[query]('.main-check-day')[quall]('td');
 				// 绑定单击
 				this.on(objs, 'click', function (e) {
 					if (!_this.hasClass(e.target, 'calendar-disabled')) {
@@ -691,7 +695,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "getYear",
 			value: function getYear() {
 				var _this = this;
-				var objs = this.$obj.querySelector('.main-check-year').querySelectorAll('td');
+				var objs = this.$obj[query]('.main-check-year')[quall]('td');
 				this.on(objs, 'click', function (e) {
 					var year = e.target.getAttribute('data-year');
 
@@ -761,7 +765,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "getMonth",
 			value: function getMonth() {
 				var _this = this;
-				var objs = this.$obj.querySelector('.main-check-month').querySelectorAll('td');
+				var objs = this.$obj[query]('.main-check-month')[quall]('td');
 				this.on(objs, 'click', function (e) {
 					var year = e.target.getAttribute('data-year');
 					var month = e.target.getAttribute('data-month');
@@ -834,9 +838,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "selectTime",
 			value: function selectTime() {
 				var _this = this;
-				var hourObjs = this.$obj.querySelector('ul.hour').querySelectorAll('li');
-				var minuteObjs = this.$obj.querySelector('ul.minute').querySelectorAll('li');
-				var secondObjs = this.$obj.querySelector('ul.second').querySelectorAll('li');
+				var hourObjs = this.$obj[query]('ul.hour')[quall]('li');
+				var minuteObjs = this.$obj[query]('ul.minute')[quall]('li');
+				var secondObjs = this.$obj[query]('ul.second')[quall]('li');
 
 				this.on(hourObjs, 'click', function (e) {
 					_this.forEach(hourObjs, function (index, item) {
@@ -990,7 +994,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				this.$obj.style.display = "none";
 				//doubule 处理
-				if (this.obj.isDoubleOne) document.querySelector(this.obj.$noDoubleObj.obj.id).style.display = "none";
+				if (this.obj.isDoubleOne) doc[query](this.obj.$noDoubleObj.obj.id).style.display = "none";
 
 				this.config.done && this.config.done(formatTime);
 				if (this.obj.initVal != formatTime && this.config.change) this.config.change(formatTime);
@@ -1053,12 +1057,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 						this.renderCommonHtml('time', topHTML, mainHTML, bottomHTML);
 
-						var hourScrollTop = this.$obj.querySelector('ul.hour').querySelector('li.active').offsetTop;
-						var minuteScrollTop = this.$obj.querySelector('ul.minute').querySelector('li.active').offsetTop;
-						var secondScrollTop = this.$obj.querySelector('ul.second').querySelector('li.active').offsetTop;
-						this.$obj.querySelector('ul.hour').scrollTop = hourScrollTop - 150;
-						this.$obj.querySelector('ul.minute').scrollTop = minuteScrollTop - 150;
-						this.$obj.querySelector('ul.second').scrollTop = secondScrollTop - 150;
+						var hourScrollTop = this.$obj[query]('ul.hour')[query]('li.active').offsetTop;
+						var minuteScrollTop = this.$obj[query]('ul.minute')[query]('li.active').offsetTop;
+						var secondScrollTop = this.$obj[query]('ul.second')[query]('li.active').offsetTop;
+						this.$obj[query]('ul.hour').scrollTop = hourScrollTop - 150;
+						this.$obj[query]('ul.minute').scrollTop = minuteScrollTop - 150;
+						this.$obj[query]('ul.second').scrollTop = secondScrollTop - 150;
 						this.selectTime();
 						break;
 				}
@@ -1068,15 +1072,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function renderCommonHtml(type, topHTML, mainHTML, bottomHTML) {
 				var isrender = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
 
-				if (type == 'time' || !isrender) this.$obj.querySelector(".btn-select-time").innerHTML = bottomHTML;
+				if (type == 'time' || !isrender) this.$obj[query](".btn-select-time").innerHTML = bottomHTML;
 				if (isrender) {
-					this.$obj.querySelector(".top-check-" + type).innerHTML = topHTML;
-					this.$obj.querySelector(".main-check-" + type).innerHTML = mainHTML;
+					this.$obj[query](".top-check-" + type).innerHTML = topHTML;
+					this.$obj[query](".main-check-" + type).innerHTML = mainHTML;
 				};
-				this.showOrHide(this.$obj.querySelectorAll('.common-top'), 'hide');
-				this.showOrHide(this.$obj.querySelectorAll('.common-main'), 'hide');
-				this.$obj.querySelector(".main-check-" + type).style.display = 'block';
-				this.$obj.querySelector(".top-check-" + type).style.display = 'block';
+				this.showOrHide(this.$obj[quall]('.common-top'), 'hide');
+				this.showOrHide(this.$obj[quall]('.common-main'), 'hide');
+				this.$obj[query](".main-check-" + type).style.display = 'block';
+				this.$obj[query](".top-check-" + type).style.display = 'block';
 			}
 
 			// 比较double数据之间的大小，并从新赋值
@@ -1242,8 +1246,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			// 计算table tr高度
 			value: function countHeight(elename, length) {
-				var mainH = this.$obj.querySelector('.zane-date-main').offsetHeight;
-				var trObj = this.$obj.querySelector(elename).querySelectorAll('tr');
+				var mainH = this.$obj[query]('.zane-date-main').offsetHeight;
+				var trObj = this.$obj[query](elename)[quall]('tr');
 				var itemH = Math.floor(mainH / length);
 				this.forEach(trObj, function (index, item) {
 					item.style.height = itemH + 'px';
@@ -1257,7 +1261,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function documentClick() {
 				var _this3 = this;
 
-				this.on(document, 'click', function (e) {
+				this.on(doc, 'click', function (e) {
 					if (!_this3.obj.calendar) return;
 					_this3.obj.calendar.style.display = 'none';
 				});

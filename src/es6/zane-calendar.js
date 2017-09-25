@@ -42,6 +42,10 @@ if(!new Date().Format){
 	}
 };
 
+let  doc 	= document,
+	query   = 'querySelector',
+	quall 	= 'querySelectorAll';
+
 // 日期插件
 class calendar{
 	constructor(json={}){
@@ -93,7 +97,7 @@ class calendar{
 		if(isNaN(new Date(this.config.max)))this.config.max = ''
 
 		this.obj={
-			input:document.querySelector(this.config.elem),
+			input:doc[query](this.config.elem),
 			calendar:null,
 			id:`#zane-calendar-${this.config.calendarName}`,
 			$obj:null,
@@ -170,11 +174,11 @@ class calendar{
 
 				// 获得年月日
 				let html 	= this.objHTML();//生成时间选择器HTML
-				var divElement = document.createElement("div");
+				var divElement = doc.createElement("div");
 				divElement.innerHTML = html
-				document.body.appendChild(divElement)
+				doc.body.appendChild(divElement)
 				
-				this.$obj 	= document.querySelector(this.obj.id);
+				this.$obj 	= doc[query](this.obj.id);
 
 				switch(this.config.type){
 					case 'day':
@@ -202,7 +206,7 @@ class calendar{
 			this.obj.initVal = this.obj.input.value;
 
 			// 隐藏其他时间插件框
-			let objs = document.querySelectorAll('.zane-calendar');
+			let objs = doc[quall]('.zane-calendar');
 			this.forEach(objs,(index,item)=>{
 				if(('#'+item.getAttribute('id')).replace(/DOUBLE/,'') !== this.obj.id.replace(/DOUBLE/,'') ){
 					item.style.display 	= 	"none";
@@ -423,13 +427,13 @@ class calendar{
 	// 插件位置定位并显示
 	elemEventPoint(e){
 		this.obj.calendar = this.$obj;
-		let winWidth  			= document.documentElement.clientWidth
-		let screenClientHeight 	= document.documentElement.clientHeight
-		let screenScrolTop	 	= document.documentElement.scrollTop
+		let winWidth  			= doc.documentElement.clientWidth
+		let screenClientHeight 	= doc.documentElement.clientHeight
+		let screenScrolTop	 	= doc.documentElement.scrollTop
 		let objOffsetTop		= e.target.offsetTop
 		let objOffsetLeft		= e.target.offsetLeft
 		let objOffsetHeight		= e.target.offsetHeight
-		let objBotton = screenClientHeight-(objOffsetTop+objOffsetHeight+this.obj.behindTop-screenScrolTop)
+		let objBotton 			= screenClientHeight-(objOffsetTop+objOffsetHeight+this.obj.behindTop-screenScrolTop)
 		let betweenRight 		=  winWidth-objOffsetLeft-this.config.width
 		this.obj.calendar.style.display = 'block';
 		this.obj.calendarHeight = this.$obj.offsetHeight
@@ -603,7 +607,7 @@ class calendar{
 	getDay(){
 		let _this=this;
 		let objs = this.$obj
-		.querySelector('.main-check-day').querySelectorAll('td');
+		[query]('.main-check-day')[quall]('td');
 		// 绑定单击
 		this.on(objs,'click',function(e){
 			if(!_this.hasClass(e.target,'calendar-disabled')){//有calendar-disabled样式的不赋予事件
@@ -681,7 +685,7 @@ class calendar{
 	getYear(){
 		let _this = this;
 		let objs = this.$obj
-		.querySelector('.main-check-year').querySelectorAll('td');
+		[query]('.main-check-year')[quall]('td');
 		this.on(objs,'click',function(e){
 			let year = e.target.getAttribute('data-year')
 
@@ -740,7 +744,7 @@ class calendar{
 	getMonth(){
 		let _this = this;
 		let objs = this.$obj
-		.querySelector('.main-check-month').querySelectorAll('td');
+		[query]('.main-check-month')[quall]('td');
 		this.on(objs,'click',function(e){
 			let year 	= e.target.getAttribute('data-year')
 			let month 	= e.target.getAttribute('data-month')
@@ -808,9 +812,9 @@ class calendar{
 	// 选择时间
 	selectTime(){
 		let _this 		= this
-		let hourObjs 	= this.$obj.querySelector('ul.hour').querySelectorAll('li')
-		let minuteObjs 	= this.$obj.querySelector('ul.minute').querySelectorAll('li')
-		let secondObjs 	= this.$obj.querySelector('ul.second').querySelectorAll('li')
+		let hourObjs 	= this.$obj[query]('ul.hour')[quall]('li')
+		let minuteObjs 	= this.$obj[query]('ul.minute')[quall]('li')
+		let secondObjs 	= this.$obj[query]('ul.second')[quall]('li')
 		
 		this.on(hourObjs,'click',function(e){
 			_this.forEach(hourObjs,(index,item)=>{
@@ -946,7 +950,7 @@ class calendar{
 
 		this.$obj.style.display 	= 	"none";
 		//doubule 处理
-		if(this.obj.isDoubleOne) document.querySelector(this.obj.$noDoubleObj.obj.id).style.display = "none";
+		if(this.obj.isDoubleOne) doc[query](this.obj.$noDoubleObj.obj.id).style.display = "none";
 
 		this.config.done&&this.config.done(formatTime);
 		if(this.obj.initVal!=formatTime&&this.config.change)this.config.change(formatTime)
@@ -1004,12 +1008,12 @@ class calendar{
 
 				this.renderCommonHtml('time',topHTML,mainHTML,bottomHTML);
 
-				let hourScrollTop = this.$obj.querySelector('ul.hour').querySelector('li.active').offsetTop
-				let minuteScrollTop = this.$obj.querySelector('ul.minute').querySelector('li.active').offsetTop
-				let secondScrollTop = this.$obj.querySelector('ul.second').querySelector('li.active').offsetTop
-				this.$obj.querySelector('ul.hour').scrollTop 		= 	hourScrollTop-150
-				this.$obj.querySelector('ul.minute').scrollTop 	= 	minuteScrollTop-150
-				this.$obj.querySelector('ul.second').scrollTop 	=	secondScrollTop-150
+				let hourScrollTop = this.$obj[query]('ul.hour')[query]('li.active').offsetTop
+				let minuteScrollTop = this.$obj[query]('ul.minute')[query]('li.active').offsetTop
+				let secondScrollTop = this.$obj[query]('ul.second')[query]('li.active').offsetTop
+				this.$obj[query]('ul.hour').scrollTop 		= 	hourScrollTop-150
+				this.$obj[query]('ul.minute').scrollTop 	= 	minuteScrollTop-150
+				this.$obj[query]('ul.second').scrollTop 	=	secondScrollTop-150
 				this.selectTime();
 				break;		
 		}
@@ -1017,15 +1021,15 @@ class calendar{
 	}
 
 	renderCommonHtml(type,topHTML,mainHTML,bottomHTML,isrender=true){
-		if(type == 'time'|| !isrender) this.$obj.querySelector(`.btn-select-time`).innerHTML = bottomHTML;
+		if(type == 'time'|| !isrender) this.$obj[query](`.btn-select-time`).innerHTML = bottomHTML;
 		if(isrender){
-			this.$obj.querySelector(`.top-check-${type}`).innerHTML 	= topHTML;
-			this.$obj.querySelector(`.main-check-${type}`).innerHTML 	= mainHTML;
+			this.$obj[query](`.top-check-${type}`).innerHTML 	= topHTML;
+			this.$obj[query](`.main-check-${type}`).innerHTML 	= mainHTML;
 		};
-		this.showOrHide(this.$obj.querySelectorAll('.common-top'),'hide')
-		this.showOrHide(this.$obj.querySelectorAll('.common-main'),'hide')
-		this.$obj.querySelector(`.main-check-${type}`).style.display 	= 'block'
-		this.$obj.querySelector(`.top-check-${type}`).style.display 	= 'block'
+		this.showOrHide(this.$obj[quall]('.common-top'),'hide')
+		this.showOrHide(this.$obj[quall]('.common-main'),'hide')
+		this.$obj[query](`.main-check-${type}`).style.display 	= 'block'
+		this.$obj[query](`.top-check-${type}`).style.display 	= 'block'
 	}
 
 	// 比较double数据之间的大小，并从新赋值
@@ -1160,8 +1164,8 @@ class calendar{
 
   	// 计算table tr高度
   	countHeight(elename,length){
-  		let mainH  		=  	this.$obj.querySelector('.zane-date-main').offsetHeight;
-  		let trObj		= 	this.$obj.querySelector(elename).querySelectorAll('tr')
+  		let mainH  		=  	this.$obj[query]('.zane-date-main').offsetHeight;
+  		let trObj		= 	this.$obj[query](elename)[quall]('tr')
   		let itemH 		=  Math.floor(mainH/length)
   		this.forEach(trObj,(index,item)=>{
   			item.style.height = itemH + 'px';
@@ -1170,7 +1174,7 @@ class calendar{
 
   	// document点击隐藏插件
   	documentClick(){
-  		this.on(document,'click',(e)=>{
+  		this.on(doc,'click',(e)=>{
   			if(!this.obj.calendar) return;
   			this.obj.calendar.style.display = 'none';
   		})

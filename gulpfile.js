@@ -4,7 +4,8 @@ const sass = require('gulp-sass')
 const uglify = require('gulp-uglify')
 const minifyCss = require('gulp-clean-css')
 const clean = require('gulp-clean')
-const connect = require('gulp-connect');
+const connect = require('gulp-connect')
+const rename = require('gulp-rename')
 
 let baseRrl = './src/'
 
@@ -48,11 +49,13 @@ gulp.task('default', ['connect', 'watch','sass','babel']);
 gulp.task('minCss',()=>{
     return gulp.src([baseRrl+'css/*.css'])
     .pipe(minifyCss())
+    .pipe(rename('zane-calendar.min.css'))
     .pipe(gulp.dest('dist'));
 })
 gulp.task('miJS',()=>{
     return gulp.src([baseRrl+'js/*.js'])
     .pipe(uglify())
+    .pipe(rename('zane-calendar.min.js'))
     .pipe(gulp.dest('dist'));
 })
 
