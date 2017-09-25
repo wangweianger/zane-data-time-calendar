@@ -12,7 +12,8 @@
 
 ### 使用方式
 
-### 浏览器端直接引用插件css 和 js
+
+### 浏览器端使用
 ```
 <link href="./dist/zane-calendar.css">
 <script src="./dist/zane-calendar.js"></script>
@@ -27,12 +28,12 @@ zaneDate({
 
 ```
 
-webpack 引用的方式
+
+### Webpack 使用
 
 ```
 
-const zaneDate = require('zane-calendar')
-或
+const zaneDate = require('zane-calendar') 或
 import zaneDate from 'zane-calendar'
 
 
