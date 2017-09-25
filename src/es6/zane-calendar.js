@@ -69,7 +69,9 @@ class calendar{
 			// 可选取时间最大范围
 			max: '', //'2099-12-31',
 			//事件方式 click 
-			event:'click',  
+			event:'click',
+			// z-index的值
+			zindex:100,  
 			//是否显示选择时间
 			showtime:false,  
 			//是否显示清除按钮
@@ -218,7 +220,7 @@ class calendar{
 	
 	//生成时间选择器区域
 	objHTML(json){
-		let html =`<div class="zane-calendar" style="width:${this.config.width}px;" id="${this.obj.id.substring(1)}">
+		let html =`<div class="zane-calendar" style="width:${this.config.width}px;z-index:${this.config.zindex}" id="${this.obj.id.substring(1)}">
 					<div class="zane-calendar-one left" style="width:${this.config.width}px;">
 						<div class="zane-date-top">
 							<div class="common-top top-check-day"></div>

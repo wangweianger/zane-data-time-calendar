@@ -70,6 +70,7 @@ npm run build
 	max: '',  可选取时间最大范围 2099-12-31
 	position:'fixed',  定位方式  暂时只支持 fixed
 	event:'click',   事件方式 暂时只支持 click 
+	zindex:100,   z-index值
 	showtime:true,  是否显示选择时间
 	showclean:true,  是否显示清除按钮
 	shownow:true,  是否显示当前按钮
@@ -189,6 +190,14 @@ zaneDate({
 
 ```
 
+### 1.2.1 版本  新增z-index 参数
+```
+zaneDate({
+	elem:'#zane-calendar',
+	zindex:500,
+})
+
+```
 
 
 
