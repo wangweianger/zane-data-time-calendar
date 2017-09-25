@@ -6,6 +6,7 @@ const minifyCss = require('gulp-clean-css')
 const clean = require('gulp-clean')
 const connect = require('gulp-connect')
 const rename = require('gulp-rename')
+const gulpSequence = require('gulp-sequence')
 
 let baseRrl = './src/'
 
@@ -46,6 +47,13 @@ gulp.task('default', ['connect', 'watch','sass','babel']);
 
 
 // build
+gulp.task('clean', function() {
+    return gulp.src(['./dist/*.*'], {
+            read: false
+        })
+        .pipe(clean());
+});
+
 gulp.task('minCss',()=>{
     return gulp.src([baseRrl+'css/*.css'])
     .pipe(minifyCss())
@@ -59,7 +67,7 @@ gulp.task('miJS',()=>{
     .pipe(gulp.dest('dist'));
 })
 
-gulp.task('build', ['minCss', 'miJS']);
+gulp.task('build', gulpSequence(['clean','minCss', 'miJS']));
 
 
 
