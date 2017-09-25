@@ -244,7 +244,7 @@ class calendar{
 									style="display:${this.config.showclean?'blcok':'none'}"
 									onclick="${this.config.calendarName}.cleanInputVal()">${this.obj.lang.tools.clear}</div>
 								<div class="button ${this.config.showsubmit?'no-right-line':''}"
-									style="display:${this.config.shownow?'blcok':'none'}" 
+									style="display:${this.config.shownow&&!this.config.min||this.config.shownow&&!this.config.max?'blcok':'none'}" 
 									onclick="${this.config.calendarName}.changeToToday()">${this.obj.lang.tools.now}</div>
 								<div class="button" 
 									style="display:${this.config.showsubmit?'blcok':'none'}"
