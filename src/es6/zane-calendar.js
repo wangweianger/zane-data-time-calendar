@@ -59,7 +59,7 @@ class calendar{
 			//cn , en 
 			lang:'cn', 
 			// 宽度
-			width:280,
+			width:250,
 			// 格式化
 			format:'yyyy-MM-dd', //'yyyy-MM-dd HH:mm:ss'
 			// 初始默认值
@@ -86,6 +86,8 @@ class calendar{
 			isDouble:false,
 			//插件于输入框的高度 
 			behindTop:10,
+			// 插件高度配置
+			calendarHeight:280,
 			// 插件加载完成之后调用
 			mounted:()=>{},
 			//时间变更之后调用
@@ -110,7 +112,6 @@ class calendar{
 			isDoubleOne:false,
 			handleType:'date',
 			initVal:'',//每次进来的初始值
-			calendarHeight:307,
 			// 选择年时展示的数量
 			totalYear:18,
 			cn:{
@@ -228,7 +229,7 @@ class calendar{
 							<div class="common-top top-check-month"></div>	
 							<div class="common-top top-check-time"></div>		
 						</div>
-						<div class="zane-date-main">
+						<div class="zane-date-main" style="height:${this.config.calendarHeight-80}px">
 							<div class="common-main main-check-day"></div>
 							<div class="common-main main-check-year"></div>
 							<div class="common-main main-check-month"></div>
@@ -438,7 +439,7 @@ class calendar{
 		let objBotton 			= screenClientHeight-(objOffsetTop+objOffsetHeight+this.config.behindTop-screenScrolTop)
 		let betweenRight 		=  winWidth-objOffsetLeft-this.config.width
 		this.obj.calendar.style.display = 'block';
-		this.obj.calendarHeight = this.$obj.offsetHeight
+		this.config.calendarHeight = this.$obj.offsetHeight
 
 		// 设置插件point位置
 		if(this.obj.isDoubleOne&&betweenRight>=this.config.width){
@@ -447,16 +448,16 @@ class calendar{
 			this.obj.calendar.style.left 	=	objOffsetLeft+'px';
 		};
 		//double 处理
-		if(objBotton > this.obj.calendarHeight){
+		if(objBotton > this.config.calendarHeight){
 			//插件在input框之下 
 			this.config.isDouble&&this.obj.isDoubleOne&&betweenRight<this.config.width?
-			this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.config.behindTop+this.obj.calendarHeight-2+'px'
+			this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.config.behindTop+this.config.calendarHeight-2+'px'
 			:this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.config.behindTop+'px';
 		}else{
 			//插件在input框之上
 			this.config.isDouble&&!this.obj.isDoubleOne&&betweenRight<this.config.width?
-			this.obj.calendar.style.top = objOffsetTop-this.config.behindTop-this.obj.calendarHeight*2+'px'
-			:this.obj.calendar.style.top = objOffsetTop-this.config.behindTop-this.obj.calendarHeight+'px';
+			this.obj.calendar.style.top = objOffsetTop-this.config.behindTop-this.config.calendarHeight*2+'px'
+			:this.obj.calendar.style.top = objOffsetTop-this.config.behindTop-this.config.calendarHeight+'px';
 		}
 	}
 
@@ -1211,8 +1212,12 @@ let zaneDate = function(option){
 		calendarName 			= calendarName.replace(/[_-]/g,'').toUpperCase();
 		option.calendarName 	= json&&json.double ?calendarName+json.double:calendarName;
 		if(option.width){
-			option.width = option.width<260?260:option.width
+			option.width = option.width<250?250:option.width
 			option.width = option.width>500?500:option.width
+		}
+		if(option.calendarHeight){
+			option.calendarHeight = option.calendarHeight<250?250:option.calendarHeight
+			option.calendarHeight = option.calendarHeight>350?350:option.calendarHeight
 		}
 
 		let cloneOption = Object.assign(extendDeep(option),json);

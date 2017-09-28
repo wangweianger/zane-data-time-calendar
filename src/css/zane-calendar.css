@@ -132,7 +132,7 @@ ul, li {
       border-top: solid 1px #ddd;
       border-left: solid 1px #ddd;
       overflow: hidden;
-      height: 43px;
+      height: 40px;
       padding: 0 8px;
       font-size: 12px; }
       .zane-calendar .zane-calendar-one .zane-date-bottom .zane-date-right {
@@ -140,7 +140,7 @@ ul, li {
         .zane-calendar .zane-calendar-one .zane-date-bottom .zane-date-right .button.no-right-line {
           border-right: none; }
       .zane-calendar .zane-calendar-one .zane-date-bottom .button {
-        margin-top: 8px;
+        margin-top: 6px;
         cursor: pointer;
         border: solid 1px #ddd;
         padding: 6px 8px;
