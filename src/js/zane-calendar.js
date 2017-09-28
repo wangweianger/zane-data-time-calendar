@@ -72,6 +72,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				lang: 'cn',
 				// 宽度
 				width: 250,
+				// 插件高度配置
+				height: 280,
+				//插件于输入框的高度 
+				behindTop: 10,
 				// 格式化
 				format: 'yyyy-MM-dd', //'yyyy-MM-dd HH:mm:ss'
 				// 初始默认值
@@ -96,10 +100,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				haveBotBtns: true,
 				calendarName: '',
 				isDouble: false,
-				//插件于输入框的高度 
-				behindTop: 10,
-				// 插件高度配置
-				calendarHeight: 280,
 				// 插件加载完成之后调用
 				mounted: function mounted() {},
 				//时间变更之后调用
@@ -240,7 +240,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: "objHTML",
 			value: function objHTML(json) {
-				var html = "<div class=\"zane-calendar\" style=\"width:" + this.config.width + "px;z-index:" + this.config.zindex + "\" id=\"" + this.obj.id.substring(1) + "\">\n\t\t\t\t\t<div class=\"zane-calendar-one left\" style=\"width:" + this.config.width + "px;\">\n\t\t\t\t\t\t<div class=\"zane-date-top\">\n\t\t\t\t\t\t\t<div class=\"common-top top-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-top top-check-year\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-month\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-time\"></div>\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"zane-date-main\" style=\"height:" + (this.config.calendarHeight - 80) + "px\">\n\t\t\t\t\t\t\t<div class=\"common-main main-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-year\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-month\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-time\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"zane-date-bottom\" style=\"display:" + (this.config.haveBotBtns || this.config.isDouble ? 'block' : 'none') + ";\n\t\t\t\t\t\t\t\t\t\t\t\tborder-left:" + (this.obj.isDoubleOne ? 'none' : 'solid 1px #ddd') + ";\">\n\t\t\t\t\t\t\t<div class=\"btn-select-time\" style=\"display:" + (this.config.showtime ? 'blcok' : 'none') + "\">\n\t\t\t\t\t\t\t\t<div class=\"zane-date-left button btn-select-time-item\" onclick=\"" + this.config.calendarName + ".getTimeHtml()\">" + this.obj.lang.timeTips + "</div>\n\t\t\t\t\t\t\t</div>\t\n\t\t\t\t \t\t\t<div class=\"zane-date-right\">\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.shownow ? 'no-right-line' : '') + "\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showclean ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".cleanInputVal()\">" + this.obj.lang.tools.clear + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.showsubmit ? 'no-right-line' : '') + "\"\n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.shownow && !this.config.min || this.config.shownow && !this.config.max ? 'blcok' : 'none') + "\" \n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".changeToToday()\">" + this.obj.lang.tools.now + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showsubmit ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".makeSureSelectTime()\">" + this.obj.lang.tools.confirm + "</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>";
+				var html = "<div class=\"zane-calendar\" style=\"width:" + this.config.width + "px;z-index:" + this.config.zindex + "\" id=\"" + this.obj.id.substring(1) + "\">\n\t\t\t\t\t<div class=\"zane-calendar-one left\" style=\"width:" + this.config.width + "px;\">\n\t\t\t\t\t\t<div class=\"zane-date-top\">\n\t\t\t\t\t\t\t<div class=\"common-top top-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-top top-check-year\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-month\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-time\"></div>\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"zane-date-main\" style=\"height:" + (this.config.height - 80) + "px\">\n\t\t\t\t\t\t\t<div class=\"common-main main-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-year\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-month\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-time\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"zane-date-bottom\" style=\"display:" + (this.config.haveBotBtns || this.config.isDouble ? 'block' : 'none') + ";\n\t\t\t\t\t\t\t\t\t\t\t\tborder-left:" + (this.obj.isDoubleOne ? 'none' : 'solid 1px #ddd') + ";\">\n\t\t\t\t\t\t\t<div class=\"btn-select-time\" style=\"display:" + (this.config.showtime ? 'blcok' : 'none') + "\">\n\t\t\t\t\t\t\t\t<div class=\"zane-date-left button btn-select-time-item\" onclick=\"" + this.config.calendarName + ".getTimeHtml()\">" + this.obj.lang.timeTips + "</div>\n\t\t\t\t\t\t\t</div>\t\n\t\t\t\t \t\t\t<div class=\"zane-date-right\">\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.shownow ? 'no-right-line' : '') + "\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showclean ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".cleanInputVal()\">" + this.obj.lang.tools.clear + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.showsubmit ? 'no-right-line' : '') + "\"\n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.shownow && !this.config.min || this.config.shownow && !this.config.max ? 'blcok' : 'none') + "\" \n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".changeToToday()\">" + this.obj.lang.tools.now + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showsubmit ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".makeSureSelectTime()\">" + this.obj.lang.tools.confirm + "</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>";
 				return html;
 			}
 			// day - top html   时间选择器选择年月块
@@ -430,7 +430,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var objBotton = screenClientHeight - (objOffsetTop + objOffsetHeight + this.config.behindTop - screenScrolTop);
 				var betweenRight = winWidth - objOffsetLeft - this.config.width;
 				this.obj.calendar.style.display = 'block';
-				this.config.calendarHeight = this.$obj.offsetHeight;
+				this.config.height = this.$obj.offsetHeight;
 
 				// 设置插件point位置
 				if (this.obj.isDoubleOne && betweenRight >= this.config.width) {
@@ -439,12 +439,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					this.obj.calendar.style.left = objOffsetLeft + 'px';
 				};
 				//double 处理
-				if (objBotton > this.config.calendarHeight) {
+				if (objBotton > this.config.height) {
 					//插件在input框之下 
-					this.config.isDouble && this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.config.behindTop + this.config.calendarHeight - 2 + 'px' : this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.config.behindTop + 'px';
+					this.config.isDouble && this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.config.behindTop + this.config.height - 2 + 'px' : this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.config.behindTop + 'px';
 				} else {
 					//插件在input框之上
-					this.config.isDouble && !this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop - this.config.behindTop - this.config.calendarHeight * 2 + 'px' : this.obj.calendar.style.top = objOffsetTop - this.config.behindTop - this.config.calendarHeight + 'px';
+					this.config.isDouble && !this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop - this.config.behindTop - this.config.height * 2 + 'px' : this.obj.calendar.style.top = objOffsetTop - this.config.behindTop - this.config.height + 'px';
 				}
 			}
 
@@ -1308,9 +1308,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				option.width = option.width < 250 ? 250 : option.width;
 				option.width = option.width > 500 ? 500 : option.width;
 			}
-			if (option.calendarHeight) {
-				option.calendarHeight = option.calendarHeight < 250 ? 250 : option.calendarHeight;
-				option.calendarHeight = option.calendarHeight > 350 ? 350 : option.calendarHeight;
+			if (option.height) {
+				option.height = option.height < 250 ? 250 : option.height;
+				option.height = option.height > 350 ? 350 : option.height;
 			}
 
 			var cloneOption = Object.assign(extendDeep(option), json);

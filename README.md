@@ -67,7 +67,7 @@ npm run build
 	type:'day',   可选类型 day year month time doubleday doubleyear doublemonth doubletime
 	lang:'cn',   可选择语言类型 cn , en 
 	width:280,  		插件宽度配置   250 <= X <= 500
-	calendarHeight:300, 插件高度配置   250 <= X <= 350
+	height:300, 		插件高度配置   250 <= X <= 350
 	behindTop:10,   	插件于输入框的高度 
 	format:'yyyy-MM-dd HH:mm:ss',  时间格式化
 	value:'',  插件初始默认值
