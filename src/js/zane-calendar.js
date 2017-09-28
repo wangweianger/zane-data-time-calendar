@@ -441,10 +441,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				//double 处理
 				if (objBotton > this.config.height) {
 					//插件在input框之下 
-					this.config.isDouble && this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.config.behindTop + this.config.height - 2 + 'px' : this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.config.behindTop + 'px';
+					this.config.isDouble && this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.config.behindTop + this.config.height - 2 - 40 + 'px' : this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.config.behindTop + 'px';
 				} else {
 					//插件在input框之上
-					this.config.isDouble && !this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop - this.config.behindTop - this.config.height * 2 + 'px' : this.obj.calendar.style.top = objOffsetTop - this.config.behindTop - this.config.height + 'px';
+					this.config.isDouble && !this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop - this.config.behindTop - this.config.height * 2 + 42 + 'px' : this.obj.calendar.style.top = objOffsetTop - this.config.behindTop - this.config.height + 'px';
 				}
 			}
 
@@ -1059,6 +1059,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						bottomHTML = this.bottomCheckTimeHTML();
 
 						this.renderCommonHtml('time', topHTML, mainHTML, bottomHTML);
+
+						this.$obj[query]('.select-time').style.height = this.config.height - 115 + 'px';
 
 						var hourScrollTop = this.$obj[query]('ul.hour')[query]('li.active').offsetTop;
 						var minuteScrollTop = this.$obj[query]('ul.minute')[query]('li.active').offsetTop;

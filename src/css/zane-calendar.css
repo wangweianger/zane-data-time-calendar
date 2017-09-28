@@ -12,7 +12,7 @@ ul, li {
   top: 0;
   font-size: 14px;
   width: 280px;
-  border: solid 1px #ddd;
+  border: solid 1px #eee;
   border-left: none;
   background: #fff;
   overflow: hidden;
@@ -33,8 +33,8 @@ ul, li {
       line-height: 40px;
       position: relative;
       text-align: center;
-      border-bottom: solid 1px #ddd;
-      border-left: solid 1px #ddd;
+      border-bottom: solid 1px #eee;
+      border-left: solid 1px #eee;
       font-size: 16px; }
       .zane-calendar .zane-calendar-one .zane-date-top .zane-date-icom {
         width: 40px;
@@ -44,13 +44,13 @@ ul, li {
         left: 0;
         top: 0;
         background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA6ElEQVRYR9XXXQ7CIAwHcDiBeAN5oM8eSW+mJ9Fz8FIPQlJDshjnPigbLXGvI/x/oaHdrOn82M755n8BiHjKp+e9f+05xU0nEGM8W2sfOTiEcFQFfIU7IroDwEUN0Do8w9klkAhnA6TCWQDJ8CJAOnwVoBG+CNAKnwVohk8A2uEjACK6lBIaY5p0OG53/DSiAZAHy4GIbgBw5W6yZ92oEw4leGoiJq1YGzE7CzQRi8NIC7E6DTUQxXEsjSgC8hWTRLAAkgg2QApRBZBAVAN+EPmz3DVrxTUbdf0xqYGW1m4qQWnTmvfdAW+Xz8YhHJFj1gAAAABJRU5ErkJggg==") no-repeat center center;
-        background-size: 70%; }
+        background-size: 55%; }
       .zane-calendar .zane-calendar-one .zane-date-top .zane-icon-right {
         position: absolute;
         top: 0;
         right: 0;
         background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA2klEQVRYR+XXwQ3CMAxAUWeY+MwIjFI2gElgA2ASVuBsDxMUCaTSQ2s7NlFLj1Wl/+RISZqg85M692EbACLaIeLTMs3mCTDzEQDOpZQbIh60CA/AHgAeNWxBNANqmIiGlNLVgnABtCDcAFaEK8CCcAdoESEADSIMIEWEAiSIcMAS4ieAKQIATjnnS33/H4DJVn1HxOFzaIVPYC4evgRL8VCAJB4GkMZDAJq4O0AbdwVY4m4Aa9wFwMzjS+nXJiO5ITdvRKNruTruMoH3QdPvx0Qy5rlvmpdg9YAX88PCIUoA0kEAAAAASUVORK5CYII=") no-repeat center center;
-        background-size: 70%; }
+        background-size: 55%; }
       .zane-calendar .zane-calendar-one .zane-date-top .zane-icon-center span:hover {
         color: #34a9da;
         cursor: pointer; }
@@ -59,7 +59,7 @@ ul, li {
     .zane-calendar .zane-calendar-one .zane-date-main {
       overflow: hidden;
       height: 220px;
-      border-left: solid 1px #ddd; }
+      border-left: solid 1px #eee; }
       .zane-calendar .zane-calendar-one .zane-date-main .week-day table.day {
         width: 100%; }
       .zane-calendar .zane-calendar-one .zane-date-main .week-day th, .zane-calendar .zane-calendar-one .zane-date-main .week-day td {
@@ -67,6 +67,7 @@ ul, li {
       .zane-calendar .zane-calendar-one .zane-date-main .week-day th.light, .zane-calendar .zane-calendar-one .zane-date-main .week-day td.light {
         color: #cacaca; }
       .zane-calendar .zane-calendar-one .zane-date-main .week-day td {
+        font-size: 13px;
         cursor: pointer; }
         .zane-calendar .zane-calendar-one .zane-date-main .week-day td.calendar-disabled {
           cursor: not-allowed;
@@ -90,8 +91,8 @@ ul, li {
         padding: 5px; }
         .zane-calendar .zane-calendar-one .zane-date-main .main-check-time .week-day .nav {
           overflow: hidden;
-          height: 30px;
-          line-height: 30px; }
+          height: 25px;
+          line-height: 25px; }
           .zane-calendar .zane-calendar-one .zane-date-main .main-check-time .week-day .nav li {
             width: 33.333%;
             float: left;
@@ -99,15 +100,16 @@ ul, li {
         .zane-calendar .zane-calendar-one .zane-date-main .main-check-time .week-day .select-time {
           overflow: hidden;
           text-align: center;
+          height: 176px;
           /*滚动条样式*/ }
           .zane-calendar .zane-calendar-one .zane-date-main .main-check-time .week-day .select-time ul {
-            height: 176px;
+            height: 99%;
             display: inline-block;
             overflow-y: scroll;
             width: 28%;
             margin: 0 2%;
             float: left;
-            border: solid 1px #ccc; }
+            border: solid 1px #eee; }
             .zane-calendar .zane-calendar-one .zane-date-main .main-check-time .week-day .select-time ul li {
               height: 25px;
               line-height: 25px;
@@ -129,8 +131,8 @@ ul, li {
             border-radius: 0;
             background: rgba(0, 0, 0, 0.1); }
     .zane-calendar .zane-calendar-one .zane-date-bottom {
-      border-top: solid 1px #ddd;
-      border-left: solid 1px #ddd;
+      border-top: solid 1px #eee;
+      border-left: solid 1px #eee;
       overflow: hidden;
       height: 40px;
       padding: 0 8px;
@@ -142,7 +144,6 @@ ul, li {
       .zane-calendar .zane-calendar-one .zane-date-bottom .button {
         margin-top: 6px;
         cursor: pointer;
-        border: solid 1px #ddd;
         padding: 6px 8px;
         float: left;
         background: #fff;

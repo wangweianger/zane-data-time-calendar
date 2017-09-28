@@ -6,7 +6,6 @@
   "repository": "wangweianger/zane-data-time-calendar",
   "author": "zane <752636052@qq.com> (http://blog.seosiwei.com/)",
   "main": "index.js",
-  "main": "zane-calendar.js",
   "scripts": {
     "dev": "gulp",
     "build": "gulp build"
