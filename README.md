@@ -68,13 +68,13 @@ npm run build
 	lang:'cn',   可选择语言类型 cn , en 
 	width:280,  		插件宽度配置   250 <= X <= 500
 	calendarHeight:300, 插件高度配置   250 <= X <= 350
+	behindTop:10,   	插件于输入框的高度 
 	format:'yyyy-MM-dd HH:mm:ss',  时间格式化
 	value:'',  插件初始默认值
 	min:'',  可选取时间最小范围 1900-10-01
 	max: '',  可选取时间最大范围 2099-12-31
 	position:'fixed',  定位方式  暂时只支持 fixed
 	event:'click',   事件方式 暂时只支持 click 
-	behindTop:10,   插件于输入框的高度 
 	zindex:100,   z-index值
 	showtime:true,  是否显示选择时间
 	showclean:true,  是否显示清除按钮
