@@ -84,6 +84,8 @@ class calendar{
 			haveBotBtns:true,
 			calendarName:'',
 			isDouble:false,
+			//插件于输入框的高度 
+			behindTop:10,
 			// 插件加载完成之后调用
 			mounted:()=>{},
 			//时间变更之后调用
@@ -108,8 +110,6 @@ class calendar{
 			isDoubleOne:false,
 			handleType:'date',
 			initVal:'',//每次进来的初始值
-			//插件于输入框的高度 
-			behindTop:10,
 			calendarHeight:307,
 			// 选择年时展示的数量
 			totalYear:18,
@@ -435,7 +435,7 @@ class calendar{
 		let objOffsetTop		= e.target.offsetTop
 		let objOffsetLeft		= e.target.offsetLeft
 		let objOffsetHeight		= e.target.offsetHeight
-		let objBotton 			= screenClientHeight-(objOffsetTop+objOffsetHeight+this.obj.behindTop-screenScrolTop)
+		let objBotton 			= screenClientHeight-(objOffsetTop+objOffsetHeight+this.config.behindTop-screenScrolTop)
 		let betweenRight 		=  winWidth-objOffsetLeft-this.config.width
 		this.obj.calendar.style.display = 'block';
 		this.obj.calendarHeight = this.$obj.offsetHeight
@@ -450,13 +450,13 @@ class calendar{
 		if(objBotton > this.obj.calendarHeight){
 			//插件在input框之下 
 			this.config.isDouble&&this.obj.isDoubleOne&&betweenRight<this.config.width?
-			this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.obj.behindTop+this.obj.calendarHeight-2+'px'
-			:this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.obj.behindTop+'px';
+			this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.config.behindTop+this.obj.calendarHeight-2+'px'
+			:this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.config.behindTop+'px';
 		}else{
 			//插件在input框之上
 			this.config.isDouble&&!this.obj.isDoubleOne&&betweenRight<this.config.width?
-			this.obj.calendar.style.top = objOffsetTop-this.obj.behindTop-this.obj.calendarHeight*2+'px'
-			:this.obj.calendar.style.top = objOffsetTop-this.obj.behindTop-this.obj.calendarHeight+'px';
+			this.obj.calendar.style.top = objOffsetTop-this.config.behindTop-this.obj.calendarHeight*2+'px'
+			:this.obj.calendar.style.top = objOffsetTop-this.config.behindTop-this.obj.calendarHeight+'px';
 		}
 	}
 
