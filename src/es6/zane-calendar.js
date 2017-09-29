@@ -236,7 +236,7 @@ class calendar{
 							<div class="common-main main-check-time"></div>
 						</div>
 						<div class="zane-date-bottom" style="display:${this.config.haveBotBtns||this.config.isDouble?'block':'none'};
-												border-left:${this.obj.isDoubleOne?'none':'solid 1px #ddd'};">
+												border-left:${this.obj.isDoubleOne?'none':'solid 1px #eee'};">
 							<div class="btn-select-time" style="display:${this.config.showtime?'blcok':'none'}">
 								<div class="zane-date-left button btn-select-time-item" onclick="${this.config.calendarName}.getTimeHtml()">${this.obj.lang.timeTips}</div>
 							</div>	
