@@ -6,6 +6,12 @@
 插件不兼容低版本的IE浏览器，IE浏览器请慎重使用
 暂时只支持单个时间段选择，后期会推出多个时间段选择方式。
 
+### images
+
+![输入图片说明](https://git.oschina.net/uploads/images/2017/0929/170241_8561545c_818875.png "在这里输入图片标题")
+![输入图片说明](https://git.oschina.net/uploads/images/2017/0929/170243_068b0494_818875.png "在这里输入图片标题")
+![输入图片说明](https://git.oschina.net/uploads/images/2017/0929/170246_ee897477_818875.png "在这里输入图片标题")
+
 ### 文档说明  ：http://www.seosiwei.com/zjkf/166.html
 ### demo地址 ： http://www.seosiwei.com/zaneDate/index.html
 ### 我的博客  ：http://blog.seosiwei.com/
