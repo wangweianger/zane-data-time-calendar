@@ -14,7 +14,6 @@
 
 ### 文档说明  ：http://www.seosiwei.com/zjkf/166.html
 ### demo地址 ： http://www.seosiwei.com/zaneDate/index.html
-### 我的博客  ：http://blog.seosiwei.com/
 
 ### 使用方式
 
