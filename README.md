@@ -15,6 +15,8 @@
 ### 文档说明  ：http://www.seosiwei.com/zjkf/166.html
 ### demo地址 ： http://www.seosiwei.com/zaneDate/index.html
 
+### 封装的vue组件请使用如下npm链接 支持vue1.0,vue2.0: https://www.npmjs.com/package/vue-date-calendar
+
 ### 使用方式
 
 
