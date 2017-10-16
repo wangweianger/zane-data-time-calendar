@@ -178,6 +178,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function init() {
 				var _this2 = this;
 
+				this.obj.input.nodeName !== 'INPUT' ? this.obj.input.textContent = this.config.value : this.obj.input.value = this.config.value;
+
 				this.on(this.obj.input, this.config.event, function (e) {
 					e.preventDefault();
 					e.stopPropagation();

@@ -162,6 +162,10 @@ class calendar{
 	}
 
 	init(){
+		this.obj.input.nodeName !== 'INPUT'?
+			this.obj.input.textContent	=	this.config.value :
+			this.obj.input.value  		=  this.config.value;
+
 		this.on(this.obj.input,this.config.event, (e)=>{
 			e.preventDefault();
 			e.stopPropagation();
