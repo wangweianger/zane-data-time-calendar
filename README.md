@@ -40,6 +40,9 @@ zaneDate({
 
 ```
 
+npm install zane-calendar --save-dev
+
+
 const zaneDate = require('zane-calendar') 或
 import zaneDate from 'zane-calendar'
 
