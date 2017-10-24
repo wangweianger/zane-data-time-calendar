@@ -170,6 +170,11 @@ class calendar{
 			e.preventDefault();
 			e.stopPropagation();
 
+			let obj = doc[query](this.obj.id);
+			if(obj){
+				this.obj.calendar = obj;
+			};
+
 			if(!this.obj.calendar){//没有calendar为第一次生成
 				// double 赋值
 				this.obj.isDoubleOne = this.config.calendarName.indexOf('DOUBLE') != -1?true:false;
@@ -206,7 +211,6 @@ class calendar{
 				this.elemEventPoint(e);
 				this.documentClick();
 				this.calendarClick(); 
-
 			}else{
 				this.elemEventPoint(e);//定位并显示选择器
 			};
@@ -433,7 +437,7 @@ class calendar{
 
 	// 插件位置定位并显示
 	elemEventPoint(e){
-		this.obj.calendar = this.$obj;
+		this.obj.calendar 		= this.$obj;
 		let winWidth  			= doc.documentElement.clientWidth
 		let screenClientHeight 	= doc.documentElement.clientHeight
 		let screenScrolTop	 	= doc.documentElement.scrollTop
