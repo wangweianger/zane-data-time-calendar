@@ -156,7 +156,6 @@ class calendar{
 		if(this.config.type == 'time'){
 			this.config.showtime =false;
 		}
-
 		// 初始化
 		this.init();
 	}
@@ -172,7 +171,8 @@ class calendar{
 
 			let obj = doc[query](this.obj.id);
 			if(obj){
-				this.obj.calendar = obj;
+				this.obj.calendar 	= obj;
+				this.$obj 			= obj;
 			};
 
 			if(!this.obj.calendar){//没有calendar为第一次生成

@@ -168,7 +168,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			if (this.config.type == 'time') {
 				this.config.showtime = false;
 			}
-
 			// 初始化
 			this.init();
 		}
@@ -183,6 +182,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				this.on(this.obj.input, this.config.event, function (e) {
 					e.preventDefault();
 					e.stopPropagation();
+
+					var obj = doc[query](_this2.obj.id);
+					if (obj) {
+						_this2.obj.calendar = obj;
+						_this2.$obj = obj;
+					};
 
 					if (!_this2.obj.calendar) {
 						//没有calendar为第一次生成
