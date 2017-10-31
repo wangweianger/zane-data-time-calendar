@@ -80,7 +80,8 @@ npm run build
 	height:300, 		插件高度配置   250 <= X <= 350
 	behindTop:10,   	插件于输入框的高度 
 	format:'yyyy-MM-dd HH:mm:ss',  时间格式化
-	value:'',  插件初始默认值
+	begintime:'',  				开始时间  （但选择器默认选择此项）
+	endtime:'',                 结束时间  （double选择器需要）
 	min:'',  可选取时间最小范围 1900-10-01
 	max: '',  可选取时间最大范围 2099-12-31
 	position:'fixed',  定位方式  暂时只支持 fixed
