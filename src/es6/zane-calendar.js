@@ -944,21 +944,24 @@ class calendar{
 	// 确定年月日的值并在input里面显示，时间选择器隐藏
 	getYearMonthAndDay(datatime,isFormat=true){
 		let formatTime = null;
+		let begintime='';
+		let endtime='';
+
 		//doubule 处理
 		if(datatime&&datatime.indexOf('|') != -1){
 			let arr 	= datatime.split('|');
 			let val1 	= null
 			let val2 	= null
 			if(isFormat){
-				val1 = new Date(arr[0]).Format(this.config.format)
-				val2 = new Date(arr[1]).Format(this.config.format)
+				val1 = begintime = new Date(arr[0]).Format(this.config.format)
+				val2 = endtime = new Date(arr[1]).Format(this.config.format)
 			}else{
-				val1 = arr[0]
-				val2 = arr[1]
+				val1 = begintime = arr[0]
+				val2 = endtime = arr[1]
 			}
 			formatTime = val1 +' - '+ val2
 		}else{
-			formatTime = isFormat?new Date(datatime).Format(this.config.format):datatime;
+			formatTime = begintime = isFormat?new Date(datatime).Format(this.config.format):datatime;
 		}
 		 
 		if(this.obj.input.nodeName !== 'INPUT'){
@@ -971,8 +974,8 @@ class calendar{
 		//doubule 处理
 		if(this.obj.isDoubleOne) doc[query](this.obj.$noDoubleObj.obj.id).style.display = "none";
 
-		this.config.done&&this.config.done(formatTime);
-		if(this.obj.initVal!=formatTime&&this.config.change)this.config.change(formatTime)
+		this.config.done&&this.config.done(formatTime,begintime,endtime);
+		if(this.obj.initVal!=formatTime&&this.config.change)this.config.change(formatTime,begintime,endtime)
 	}
 
 	// 判断插件渲染类型 day | year | month | time

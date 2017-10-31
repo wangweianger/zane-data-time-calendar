@@ -93,7 +93,7 @@
 		<div class="demo"><span>初始化回调:</span><input id="demo16" type="text" class="input" placeholder="yyyy-MM-dd"></div>
 		<div class="demo"><span>改变值回调:</span><input id="demo17" type="text" class="input" placeholder="yyyy-MM-dd"></div>
 		<div class="demo"><span>完成回调:</span><input id="demo18" type="text" class="input" placeholder="yyyy-MM-dd"></div>
-
+		<div class="demo"><span>double完成回调:</span><input id="demo27" type="text" class="input" placeholder="yyyy-MM-dd"></div>
 	</div>
 
 	<script>
@@ -175,14 +175,21 @@
 		})
 		zaneDate({
 			elem:'#demo17',
-			change:function(time){
-				alert('我改变的值是'+time)
+			change:function(fulltime,begintime,endtime){
+				alert('fulltime:'+fulltime+'\r\nbegintime:'+begintime+'\r\nendtime:'+endtime)
 			}
 		})
 		zaneDate({
 			elem:'#demo18',
-			done:function(time){
-				alert('我完成的值是'+time)
+			done:function(fulltime,begintime,endtime){
+				alert('fulltime:'+fulltime+'\r\nbegintime:'+begintime+'\r\nendtime:'+endtime)
+			}
+		})
+		zaneDate({
+			elem:'#demo27',
+			type:'doubleday',
+			done:function(fulltime,begintime,endtime){
+				alert('fulltime:'+fulltime+'\r\nbegintime:'+begintime+'\r\nendtime:'+endtime)
 			}
 		})
 		zaneDate({
