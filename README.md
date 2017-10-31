@@ -93,8 +93,8 @@ npm run build
 	haveBotBtns:true, 是否有底部按钮列表
 	calendarName:'', 此参数勿动 表示当前时间插件实例化对象
 	mounted:()=>{}, 插件加载完成之后调用
-	change:()=>{}, 时间变更之后调用
-	done:()=>{}, 选择完成之后调用
+	change:(fulltime,begintime,endtime)=>{}, 时间变更之后调用
+	done:(fulltime,begintime,endtime)=>{}, 选择完成之后调用
 }	
 
 
