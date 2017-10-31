@@ -109,10 +109,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			};
 
 			this.config = this.extend(this.config, json);
+
 			//校验时间格式
-			if (isNaN(new Date(this.config.value))) this.config.value = '';
-			if (isNaN(new Date(this.config.min))) this.config.min = '';
-			if (isNaN(new Date(this.config.max))) this.config.max = '';
+			if (!this.config.value) this.config.value = '';
+			if (!this.config.min) this.config.min = '';
+			if (!this.config.max) this.config.max = '';
 
 			this.obj = {
 				input: doc[query](this.config.elem),
@@ -177,7 +178,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function init() {
 				var _this2 = this;
 
-				this.obj.input.nodeName !== 'INPUT' ? this.obj.input.textContent = this.config.value : this.obj.input.value = this.config.value;
+				// double 处理
+				if (this.config.isDouble) {
+					this.obj.input.nodeName !== 'INPUT' ? this.obj.input.textContent = this.config.doublevalue : this.obj.input.value = this.config.doublevalue;
+				} else if (!this.config.isDouble) {
+					this.obj.input.nodeName !== 'INPUT' ? this.obj.input.textContent = this.config.value : this.obj.input.value = this.config.value;
+				}
 
 				this.on(this.obj.input, this.config.event, function (e) {
 					e.preventDefault();
@@ -212,13 +218,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 								_this2.judgeCalendarRender('day', _this2.config.value);
 								break;
 							case 'year':
-								_this2.getYearHtml();
+								_this2.getYearHtml(_this2.config.value);
 								break;
 							case 'month':
-								_this2.getMonthHtml();
+								_this2.getMonthHtml(_this2.config.value);
 								break;
 							case 'time':
-								_this2.getTimeHtml();
+								_this2.getTimeHtml(_this2.config.value);
 								break;
 						}
 
@@ -343,7 +349,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: "topCheckMonthHTML",
 			value: function topCheckMonthHTML(json) {
-				var html = "\n\t\t<div class=\"zane-date-icom zane-icon-left\" onclick=\"" + this.config.calendarName + ".perMonthYear(" + json.year + "," + json.nowmonth + ")\"></div>\n\t\t<div class=\"zane-icon-center\">\n\t\t\t<span>" + json.year + "\u5E74</span>\n\t\t</div>\n\t\t<div class=\"zane-date-icom zane-icon-right\" onclick=\"" + this.config.calendarName + ".nextMonthYear(" + json.year + "," + json.nowmonth + ")\"></div>";
+				var html = "\n\t\t<div class=\"zane-date-icom zane-icon-left\" style=\"display:" + (this.obj.handleType == 'month' ? 'none' : 'block') + "\" onclick=\"" + this.config.calendarName + ".perMonthYear(" + json.year + "," + json.nowmonth + ")\"></div>\n\t\t<div class=\"zane-icon-center\">\n\t\t\t<span>" + json.year + "\u5E74</span>\n\t\t</div>\n\t\t<div class=\"zane-date-icom zane-icon-right\" style=\"display:" + (this.obj.handleType == 'month' ? 'none' : 'block') + "\" onclick=\"" + this.config.calendarName + ".nextMonthYear(" + json.year + "," + json.nowmonth + ")\"></div>";
 				return html;
 			}
 			// month -main html 时间选择器选择月份状态内容块
@@ -354,7 +360,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var html = "<div class=\"week-day\">\n\t\t\t<table class=\"day\" border=\"0\" cellspacing=\"0\">";
 				for (var i = 0, len = json.datalist.length; i < len; i++) {
 					var className = json.datalist[i].class || "";
-					if (i + 1 === json.nowmonth) {
+					if (i + 1 === parseInt(json.nowmonth)) {
 						className += " active";
 					}
 					if (i == 0) {
@@ -471,7 +477,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var second = date.getSeconds();
 
 				// double 处理
-				if (this.config.isDouble && this.obj.isDoubleOne && clickType != 'pre') {
+				if (this.config.isDouble && this.obj.isDoubleOne && clickType == 'next') {
 					if (month >= 12) {
 						year = year + 1;
 						month = 1;
@@ -606,7 +612,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 				var fulldate = year + "/" + month + "/" + this.obj.fulldatas.today;
 				var isreset = this.config.isDouble && !this.obj.isDoubleOne ? true : false;
-				this.judgeCalendarRender('day', fulldate, isreset);
+				this.judgeCalendarRender('day', fulldate, isreset, 'next');
 			}
 
 			// 获得年月日,如果showtime=true,日期加样式，如果为false,直接设置当前选择的日期
@@ -654,7 +660,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				year = parseInt(year);
 
 				// double 处理
-				if (this.config.isDouble && this.obj.isDoubleOne && clickType != 'pre') {
+				if (this.config.isDouble && this.obj.isDoubleOne && clickType == 'next') {
 					year = year + 1;
 				} else if (this.config.isDouble && !this.obj.isDoubleOne && clickType == 'pre') {
 					year = year - 1;
@@ -696,7 +702,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function nextYear(year) {
 				year = year + this.obj.totalYear;
 				var isreset = this.config.isDouble && !this.obj.isDoubleOne ? true : false;
-				this.getYearHtml(year, isreset);
+				this.getYearHtml(year, isreset, 'next');
 			}
 
 			// 获得年
@@ -799,11 +805,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 		}, {
 			key: "getTimeHtml",
-			value: function getTimeHtml() {
+			value: function getTimeHtml(time) {
 				//double 处理
 				if (this.config.isDouble && !this.obj.isDoubleOne && this.config.type == 'day') this.obj.$noDoubleObj.getTimeHtml();
-
-				var date = new Date();
+				var nowday = new Date().Format('yyyy-MM-dd');
+				var date = time ? new Date(nowday + ' ' + time) : new Date();
 				var hour = date.getHours();
 				var minute = date.getMinutes();
 				var second = date.getSeconds();
@@ -1294,16 +1300,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				showclean: false,
 				shownow: false,
 				showsubmit: false,
-				isDouble: true
+				isDouble: true,
+				value: option.begintime,
+				doublevalue: option.begintime && option.endtime ? option.begintime + ' - ' + option.endtime : ''
 			});
 			createCalendar({
 				shownow: false,
 				showtime: false,
 				isDouble: true,
-				double: 'DOUBLE'
+				double: 'DOUBLE',
+				value: option.endtime,
+				doublevalue: option.begintime && option.endtime ? option.begintime + ' - ' + option.endtime : ''
 			});
 		} else {
-			createCalendar();
+			createCalendar({
+				value: option.begintime
+			});
 		}
 
 		// 新建日期插件
