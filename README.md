@@ -24,8 +24,8 @@
 
 ### 浏览器端使用
 ```
-<link href="./dist/zane-calendar.css">
-<script src="./dist/zane-calendar.js"></script>
+<link href="./dist/zane-calendar.min.css">
+<script src="./dist/zane-calendar.min.js"></script>
 
 <!-- 需要加时间插件的输入框 -->
 <input type="" name="" id="zane-calendar">
