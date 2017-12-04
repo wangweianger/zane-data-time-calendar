@@ -446,13 +446,14 @@ class calendar{
 	// 插件位置定位并显示
 	elemEventPoint(e){
 		this.obj.calendar 		= this.$obj;
+		let rectObject = e.srcElement.getBoundingClientRect()
+		let objOffsetLeft = rectObject.left
+		let objOffsetTop = rectObject.top
 		let winWidth  			= doc.documentElement.clientWidth
 		let screenClientHeight 	= doc.documentElement.clientHeight
 		let screenScrolTop	 	= doc.documentElement.scrollTop
-		let objOffsetTop		= e.target.offsetTop
-		let objOffsetLeft		= e.target.offsetLeft
 		let objOffsetHeight		= e.target.offsetHeight
-		let objBotton 			= screenClientHeight-(objOffsetTop+objOffsetHeight+this.config.behindTop-screenScrolTop)
+		let objBotton 			= screenClientHeight-(objOffsetTop+objOffsetHeight+this.config.behindTop)
 		let betweenRight 		=  winWidth-objOffsetLeft-this.config.width
 		this.obj.calendar.style.display = 'block';
 		this.config.height = this.$obj.offsetHeight
@@ -467,13 +468,13 @@ class calendar{
 		if(objBotton > this.config.height){
 			//插件在input框之下 
 			this.config.isDouble&&this.obj.isDoubleOne&&betweenRight<this.config.width?
-			this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.config.behindTop+this.config.height-2-40+'px'
-			:this.obj.calendar.style.top = objOffsetTop+objOffsetHeight+this.config.behindTop+'px';
+			this.obj.calendar.style.top = objOffsetTop+screenScrolTop+objOffsetHeight+this.config.behindTop+this.config.height-2-40+'px'
+			:this.obj.calendar.style.top = objOffsetTop+screenScrolTop+objOffsetHeight+this.config.behindTop+'px';
 		}else{
 			//插件在input框之上
 			this.config.isDouble&&!this.obj.isDoubleOne&&betweenRight<this.config.width?
-			this.obj.calendar.style.top = objOffsetTop-this.config.behindTop-this.config.height*2+42+'px'
-			:this.obj.calendar.style.top = objOffsetTop-this.config.behindTop-this.config.height+'px';
+			this.obj.calendar.style.top = objOffsetTop+screenScrolTop-this.config.behindTop-this.config.height*2+42+'px'
+			:this.obj.calendar.style.top = objOffsetTop+screenScrolTop-this.config.behindTop-this.config.height+'px';
 		}
 	}
 

@@ -52,11 +52,16 @@
 			display: inline-block;
 		}
 	</style>
+	<style type="text/css">
+		.position_flexd{width:600px;height:200px;position:fixed;left:30%;top:50px;background:#fff;padding-top:30px;}
+		.position_fix{margin-left:50px;}
+		.position_absolute{position:absolute;left:50px;top:100px;background:#fff;}
+		.close{width:20px;height:20px;position:absolute;right:20px;top:20px;cursor:pointer;font-size:30px;}
+	</style>
 	<link rel="stylesheet" type="text/css" href="./css/zane-calendar.css">
 	<script src="./js/zane-calendar.js"></script>
 </head>
 <body>
-	
 	<ul class="navdemo">
 		<li><a target="_blank" href="http://blog.seosiwei.com/">zane博客</a></li>
 		<li><a target="_blank" href="http://www.seosiwei.com/zjkf/166.html">文档</a></li>
@@ -65,6 +70,15 @@
 
 	<h1 class="h1">示例</h1>
 	<div class="main">
+		<div class="position_flexd demo" id="open_model" style="width:600px">
+			<div class="position_fix">
+				<span>fixed绝对定位:</span><input id="demo28" type="text" class="input" placeholder="我是input框">
+			</div>
+			<div class="position_absolute">
+				<span>绝对定位中的absolute定位:</span><input id="demo29" type="text" class="input" placeholder="我是input框">
+			</div>
+			<div class="close" onclick="closeModel()">x</div>
+		</div>
 		<div class="demo"><span>input框:</span><input id="demo20" type="text" class="input" placeholder="我是input框"></div>
 		<div class="demo"><span>DIV框:</span><div class="input" id="demo19">我是div框</div></div>
 		<div class="demo"><span>中文版:</span><input id="demo1" type="text" class="input" placeholder="yyyy-MM-dd"></div>
@@ -97,6 +111,12 @@
 	</div>
 
 	<script>
+		zaneDate({
+			elem:'#demo28',
+		})
+		zaneDate({
+			elem:'#demo29',
+		})
 		zaneDate({
 			elem:'#demo1',
 			type:'day',
@@ -237,6 +257,12 @@
 			elem:'#demo26',
 			zindex:500
 		})
+	</script>
+	<script type="text/javascript">
+		function closeModel(){
+			let closeModels = document.querySelector('#open_model');
+			closeModels.style.display = 'none'
+		}
 	</script>
 </body>
 </html>

@@ -434,13 +434,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "elemEventPoint",
 			value: function elemEventPoint(e) {
 				this.obj.calendar = this.$obj;
+				var rectObject = e.srcElement.getBoundingClientRect();
+				var objOffsetLeft = rectObject.left;
+				var objOffsetTop = rectObject.top;
 				var winWidth = doc.documentElement.clientWidth;
 				var screenClientHeight = doc.documentElement.clientHeight;
 				var screenScrolTop = doc.documentElement.scrollTop;
-				var objOffsetTop = e.target.offsetTop;
-				var objOffsetLeft = e.target.offsetLeft;
 				var objOffsetHeight = e.target.offsetHeight;
-				var objBotton = screenClientHeight - (objOffsetTop + objOffsetHeight + this.config.behindTop - screenScrolTop);
+				var objBotton = screenClientHeight - (objOffsetTop + objOffsetHeight + this.config.behindTop);
 				var betweenRight = winWidth - objOffsetLeft - this.config.width;
 				this.obj.calendar.style.display = 'block';
 				this.config.height = this.$obj.offsetHeight;
@@ -454,10 +455,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				//double 处理
 				if (objBotton > this.config.height) {
 					//插件在input框之下 
-					this.config.isDouble && this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.config.behindTop + this.config.height - 2 - 40 + 'px' : this.obj.calendar.style.top = objOffsetTop + objOffsetHeight + this.config.behindTop + 'px';
+					this.config.isDouble && this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop + screenScrolTop + objOffsetHeight + this.config.behindTop + this.config.height - 2 - 40 + 'px' : this.obj.calendar.style.top = objOffsetTop + screenScrolTop + objOffsetHeight + this.config.behindTop + 'px';
 				} else {
 					//插件在input框之上
-					this.config.isDouble && !this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop - this.config.behindTop - this.config.height * 2 + 42 + 'px' : this.obj.calendar.style.top = objOffsetTop - this.config.behindTop - this.config.height + 'px';
+					this.config.isDouble && !this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop + screenScrolTop - this.config.behindTop - this.config.height * 2 + 42 + 'px' : this.obj.calendar.style.top = objOffsetTop + screenScrolTop - this.config.behindTop - this.config.height + 'px';
 				}
 			}
 
