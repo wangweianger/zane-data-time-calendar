@@ -12,8 +12,7 @@
 ![输入图片说明](https://git.oschina.net/uploads/images/2017/0929/170243_068b0494_818875.png "在这里输入图片标题")
 ![输入图片说明](https://git.oschina.net/uploads/images/2017/0929/170246_ee897477_818875.png "在这里输入图片标题")
 
-### 文档说明  ：http://www.seosiwei.com/zjkf/166.html
-### demo地址 ： http://www.seosiwei.com/zaneDate/index.html
+### API文档及DEMO地址  ：http://www.seosiwei.com/zaneDate/index.html
 
 ### npm地址：https://www.npmjs.com/package/zane-calendar
 
@@ -23,7 +22,7 @@
 
 
 ### 浏览器端使用
-```
+```js
 <link href="./dist/zane-calendar.min.css">
 <script src="./dist/zane-calendar.min.js"></script>
 
@@ -40,7 +39,7 @@ zaneDate({
 
 ### Webpack 使用
 
-```
+```js
 
 npm install zane-calendar --save-dev
 
@@ -61,7 +60,7 @@ zaneDate({
 ```
 
 ### 项目运行方法
-```
+```js
 git clone https://github.com/wangweianger/zane-data-time-calendar.git
 npm install
 npm run dev
@@ -72,7 +71,7 @@ npm run build
 ### 参数说明
 
 参数配置
-```
+```js
 {
 	
 	elem:'#zane-calendar',   控件的dom原生 注意：仅限制于id选择器
@@ -104,7 +103,7 @@ npm run build
 ```
 ### 案例调用方式
 
-```
+```js
 	默认完整选项
 	zaneDate({
 		elem:'#zane-calendar',
@@ -161,7 +160,7 @@ npm run build
 
 ### 1.1.0 版本新增 double选择器 
 
-```
+```js
 config.type  新增double类型  可选类型如下：day year month time doubleday doubleyear doublemonth doubletime
 
 双日期范围选择
@@ -195,7 +194,7 @@ zaneDate({
 ### 1.doubleday类型新增选择时间，支持时分秒选择
 ### 2.double类型检测距离右边window边线的距离，若不足，自动排列为上下两个日期
 
-```
+```js
 config.type doubleday支持选择时间范围
 
 双日期范围选择
@@ -209,7 +208,7 @@ zaneDate({
 ```
 
 ### 1.2.1 版本  新增z-index 参数
-```
+```js
 zaneDate({
 	elem:'#zane-calendar',
 	zindex:500,
@@ -217,7 +216,7 @@ zaneDate({
 
 ```
 
-
+### 1.2.2 版本 完善日历插件文档
 
 
 
