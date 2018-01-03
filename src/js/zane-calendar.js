@@ -157,7 +157,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 			};
 
-			this.vision = '1.2.0';
+			this.vision = '2.0.7';
 			this.auther = 'zane';
 
 			this.obj.lang = this.obj[this.config.lang];
