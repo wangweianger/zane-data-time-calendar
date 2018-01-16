@@ -28,8 +28,8 @@ if(!new Date().Format){
 	    var o = {
 	        "M+": this.getMonth() + 1, //月份 
 	        "d+": this.getDate(), //日 
-	        "h+": this.getHours(), //小时 
-			"H+":this.getHours()>12?this.getHours()-12:this.getHours(),
+	        "h+": this.getHours()>12?this.getHours()-12:this.getHours(), //小时 
+			"H+": this.getHours(),
 	        "m+": this.getMinutes(), //分 
 	        "s+": this.getSeconds(), //秒 
 	        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
@@ -1201,6 +1201,13 @@ class calendar{
   	documentClick(){
   		this.on(doc,'click',(e)=>{
   			if(!this.obj.calendar) return;
+			// 拿到父节点:
+			// let parent = this.obj.calendar.parentElement;
+			// let parents = parent.parentElement;
+			// let removed = parents.removeChild(parent);
+			// this.obj.calendar=null
+			// this.obj.$obj=null
+			// this.$obj=null
   			this.obj.calendar.style.display = 'none';
   		})
   	}

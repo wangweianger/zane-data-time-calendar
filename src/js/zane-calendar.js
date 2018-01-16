@@ -35,8 +35,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			var o = {
 				"M+": this.getMonth() + 1, //月份 
 				"d+": this.getDate(), //日 
-				"h+": this.getHours(), //小时 
-				"H+": this.getHours() > 12 ? this.getHours() - 12 : this.getHours(),
+				"h+": this.getHours() > 12 ? this.getHours() - 12 : this.getHours(), //小时 
+				"H+": this.getHours(),
 				"m+": this.getMinutes(), //分 
 				"s+": this.getSeconds(), //秒 
 				"q+": Math.floor((this.getMonth() + 3) / 3), //季度 
@@ -1285,6 +1285,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				this.on(doc, 'click', function (e) {
 					if (!_this3.obj.calendar) return;
+					// 拿到父节点:
+					// let parent = this.obj.calendar.parentElement;
+					// let parents = parent.parentElement;
+					// let removed = parents.removeChild(parent);
+					// this.obj.calendar=null
+					// this.obj.$obj=null
+					// this.$obj=null
 					_this3.obj.calendar.style.display = 'none';
 				});
 			}
