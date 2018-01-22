@@ -252,6 +252,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					_this2.calendarClick();
 
 					_this2.obj.initVal = _this2.obj.input.value;
+
+					// 隐藏其他时间插件框
+					var objs = doc[quall]('.zane-calendar');
+					_this2.forEach(objs, function (index, item) {
+						if (('#' + item.getAttribute('id')).replace(/DOUBLE/, '') !== _this2.obj.id.replace(/DOUBLE/, '')) {
+							_this2.removeCalendar();
+						}
+					});
 				});
 
 				this.config.mounted && this.config.mounted();

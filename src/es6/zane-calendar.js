@@ -237,6 +237,15 @@ class calendar{
 			this.calendarClick(); 
 			
 			this.obj.initVal = this.obj.input.value;
+
+			// 隐藏其他时间插件框
+			let objs = doc[quall]('.zane-calendar');
+			this.forEach(objs,(index,item)=>{
+				if(('#'+item.getAttribute('id')).replace(/DOUBLE/,'') !== this.obj.id.replace(/DOUBLE/,'') ){
+					this.removeCalendar()
+				}
+			})
+
 		});
 
 		this.config.mounted&&this.config.mounted();

@@ -6,8 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<style>
 		*{padding:0;margin:0;}
+		input{
+			outline:none;
+		}
 		body{
 			background: #eee;
+		}
+		.line{
+			overflow: hidden;
 		}
 		.navdemo{
 			overflow: hidden;
@@ -102,7 +108,7 @@
 		}
 	</style>
 	<style type="text/css">
-		.position_flexd{width:600px;height:200px;position:fixed;left:30%;top:50px;background:#fff;padding-top:30px;display:none;}
+		.position_flexd{width:600px;height:200px;position:fixed;left:30%;top:50px;background:#fff;padding-top:30px;display:none;z-index:10000;}
 		.position_fix{margin-left:50px;}
 		.position_absolute{position:absolute;left:50px;top:150px;background:#fff;}
 		.close{width:20px;height:20px;position:absolute;right:20px;top:20px;cursor:pointer;font-size:30px;}
@@ -157,6 +163,33 @@ zaneDate({
 })
 </code></pre></div>
 
+<div class="title-h1">所有参数说明(组合随意)</div>
+<div class="every-code" style="display:block"><pre>
+<code class="language-js">{
+	elem:'#zane-calendar',  控件的dom原生 注意：仅限制于id选择器（必填参，其他参数皆为可选参）
+	type:'day',   			可选类型 day year month time doubleday doubleyear doublemonth doubletime
+	lang:'cn',   			可选择语言类型 cn , en 
+	width:280,  			插件宽度配置   250 <= X <= 500
+	height:300, 			插件高度配置   250 <= X <= 350
+	behindTop:10,   		插件与输入框的距离
+	format:'yyyy-MM-dd HH:mm:ss',  时间格式化
+	begintime:'',  			开始时间  （单选择器默认选择此项）
+	endtime:'',             结束时间  （double选择器需要）
+	min:'',  				可选取时间最小范围 1900-10-01
+	max: '',  				可选取时间最大范围 2099-12-31
+	position:'fixed',  		定位方式  暂时只支持 fixed
+	event:'click',   		事件方式 暂时只支持 click 
+	zindex:100,   			z-index值
+	showtime:true,  		是否显示选择时间
+	showclean:true,  		是否显示清除按钮
+	shownow:true,  			是否显示当前按钮
+	showsubmit:true, 		是否显示提交按钮
+	haveBotBtns:true, 		是否有底部按钮列表
+	mounted:()=>{}, 		插件加载完成之后调用
+	change:(fulltime,begintime,endtime)=>{}, 时间变更之后调用
+	done:(fulltime,begintime,endtime)=>{},   选择完成之后调用
+}</code></pre></div>
+
 		<div class="english h2">承载元素</div>
 		<div class="block">
 			<div class="demo">
@@ -204,6 +237,7 @@ zaneDate({
 		</div>
 
 		<div class="english h2">中文版案例 (以下所有功能均适用于英文版)</div>
+		<div class="line">
 		<div class="demo">
 			<span class="t1">完整版:</span>
 			<input id="demo3" type="text" class="input" placeholder="yyyy-MM-dd HH:mm:ss">
@@ -224,6 +258,8 @@ zaneDate({
 	type:'year'
 })</code></pre></div>
 		</div>
+		</div>
+		<div class="line">
 		<div class="demo">
 			<span class="t1">选择月:</span>
 			<input id="demo5" type="text" class="input" placeholder="mm">
@@ -242,6 +278,8 @@ zaneDate({
 	type:'time'
 })</code></pre></div>
 		</div>
+		</div>
+		<div class="line">
 		<div class="demo">
 			<span class="t1">z-index值:</span><input id="demo26" type="text" class="input" placeholder="zindex:500">
 <span class="button">代码</span>
@@ -258,6 +296,8 @@ zaneDate({
 	width:350,
 })</code></pre></div>
 		</div>
+		</div>
+		<div class="line">
 		<div class="demo">
 			<span class="t1">格式化:</span><input id="demo8" type="text" class="input" placeholder="yyyy年MM月dd日 HH时mm分ss秒">
 <span class="button">代码</span>
@@ -275,6 +315,8 @@ zaneDate({
 	begintime:'2018-01-01',
 })</code></pre></div>
 		</div>
+		</div>
+		<div class="line">
 		<div class="demo">
 			<span class="t1">时间范围min,max:</span><input id="demo10" type="text" class="input" placeholder="2017-09-01 2017-09-20">
 <span class="button">代码</span>
@@ -292,6 +334,8 @@ zaneDate({
 	showtime:false
 })</code></pre></div>
 		</div>
+		</div>
+		<div class="line">
 		<div class="demo">
 			<span class="t1">不显示清除按钮:</span><input id="demo12" type="text" class="input" placeholder="yyyy-MM-dd">
 <span class="button">代码</span>
@@ -308,6 +352,8 @@ zaneDate({
 	shownow:false
 })</code></pre></div>
 		</div>
+		</div>
+		<div class="line">
 		<div class="demo">
 			<span class="t1">不显示确定按钮:</span><input id="demo14" type="text" class="input" placeholder="yyyy-MM-dd">
 <span class="button">代码</span>
@@ -326,6 +372,8 @@ zaneDate({
 	haveBotBtns:false
 })</code></pre></div>
 		</div>
+		</div>
+		<div class="line">
 		<div class="demo">
 			<span class="t1">初始化回调:</span><input id="demo16" type="text" class="input" placeholder="yyyy-MM-dd">
 <span class="button">代码</span>
@@ -346,6 +394,8 @@ zaneDate({
 	}
 })</code></pre></div>
 		</div>
+	</div>
+	<div class="line">
 		<div class="demo">
 			<span class="t1">完成回调:</span><input id="demo18" type="text" class="input" placeholder="yyyy-MM-dd">
 <span class="button">代码</span>
@@ -367,8 +417,9 @@ zaneDate({
 	}
 })</code></pre></div>
 		</div>
-
+	</div>
 		<div class="english h2">双选择器案例</div>
+		<div class="line">
 		<div class="demo">
 			<span class="t1">doubleday:</span>
 			<input id="demo21" type="text" class="input" placeholder="HH:mm:ss">
@@ -391,6 +442,8 @@ zaneDate({
 	type:'doubleyear',
 })</code></pre></div>
 		</div>
+	</div>
+	<div class="line">
 		<div class="demo">
 			<span class="t1">doublemonth:</span>
 			<input id="demo23" type="text" class="input" placeholder="HH:mm:ss">
@@ -413,6 +466,8 @@ zaneDate({
 	type:'doubletime',
 })</code></pre></div>
 		</div>
+	</div>	
+	<div class="line">
 		<div class="demo">
 			<span class="t1">doubleday支持时分秒:</span>
 			<input id="demo25" type="text" class="input" placeholder="HH:mm:ss">
@@ -426,7 +481,9 @@ zaneDate({
 	showtime:true
 })</code></pre></div>
 		</div>
+	</div>	
 		<div class="english h2">英文版本案例</div>
+		<div class="line">
 		<div class="demo">
 			<span class="t1">完整版:</span>
 			<input id="demo30" type="text" class="input" placeholder="yyyy-MM-dd HH:mm:ss">
@@ -456,6 +513,7 @@ zaneDate({
 	}
 })</code></pre></div>
 		</div>
+	</div>
 	</div>
 
 	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
