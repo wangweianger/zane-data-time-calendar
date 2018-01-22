@@ -77,7 +77,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				//插件于输入框的高度 
 				behindTop: 10,
 				// 格式化
-				format: 'yyyy-MM-dd', //'yyyy-MM-dd HH:mm:ss'
+				format: 'yyyy/MM/dd', //'yyyy-MM-dd HH:mm:ss'
 				// 初始默认值
 				value: '',
 				// 可选取时间最小范围
@@ -115,68 +115,70 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			if (!this.config.min) this.config.min = '';
 			if (!this.config.max) this.config.max = '';
 
-			this.obj = {
-				input: doc[query](this.config.elem),
-				calendar: null,
-				id: "#zane-calendar-" + this.config.calendarName,
-				$obj: null,
-				fulldatas: {},
-				$noDoubleObj: null,
-				isDoubleOne: false,
-				handleType: 'date',
-				initVal: '', //每次进来的初始值
-				// 选择年时展示的数量
-				totalYear: 18,
-				cn: {
-					weeks: ['日', '一', '二', '三', '四', '五', '六'],
-					time: ['时', '分', '秒'],
-					timeTips: '选择时间',
-					startTime: '开始时间',
-					endTime: '结束时间',
-					dateTips: '返回日期',
-					month: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-					tools: {
-						confirm: '确定',
-						clear: '清空',
-						now: '现在'
-					}
-				},
-				en: {
-					weeks: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-					time: ['Hours', 'Minutes', 'Seconds'],
-					timeTips: 'Select Time',
-					startTime: 'Start Time',
-					endTime: 'End Time',
-					dateTips: 'Select Date',
-					month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-					tools: {
-						confirm: 'Confirm',
-						clear: 'Clear',
-						now: 'Now'
-					}
-				}
-			};
-
-			this.vision = '2.0.7';
-			this.auther = 'zane';
-
-			this.obj.lang = this.obj[this.config.lang];
-
-			if (this.config.type == 'year' || this.config.type == 'month') {
-				this.config.haveBotBtns = false;
-			}
-
-			if (this.config.type == 'time') {
-				this.config.showtime = false;
-			}
 			// 初始化
 			this.init();
 		}
 
+		// 生成对象obj
+
+
 		_createClass(calendar, [{
-			key: "init",
-			value: function init() {
-				var _this2 = this;
+			key: "generateCalendarObj",
+			value: function generateCalendarObj() {
+				this.obj = {
+					input: doc[query](this.config.elem),
+					calendar: null,
+					id: "#zane-calendar-" + this.config.calendarName,
+					$obj: null,
+					fulldatas: {},
+					$noDoubleObj: null,
+					isDoubleOne: false,
+					handleType: 'date',
+					initVal: '', //每次进来的初始值
+					// 选择年时展示的数量
+					totalYear: 18,
+					cn: {
+						weeks: ['日', '一', '二', '三', '四', '五', '六'],
+						time: ['时', '分', '秒'],
+						timeTips: '选择时间',
+						startTime: '开始时间',
+						endTime: '结束时间',
+						dateTips: '返回日期',
+						month: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+						tools: {
+							confirm: '确定',
+							clear: '清空',
+							now: '现在'
+						}
+					},
+					en: {
+						weeks: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+						time: ['Hours', 'Minutes', 'Seconds'],
+						timeTips: 'Select Time',
+						startTime: 'Start Time',
+						endTime: 'End Time',
+						dateTips: 'Select Date',
+						month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+						tools: {
+							confirm: 'Confirm',
+							clear: 'Clear',
+							now: 'Now'
+						}
+					}
+				};
+
+				this.vision = '2.0.9';
+				this.auther = 'zane';
+
+				this.obj.lang = this.obj[this.config.lang];
+
+				if (this.config.type == 'year' || this.config.type == 'month') {
+					this.config.haveBotBtns = false;
+				}
+
+				if (this.config.type == 'time') {
+					this.config.showtime = false;
+				}
 
 				// double 处理
 				if (this.config.isDouble) {
@@ -184,67 +186,74 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				} else if (!this.config.isDouble) {
 					this.obj.input.nodeName !== 'INPUT' ? this.obj.input.textContent = this.config.value : this.obj.input.value = this.config.value;
 				}
+			}
+		}, {
+			key: "init",
+			value: function init() {
+				var _this2 = this;
 
+				this.generateCalendarObj();
 				this.on(this.obj.input, this.config.event, function (e) {
 					e.preventDefault();
 					e.stopPropagation();
 
 					var obj = doc[query](_this2.obj.id);
+
 					if (obj) {
 						_this2.obj.calendar = obj;
 						_this2.$obj = obj;
 					};
 
-					if (!_this2.obj.calendar) {
-						//没有calendar为第一次生成
-						// double 赋值
-						_this2.obj.isDoubleOne = _this2.config.calendarName.indexOf('DOUBLE') != -1 ? true : false;
-						if (_this2.obj.isDoubleOne) {
-							var noDoubleObj = _this2.config.calendarName.replace(/DOUBLE/, '');
-							_this2.obj.$noDoubleObj = window[noDoubleObj];
-							window[noDoubleObj].obj.$noDoubleObj = _this2;
-						};
-
-						// 获得年月日
-						var html = _this2.objHTML(); //生成时间选择器HTML
-						var divElement = doc.createElement("div");
-						divElement.innerHTML = html;
-						doc.body.appendChild(divElement);
-
-						_this2.$obj = doc[query](_this2.obj.id);
-
-						switch (_this2.config.type) {
-							case 'day':
-								_this2.judgeCalendarRender('day', _this2.config.value);
-								break;
-							case 'year':
-								_this2.getYearHtml(_this2.config.value);
-								break;
-							case 'month':
-								_this2.getMonthHtml(_this2.config.value);
-								break;
-							case 'time':
-								_this2.getTimeHtml(_this2.config.value);
-								break;
-						}
-
-						//定位并显示选择器
-						_this2.elemEventPoint(e);
-						_this2.documentClick();
-						_this2.calendarClick();
-					} else {
-						_this2.elemEventPoint(e); //定位并显示选择器
+					// double 赋值
+					_this2.obj.isDoubleOne = _this2.config.calendarName.indexOf('DOUBLE') != -1 ? true : false;
+					if (_this2.obj.isDoubleOne) {
+						var noDoubleObj = _this2.config.calendarName.replace(/DOUBLE/, '');
+						_this2.obj.$noDoubleObj = window[noDoubleObj];
+						window[noDoubleObj].obj.$noDoubleObj = _this2;
 					};
-					_this2.obj.initVal = _this2.obj.input.value;
 
-					// 隐藏其他时间插件框
-					var objs = doc[quall]('.zane-calendar');
-					_this2.forEach(objs, function (index, item) {
-						if (('#' + item.getAttribute('id')).replace(/DOUBLE/, '') !== _this2.obj.id.replace(/DOUBLE/, '')) {
-							item.style.display = "none";
-						}
-					});
+					// // 设置默认值
+					var defaultValue = void 0,
+					    inpValue = void 0;
+					defaultValue = _this2.obj.input.nodeName === 'INPUT' ? _this2.obj.input.value.trim() : _this2.obj.input.textContent.trim();
+					if (_this2.config.isDouble) {
+						var arr = defaultValue.split('-');
+						_this2.config.value = _this2.obj.isDoubleOne ? arr[1].trim() : arr[0].trim();
+					} else {
+						_this2.config.value = defaultValue;
+					}
+
+					// 获得年月日
+					var html = _this2.objHTML(); //生成时间选择器HTML
+					var divElement = doc.createElement("div");
+					divElement.innerHTML = html;
+					doc.body.appendChild(divElement);
+
+					_this2.$obj = doc[query](_this2.obj.id);
+
+					switch (_this2.config.type) {
+						case 'day':
+							_this2.judgeCalendarRender('day', _this2.config.value);
+							break;
+						case 'year':
+							_this2.getYearHtml(_this2.config.value);
+							break;
+						case 'month':
+							_this2.getMonthHtml(_this2.config.value);
+							break;
+						case 'time':
+							_this2.getTimeHtml(_this2.config.value);
+							break;
+					}
+
+					//定位并显示选择器
+					_this2.elemEventPoint(e);
+					_this2.documentClick();
+					_this2.calendarClick();
+
+					_this2.obj.initVal = _this2.obj.input.value;
 				});
+
 				this.config.mounted && this.config.mounted();
 			}
 
@@ -433,18 +442,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: "elemEventPoint",
 			value: function elemEventPoint(e) {
+				var secElement = e.srcElement || e.target;
 				this.obj.calendar = this.$obj;
-				var rectObject = e.srcElement.getBoundingClientRect();
+				var rectObject = secElement.getBoundingClientRect();
 				var objOffsetLeft = rectObject.left;
 				var objOffsetTop = rectObject.top;
 				var winWidth = doc.documentElement.clientWidth;
 				var screenClientHeight = doc.documentElement.clientHeight;
-				var screenScrolTop = doc.documentElement.scrollTop;
+				var screenScrolTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
 				var objOffsetHeight = e.target.offsetHeight;
 				var objBotton = screenClientHeight - (objOffsetTop + objOffsetHeight + this.config.behindTop);
 				var betweenRight = winWidth - objOffsetLeft - this.config.width;
+				var calendHeight = this.$obj.offsetHeight;
 				this.obj.calendar.style.display = 'block';
-				this.config.height = this.$obj.offsetHeight;
 
 				// 设置插件point位置
 				if (this.obj.isDoubleOne && betweenRight >= this.config.width) {
@@ -453,12 +463,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					this.obj.calendar.style.left = objOffsetLeft + 'px';
 				};
 				//double 处理
-				if (objBotton > this.config.height) {
+				if (objBotton > calendHeight) {
 					//插件在input框之下 
-					this.config.isDouble && this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop + screenScrolTop + objOffsetHeight + this.config.behindTop + this.config.height - 2 - 40 + 'px' : this.obj.calendar.style.top = objOffsetTop + screenScrolTop + objOffsetHeight + this.config.behindTop + 'px';
+					this.config.isDouble && this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop + screenScrolTop + objOffsetHeight + this.config.behindTop + calendHeight - 2 - 40 + 'px' : this.obj.calendar.style.top = objOffsetTop + screenScrolTop + objOffsetHeight + this.config.behindTop + 'px';
 				} else {
 					//插件在input框之上
-					this.config.isDouble && !this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop + screenScrolTop - this.config.behindTop - this.config.height * 2 + 42 + 'px' : this.obj.calendar.style.top = objOffsetTop + screenScrolTop - this.config.behindTop - this.config.height + 'px';
+					this.config.isDouble && !this.obj.isDoubleOne && betweenRight < this.config.width ? this.obj.calendar.style.top = objOffsetTop + screenScrolTop - this.config.behindTop - calendHeight * 2 + 42 + 'px' : this.obj.calendar.style.top = objOffsetTop + screenScrolTop - this.config.behindTop - calendHeight + 'px';
 				}
 			}
 
@@ -809,7 +819,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function getTimeHtml(time) {
 				//double 处理
 				if (this.config.isDouble && !this.obj.isDoubleOne && this.config.type == 'day') this.obj.$noDoubleObj.getTimeHtml();
-				var nowday = new Date().Format('yyyy-MM-dd');
+				var nowday = new Date().Format('yyyy/MM/dd');
 				var date = time ? new Date(nowday + ' ' + time) : new Date();
 				var hour = date.getHours();
 				var minute = date.getMinutes();
@@ -1012,9 +1022,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					this.obj.input.value = formatTime;
 				}
 
-				this.$obj.style.display = "none";
-				//doubule 处理
-				if (this.obj.isDoubleOne) doc[query](this.obj.$noDoubleObj.obj.id).style.display = "none";
+				// 移除事件插件dom元素
+				this.removeCalendar();
 
 				this.config.done && this.config.done(formatTime, begintime, endtime);
 				if (this.obj.initVal != formatTime && this.config.change) this.config.change(formatTime, begintime, endtime);
@@ -1032,6 +1041,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					case 'day':
 						this.obj.handleType = 'day';
 						var json = this.getTimeDates(any, clickType);
+
 						this.obj.fulldatas = json;
 						// double 处理
 						this.compareSize(isreset, clickType);
@@ -1284,16 +1294,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var _this3 = this;
 
 				this.on(doc, 'click', function (e) {
-					if (!_this3.obj.calendar) return;
-					// 拿到父节点:
-					// let parent = this.obj.calendar.parentElement;
-					// let parents = parent.parentElement;
-					// let removed = parents.removeChild(parent);
-					// this.obj.calendar=null
-					// this.obj.$obj=null
-					// this.$obj=null
-					_this3.obj.calendar.style.display = 'none';
+					_this3.removeCalendar();
 				});
+			}
+
+			// 移除事件选择器
+
+		}, {
+			key: "removeCalendar",
+			value: function removeCalendar(calobj) {
+				var zaneCalendarObjs = doc[quall]('.zane-calendar');
+				if (zaneCalendarObjs && zaneCalendarObjs.length) {
+					zaneCalendarObjs.forEach(function (item) {
+						var parent = item.parentElement;
+						var parents = parent.parentElement;
+						var removed = parents.removeChild(parent);
+					});
+				}
 			}
 		}]);
 
@@ -1304,6 +1321,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	// 实例化日期插件 双选择器DOUBLE区分
 	var zaneDate = function zaneDate(option) {
+		var begintime = void 0,
+		    endtime = void 0;
+		var format = option.format ? option.format.replace(/-/g, '/') : 'yyyy/MM/dd';
+
+		//处理begintime
+		if (option.begintime && typeof option.begintime === 'string') {
+			begintime = option.begintime.replace(/-/g, '/');
+		} else if (option.begintime && typeof option.begintime === 'number') {
+			begintime = new Date(option.begintime).Format(format);
+		}
+
+		// 处理begintime
+		if (option.endtime && typeof option.endtime === 'string') {
+			endtime = option.endtime.replace(/-/g, '/');
+		} else if (option.endtime && typeof option.endtime === 'number') {
+			endtime = new Date(option.endtime).Format(format);
+		}
+
 		option.type = option.type || 'day';
 		if (option.type.indexOf('double') != -1) {
 			option.type = option.type.replace(/double/, '');
@@ -1312,20 +1347,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				shownow: false,
 				showsubmit: false,
 				isDouble: true,
-				value: option.begintime,
-				doublevalue: option.begintime && option.endtime ? option.begintime + ' - ' + option.endtime : ''
+				value: begintime,
+				format: format,
+				doublevalue: begintime && endtime ? begintime + ' - ' + endtime : ''
 			});
 			createCalendar({
 				shownow: false,
 				showtime: false,
 				isDouble: true,
 				double: 'DOUBLE',
-				value: option.endtime,
-				doublevalue: option.begintime && option.endtime ? option.begintime + ' - ' + option.endtime : ''
+				value: endtime,
+				format: format,
+				doublevalue: begintime && endtime ? begintime + ' - ' + endtime : ''
 			});
 		} else {
 			createCalendar({
-				value: option.begintime
+				format: format,
+				value: begintime
 			});
 		}
 
