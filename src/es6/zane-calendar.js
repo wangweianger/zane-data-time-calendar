@@ -182,6 +182,15 @@ class calendar{
 			e.preventDefault();
 			e.stopPropagation();
 
+			// 隐藏其他时间插件框
+			let objs = doc[quall]('.zane-calendar');
+			this.forEach(objs,(index,item)=>{
+				if(('#'+item.getAttribute('id')).replace(/DOUBLE/,'') !== this.obj.id.replace(/DOUBLE/,'') ){
+					this.removeCalendar()
+				}
+			})
+
+
 			let obj = doc[query](this.obj.id);
 
 			if(obj){
@@ -201,11 +210,23 @@ class calendar{
 			// // 设置默认值
 			let defaultValue,inpValue;
 			defaultValue = this.obj.input.nodeName === 'INPUT'?this.obj.input.value.trim():this.obj.input.textContent.trim()
-			if(this.config.isDouble){
-				let arr = defaultValue.split('-')
-				this.config.value = this.obj.isDoubleOne?arr[1].trim():arr[0].trim()
-			}else{
-				this.config.value = defaultValue
+			if(defaultValue){
+				// 中文处理
+				defaultValue = defaultValue.replace(/[\u4e00-\u9fa5]+/g,function($a,$b){
+					if($a=='年'||$a=='月'){
+						return '/'
+					}else if($a=='时'||$a=='分'){
+						return ':'
+					}else if($a=='秒'||$a=='日'){
+						return ''
+					}
+				})
+				if(this.config.isDouble){
+					let arr = defaultValue.split('-')
+					this.config.value = this.obj.isDoubleOne?arr[1].trim():arr[0].trim()
+				}else{
+					this.config.value = defaultValue
+				}
 			}
 
 			// 获得年月日
@@ -237,17 +258,7 @@ class calendar{
 			this.calendarClick(); 
 			
 			this.obj.initVal = this.obj.input.value;
-
-			// 隐藏其他时间插件框
-			let objs = doc[quall]('.zane-calendar');
-			this.forEach(objs,(index,item)=>{
-				if(('#'+item.getAttribute('id')).replace(/DOUBLE/,'') !== this.obj.id.replace(/DOUBLE/,'') ){
-					this.removeCalendar()
-				}
-			})
-
 		});
-
 		this.config.mounted&&this.config.mounted();
 	}
 
@@ -304,7 +315,6 @@ class calendar{
 			</div>`
 		}
 		html +=`<div onclick="${this.config.calendarName}.nextMonth(${json.year},${json.month})" class="zane-date-icom zane-icon-right"></div>`
-		
 		return html;
 	}
 
@@ -1047,9 +1057,7 @@ class calendar{
 				bottomHTML  = this.bottomCheckTimeHTML();
 
 				this.renderCommonHtml('time',topHTML,mainHTML,bottomHTML);
-
 				this.$obj[query]('.select-time').style.height = this.config.height-115 +'px'
-
 				let hourScrollTop = this.$obj[query]('ul.hour')[query]('li.active').offsetTop
 				let minuteScrollTop = this.$obj[query]('ul.minute')[query]('li.active').offsetTop
 				let secondScrollTop = this.$obj[query]('ul.second')[query]('li.active').offsetTop
@@ -1195,15 +1203,6 @@ class calendar{
 		}
 	}
 
-	//解除事件
-  	off(obj,eventName, fn){
-    	return this.forEach(obj,(index, item)=>{
-	      	item.detachEvent 
-	        ? item.detachEvent('on'+ eventName, fn)  
-	      	: item.removeEventListener(eventName, fn, false);
-    	});
-  	};
-
   	// 计算table tr高度
   	countHeight(elename,length){
   		let mainH  		=  	this.$obj[query]('.zane-date-main').offsetHeight;
@@ -1237,24 +1236,35 @@ class calendar{
 
 // 实例化日期插件 双选择器DOUBLE区分
 let zaneDate = function(option){
-	let begintime,endtime;
-	let format 		= option.format?option.format.replace(/-/g,'/'):'yyyy/MM/dd'
-	
+	let begintime,endtime,format;
+	format 	= option.format?option.format.replace(/-/g,'/'):'yyyy/MM/dd'
+	if(option.type){
+		if(option.type.indexOf('time')!=-1) format 	= 'HH:mm:ss';
+		if(option.type.indexOf('year')!=-1) format 	= 'yyyy';
+		if(option.type.indexOf('month')!=-1) format = 'MM';
+	}
+	option.type = option.type || 'day'
+
 	//处理begintime
 	if(option.begintime&&typeof(option.begintime)==='string'){
 		begintime 	= option.begintime.replace(/-/g,'/')
+		if(option.type&&option.type.indexOf('time')==-1 || !option.type){
+			begintime 	= new Date(begintime).Format(format)
+		}
 	}else if(option.begintime&&typeof(option.begintime)==='number'){
-		begintime = new Date(option.begintime).Format(format)
+		begintime 	= new Date(option.begintime).Format(format)
 	}
 
 	// 处理begintime
 	if(option.endtime&&typeof(option.endtime)==='string'){
 		endtime 	= option.endtime.replace(/-/g,'/')
+		if(option.type&&option.type.indexOf('time')==-1 || !option.type){
+			endtime 	= new Date(endtime).Format(format)
+		}
 	}else if(option.endtime&&typeof(option.endtime)==='number'){
-		endtime = new Date(option.endtime).Format(format)
+		endtime 	= new Date(option.endtime).Format(format)
 	}
-
-	option.type = option.type || 'day'
+	
 	if(option.type.indexOf('double') != -1){
 		option.type = option.type.replace(/double/,'');
 		createCalendar({
@@ -1281,8 +1291,6 @@ let zaneDate = function(option){
 			value:begintime,
 		});
 	}
-	
-
 	// 新建日期插件
 	function createCalendar(json={}){
 		let calendarName 		= option.elem.substring(1);

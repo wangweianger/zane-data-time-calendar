@@ -197,6 +197,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					e.preventDefault();
 					e.stopPropagation();
 
+					// 隐藏其他时间插件框
+					var objs = doc[quall]('.zane-calendar');
+					_this2.forEach(objs, function (index, item) {
+						if (('#' + item.getAttribute('id')).replace(/DOUBLE/, '') !== _this2.obj.id.replace(/DOUBLE/, '')) {
+							_this2.removeCalendar();
+						}
+					});
+
 					var obj = doc[query](_this2.obj.id);
 
 					if (obj) {
@@ -216,11 +224,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					var defaultValue = void 0,
 					    inpValue = void 0;
 					defaultValue = _this2.obj.input.nodeName === 'INPUT' ? _this2.obj.input.value.trim() : _this2.obj.input.textContent.trim();
-					if (_this2.config.isDouble) {
-						var arr = defaultValue.split('-');
-						_this2.config.value = _this2.obj.isDoubleOne ? arr[1].trim() : arr[0].trim();
-					} else {
-						_this2.config.value = defaultValue;
+					if (defaultValue) {
+						// 中文处理
+						defaultValue = defaultValue.replace(/[\u4e00-\u9fa5]+/g, function ($a, $b) {
+							if ($a == '年' || $a == '月') {
+								return '/';
+							} else if ($a == '时' || $a == '分') {
+								return ':';
+							} else if ($a == '秒' || $a == '日') {
+								return '';
+							}
+						});
+						if (_this2.config.isDouble) {
+							var arr = defaultValue.split('-');
+							_this2.config.value = _this2.obj.isDoubleOne ? arr[1].trim() : arr[0].trim();
+						} else {
+							_this2.config.value = defaultValue;
+						}
 					}
 
 					// 获得年月日
@@ -252,16 +272,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					_this2.calendarClick();
 
 					_this2.obj.initVal = _this2.obj.input.value;
-
-					// 隐藏其他时间插件框
-					var objs = doc[quall]('.zane-calendar');
-					_this2.forEach(objs, function (index, item) {
-						if (('#' + item.getAttribute('id')).replace(/DOUBLE/, '') !== _this2.obj.id.replace(/DOUBLE/, '')) {
-							_this2.removeCalendar();
-						}
-					});
 				});
-
 				this.config.mounted && this.config.mounted();
 			}
 
@@ -285,7 +296,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					html += "<div class=\"zane-icon-center\">\n\t\t\t\t<span onclick=\"" + this.config.calendarName + ".getMonthHtml(" + json.month + ")\">" + this.weekToEn(json.month) + "</span>\n\t\t\t\t<span onclick=\"" + this.config.calendarName + ".getYearHtml(" + json.year + ")\">" + json.year + "</span>\n\t\t\t</div>";
 				}
 				html += "<div onclick=\"" + this.config.calendarName + ".nextMonth(" + json.year + "," + json.month + ")\" class=\"zane-date-icom zane-icon-right\"></div>";
-
 				return html;
 			}
 
@@ -1094,9 +1104,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						bottomHTML = this.bottomCheckTimeHTML();
 
 						this.renderCommonHtml('time', topHTML, mainHTML, bottomHTML);
-
 						this.$obj[query]('.select-time').style.height = this.config.height - 115 + 'px';
-
 						var hourScrollTop = this.$obj[query]('ul.hour')[query]('li.active').offsetTop;
 						var minuteScrollTop = this.$obj[query]('ul.minute')[query]('li.active').offsetTop;
 						var secondScrollTop = this.$obj[query]('ul.second')[query]('li.active').offsetTop;
@@ -1271,20 +1279,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 			}
 
-			//解除事件
+			// 计算table tr高度
 
-		}, {
-			key: "off",
-			value: function off(obj, eventName, fn) {
-				return this.forEach(obj, function (index, item) {
-					item.detachEvent ? item.detachEvent('on' + eventName, fn) : item.removeEventListener(eventName, fn, false);
-				});
-			}
 		}, {
 			key: "countHeight",
-
-
-			// 计算table tr高度
 			value: function countHeight(elename, length) {
 				var mainH = this.$obj[query]('.zane-date-main').offsetHeight;
 				var trObj = this.$obj[query](elename)[quall]('tr');
@@ -1330,12 +1328,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	// 实例化日期插件 双选择器DOUBLE区分
 	var zaneDate = function zaneDate(option) {
 		var begintime = void 0,
-		    endtime = void 0;
-		var format = option.format ? option.format.replace(/-/g, '/') : 'yyyy/MM/dd';
+		    endtime = void 0,
+		    format = void 0;
+		format = option.format ? option.format.replace(/-/g, '/') : 'yyyy/MM/dd';
+		if (option.type) {
+			if (option.type.indexOf('time') != -1) format = 'HH:mm:ss';
+			if (option.type.indexOf('year') != -1) format = 'yyyy';
+			if (option.type.indexOf('month') != -1) format = 'MM';
+		}
+		option.type = option.type || 'day';
 
 		//处理begintime
 		if (option.begintime && typeof option.begintime === 'string') {
 			begintime = option.begintime.replace(/-/g, '/');
+			if (option.type && option.type.indexOf('time') == -1 || !option.type) {
+				begintime = new Date(begintime).Format(format);
+			}
 		} else if (option.begintime && typeof option.begintime === 'number') {
 			begintime = new Date(option.begintime).Format(format);
 		}
@@ -1343,11 +1351,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		// 处理begintime
 		if (option.endtime && typeof option.endtime === 'string') {
 			endtime = option.endtime.replace(/-/g, '/');
+			if (option.type && option.type.indexOf('time') == -1 || !option.type) {
+				endtime = new Date(endtime).Format(format);
+			}
 		} else if (option.endtime && typeof option.endtime === 'number') {
 			endtime = new Date(option.endtime).Format(format);
 		}
 
-		option.type = option.type || 'day';
 		if (option.type.indexOf('double') != -1) {
 			option.type = option.type.replace(/double/, '');
 			createCalendar({
@@ -1374,7 +1384,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				value: begintime
 			});
 		}
-
 		// 新建日期插件
 		function createCalendar() {
 			var json = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};

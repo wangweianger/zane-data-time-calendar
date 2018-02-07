@@ -106,9 +106,12 @@
 			z-index: 10000;
 			/*max-width: 650px;*/
 		}
+		.every-code{
+			z-index: 10!important;
+		}
 	</style>
 	<style type="text/css">
-		.position_flexd{width:600px;height:200px;position:fixed;left:30%;top:50px;background:#fff;padding-top:30px;display:none;z-index:10000;}
+		.position_flexd{width:600px;height:200px;position:fixed;left:30%;top:50px;background:#fff;padding-top:30px;display:none;z-index:11;}
 		.position_fix{margin-left:50px;}
 		.position_absolute{position:absolute;left:50px;top:150px;background:#fff;}
 		.close{width:20px;height:20px;position:absolute;right:20px;top:20px;cursor:pointer;font-size:30px;}
@@ -608,7 +611,7 @@ zaneDate({
 		zaneDate({
 			elem:'#demo16',
 			mounted:function(){
-				document.getElementById('demo16').value="初始化完成！"
+				document.getElementById('demo16').placeholder="初始化完成！"
 			}
 		})
 		zaneDate({
