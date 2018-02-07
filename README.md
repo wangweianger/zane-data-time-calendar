@@ -4,13 +4,12 @@
 ### 说明：
 此插件不依赖任何第三方插件，因此可以在任何地方单独使用
 插件不兼容低版本的IE浏览器，IE浏览器请慎重使用
-暂时只支持单个时间段选择，后期会推出多个时间段选择方式。
 
 ### images
 
-![输入图片说明](https://git.oschina.net/uploads/images/2017/0929/170241_8561545c_818875.png "在这里输入图片标题")
-![输入图片说明](https://git.oschina.net/uploads/images/2017/0929/170243_068b0494_818875.png "在这里输入图片标题")
-![输入图片说明](https://git.oschina.net/uploads/images/2017/0929/170246_ee897477_818875.png "在这里输入图片标题")
+![输入图片说明](https://github.com/wangweianger/zane-data-time-calendar/blob/master/demo/01.png "在这里输入图片标题")
+![输入图片说明](https://github.com/wangweianger/zane-data-time-calendar/blob/master/demo/02.png "在这里输入图片标题")
+![输入图片说明](https://github.com/wangweianger/zane-data-time-calendar/blob/master/demo/03.png "在这里输入图片标题")
 
 ### API文档及DEMO地址  ：http://www.seosiwei.com/zaneDate/index.html
 
@@ -220,7 +219,7 @@ zaneDate({
 
 ### 2.0.9 版本 修复单页面BUG，修复safair苹果信息 相关BUG
 
-
+### 2.1.0 版本 修复双选择器有默认值的bug，更新demo图片
 
 
 
