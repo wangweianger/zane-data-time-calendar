@@ -339,14 +339,14 @@ class calendar{
 				}
 
 				if(i == 0){
-					html+=`<tr><td data-time="${json.datalist[i].fullday}" class="${className}">${json.datalist[i].day}</td>`;
+					html+=`<tr><td data-time="${json.datalist[i].fullday}" class="${className}"><span>${json.datalist[i].day}</span></td>`;
 				}else if(i == len-1){
-					html+=`<td data-time="${json.datalist[i].fullday}" class="${className}">${json.datalist[i].day}</td></tr>`;
+					html+=`<td data-time="${json.datalist[i].fullday}" class="${className}"><span>${json.datalist[i].day}</span></td></tr>`;
 				}else{
 					if((i+1)%7 == 0){
-						html+=`<td data-time="${json.datalist[i].fullday}" class="${className}">${json.datalist[i].day}</td></tr><tr>`;
+						html+=`<td data-time="${json.datalist[i].fullday}" class="${className}"><span>${json.datalist[i].day}</span></td></tr><tr>`;
 					}else{
-						html+=`<td data-time="${json.datalist[i].fullday}" class="${className}">${json.datalist[i].day}</td>`;
+						html+=`<td data-time="${json.datalist[i].fullday}" class="${className}"><span>${json.datalist[i].day}</span></td>`;
 					}
 				}
 			}
@@ -369,21 +369,21 @@ class calendar{
 	// year - main html 时间选择器选择年份状态内容块
 	mainCheckYearHTML(json){
 		let html=`<div class="week-day">
-			<table class="day" border="0" cellspacing="0">`
+			<table class="day border-day" border="0" cellspacing="0">`
 				for (let i = 0,len=json.datalist.length; i < len; i++) {
 					let className = json.datalist[i].class||"";
 					if(json.datalist[i].year === json.nowyear){
 						className+=` active`
 					}
 					if(i == 0){
-						html+=`<tr><td data-year="${json.datalist[i].year}" class="${className}">${json.datalist[i].year}${this.config.lang=='cn'?'年':''}</td>`;
+						html+=`<tr><td class="${className}"><span data-year="${json.datalist[i].year}">${json.datalist[i].year}</span></td>`;
 					}else if(i == len-1){
-						html+=`<td data-year="${json.datalist[i].year}" class="${className}">${json.datalist[i].year}${this.config.lang=='cn'?'年':''}</td></tr>`;
+						html+=`<td class="${className}"><span data-year="${json.datalist[i].year}">${json.datalist[i].year}</span></td></tr>`;
 					}else{
 						if((i+1)%3 == 0){
-							html+=`<td data-year="${json.datalist[i].year}" class="${className}">${json.datalist[i].year}${this.config.lang=='cn'?'年':''}</td></tr><tr>`;
+							html+=`<td class="${className}"><span data-year="${json.datalist[i].year}">${json.datalist[i].year}</span></td></tr><tr>`;
 						}else{
-							html+=`<td data-year="${json.datalist[i].year}" class="${className}">${json.datalist[i].year}${this.config.lang=='cn'?'年':''}</td>`;
+							html+=`<td class="${className}"><span data-year="${json.datalist[i].year}">${json.datalist[i].year}</span></td>`;
 						}
 					}
 				}
@@ -405,21 +405,21 @@ class calendar{
 	// month -main html 时间选择器选择月份状态内容块
 	mainCheckMonthHTML(json){
 		let html=`<div class="week-day">
-			<table class="day" border="0" cellspacing="0">`
+			<table class="day border-day" border="0" cellspacing="0">`
 				for (let i = 0,len=json.datalist.length; i < len; i++) {
 					let className = json.datalist[i].class||"";
 					if((i+1) === parseInt(json.nowmonth)){
 						className+=` active`
 					}
 					if(i == 0){
-						html+=`<tr><td data-month="${i+1}" data-year="${json.year}" class="${className}">${json.datalist[i]}</td>`;
+						html+=`<tr><td class="${className}"><span data-year="${json.year}" data-month="${i+1}">${json.datalist[i]}</span></td>`;
 					}else if(i == len-1){
-						html+=`<td data-month="${i+1}" data-year="${json.year}" class="${className}">${json.datalist[i]}</td></tr>`;
+						html+=`<td class="${className}"><span data-year="${json.year}" data-month="${i+1}">${json.datalist[i]}</span></td></tr>`;
 					}else{
 						if((i+1)%3 == 0){
-							html+=`<td data-month="${i+1}" data-year="${json.year}" class="${className}">${json.datalist[i]}</td></tr><tr>`;
+							html+=`<td class="${className}"><span data-year="${json.year}" data-month="${i+1}">${json.datalist[i]}</span></td></tr><tr>`;
 						}else{
-							html+=`<td data-month="${i+1}" data-year="${json.year}" class="${className}">${json.datalist[i]}</td>`;
+							html+=`<td class="${className}"><span data-year="${json.year}" data-month="${i+1}">${json.datalist[i]}</span></td>`;
 						}
 					}
 				}
@@ -735,7 +735,6 @@ class calendar{
 		[query]('.main-check-year')[quall]('td');
 		this.on(objs,'click',function(e){
 			let year = e.target.getAttribute('data-year')
-
 			//选择具体日期添加样式
 			_this.forEach(objs,(index,item)=>{
 				_this.removeClass(item,'active');

@@ -22,7 +22,7 @@ ul,li{
 	-ms-user-select:none;
 	user-select:none;
 	.main-color{
-		color:#34a9da;
+		color:#46d7a2;
 	}
 	.zane-date-left{
 		float:left;
@@ -57,7 +57,7 @@ ul,li{
 			}
 			.zane-icon-center{
 				span:hover{
-					color:#34a9da;
+					color:#46d7a2;
 					cursor:pointer;
 				}
 				span:nth-child(1){
@@ -73,6 +73,9 @@ ul,li{
 				table.day{
 					width:100%;
 				}
+				th{
+					font-size:13px;
+				}
 				th,td{
 					text-align:center; 
 				}
@@ -80,19 +83,42 @@ ul,li{
 					color:#cacaca
 				}
 				td{
-					font-size:13px;
+					font-size:12px;
 					cursor:pointer;
 					&.calendar-disabled{
 						cursor:not-allowed;
 						color: #ccc;
 					}
+					span{
+						display:inline-block;
+						width:10px;
+						height:10px;
+						padding:9px;
+						padding-left:8px;
+						padding-right:10px;
+						text-align:center;
+						line-height:10px;
+						border-radius:100%;
+					}
 				}
 				td:hover{
-					background:#f4f4f4;
+					span{
+						background:#f4f4f4;
+					}
 				}
 				td.active{
-					background:#34a9da;
+					span{
+						background:#46d7a2;
+					}
 					color:#fff;
+				}
+				.border-day{
+					td{
+						span{
+							width:auto;
+							border-radius:15px;
+						}
+					}
 				}
 			}
 			.main-check-month{
@@ -150,7 +176,7 @@ ul,li{
 									background:#f4f4f4;
 								}
 								&.active{
-									background:#34a9da;
+									background:#46d7a2;
 									color:#fff;
 								}
 							}
@@ -196,7 +222,7 @@ ul,li{
 				background:#fff;
 				color:#999;
 				&:hover{
-					color:#34a9da;
+					color:#46d7a2;
 				}
 			}
 		}
