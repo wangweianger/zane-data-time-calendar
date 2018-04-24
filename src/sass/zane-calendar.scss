@@ -80,14 +80,14 @@ ul,li{
 					text-align:center; 
 				}
 				th.light,td.light{
-					color:#cacaca
+					color:#aaa
 				}
 				td{
 					font-size:12px;
 					cursor:pointer;
 					&.calendar-disabled{
 						cursor:not-allowed;
-						color: #ccc;
+						color: #ddd;
 					}
 					span{
 						display:inline-block;

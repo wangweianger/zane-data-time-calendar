@@ -653,7 +653,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var objs = this.$obj[query]('.main-check-day')[quall]('td');
 				// 绑定单击
 				this.on(objs, 'click', function (e) {
-					if (!_this.hasClass(e.target, 'calendar-disabled')) {
+					var node = e.target.nodeName == 'SPAN' ? e.target.parentNode : e.target;
+					if (!_this.hasClass(node, 'calendar-disabled')) {
 						//有calendar-disabled样式的不赋予事件
 						var dataTime = this.getAttribute('data-time');
 						var arr = dataTime.split('/');
@@ -676,7 +677,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				});
 				// 绑定双击
 				!this.config.isDouble && this.on(objs, 'dblclick', function (e) {
-					if (e.type === 'dblclick') _this.makeSureSelectTime();
+					var node = e.target.nodeName == 'SPAN' ? e.target.parentNode : e.target;
+					if (e.type === 'dblclick' && !_this.hasClass(node, 'calendar-disabled')) _this.makeSureSelectTime();
 				});
 			}
 

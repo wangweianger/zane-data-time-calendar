@@ -657,7 +657,8 @@ class calendar{
 		[query]('.main-check-day')[quall]('td');
 		// 绑定单击
 		this.on(objs,'click',function(e){
-			if(!_this.hasClass(e.target,'calendar-disabled')){//有calendar-disabled样式的不赋予事件
+			let node = e.target.nodeName=='SPAN'?e.target.parentNode:e.target
+			if(!_this.hasClass(node,'calendar-disabled')){//有calendar-disabled样式的不赋予事件
 				let dataTime 				= 	this.getAttribute('data-time');
 				let arr 					=	dataTime.split('/')
 				_this.obj.fulldatas.year 	=	arr[0]
@@ -679,7 +680,8 @@ class calendar{
 		})
 		// 绑定双击
 		!this.config.isDouble&&this.on(objs,'dblclick',function(e){
-			if(e.type === 'dblclick') _this.makeSureSelectTime();
+			let node = e.target.nodeName=='SPAN'?e.target.parentNode:e.target
+			if(e.type === 'dblclick'&&!_this.hasClass(node,'calendar-disabled')) _this.makeSureSelectTime();
 		})
 	}
 
