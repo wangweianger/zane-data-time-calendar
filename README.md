@@ -15,7 +15,7 @@
 
 ### API文档及DEMO地址  ：http://www.seosiwei.com/zaneDate/index.html
 
-### npm地址：https://www.npmjs.com/package/zane-calendar
+### npm地址：https://www.npmjs.com/package/zane-calendar 
 
 ### vue组件npm地址 支持vue1.0,vue2.0: https://www.npmjs.com/package/vue-date-calendar
 
@@ -34,7 +34,6 @@
 zaneDate({
 	elem:'#zane-calendar',
 })
-
 ```
 
 
