@@ -19,7 +19,7 @@
 
 ### vue组件npm地址 支持vue1.0,vue2.0: https://www.npmjs.com/package/vue-date-calendar
 
-### 使用方式
+### 使用方式 
 
 
 ### 浏览器端使用
@@ -70,7 +70,7 @@ npm run build
 
 ### 参数说明
 
-参数配置
+参数配置  
 ```js
 {
 	
