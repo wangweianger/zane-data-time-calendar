@@ -7,6 +7,7 @@ ul, li {
   list-style: none; }
 
 .zane-calendar {
+  box-sizing: initial;
   position: absolute;
   left: 0;
   top: 0;
@@ -75,6 +76,7 @@ ul, li {
           cursor: not-allowed;
           color: #ddd; }
         .zane-calendar .zane-calendar-one .zane-date-main .week-day td span {
+          box-sizing: initial;
           display: inline-block;
           width: 10px;
           height: 10px;
