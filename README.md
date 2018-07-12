@@ -4,7 +4,7 @@
 ### 说明：
 此插件不依赖任何第三方插件，因此可以在任何地方单独使用
 
-### images
+### images 
 
 ![输入图片说明](https://github.com/wangweianger/zane-data-time-calendar/blob/master/demo/01.png "在这里输入图片标题")
 ![输入图片说明](https://github.com/wangweianger/zane-data-time-calendar/blob/master/demo/02.png "在这里输入图片标题")
@@ -22,7 +22,7 @@
 ### 使用方式 
 
 
-### 浏览器端使用
+### 浏览器端使用 
 ```js
 <link href="./dist/zane-calendar.min.css">
 <script src="./dist/zane-calendar.min.js"></script>
@@ -52,7 +52,7 @@ import zaneDate from 'zane-calendar'
 <input type="" name="" id="zane-calendar">
 
 
-初始化
+初始化 
 zaneDate({
 	elem:'#zane-calendar',
 })
@@ -70,7 +70,7 @@ npm run build
 
 ### 参数说明
 
-参数配置  
+参数配置   
 ```js
 {
 	
