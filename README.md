@@ -13,13 +13,13 @@
 ![输入图片说明](https://github.com/wangweianger/zane-data-time-calendar/blob/master/demo/05.png "在这里输入图片标题")
 ![输入图片说明](https://github.com/wangweianger/zane-data-time-calendar/blob/master/demo/06.png "在这里输入图片标题")
 
-### API文档及DEMO地址  ：http://www.seosiwei.com/zaneDate/index.html 
+### API文档及DEMO地址  ：http://www.seosiwei.com/zaneDate/index.html  
 
 ### npm地址：https://www.npmjs.com/package/zane-calendar 
 
 ### vue组件npm地址 支持vue1.0,vue2.0: https://www.npmjs.com/package/vue-date-calendar
 
-### 使用方式 
+### 使用方式  
 
 
 ### 浏览器端使用 
@@ -184,7 +184,7 @@ zaneDate({
 双时间选择
 zaneDate({
 	elem:'#demo24',
-	type:'doubletime',
+	type:'doubletime', 
 })
 
 
