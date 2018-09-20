@@ -196,8 +196,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				this.on(this.obj.input, this.config.event, function (e) {
 					e.preventDefault();
 					e.stopPropagation();
-					// 过滤重复生成
-					if (_this2.$obj) return;
 
 					// 隐藏其他时间插件框
 					var objs = doc[quall]('.zane-calendar');
@@ -205,7 +203,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						var itemId = item.getAttribute('id');
 						if (('#' + itemId).replace(/DOUBLE/, '') !== _this2.obj.id.replace(/DOUBLE/, '')) {
 							itemId = itemId.replace('zane-calendar-', '');
-							window[itemId].$obj = null;
 							_this2.removeCalendar();
 						}
 					});
@@ -247,6 +244,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							_this2.config.value = defaultValue;
 						}
 					}
+
+					// 过滤重复生成
+					if (doc[query](_this2.obj.id)) return;
 
 					// 获得年月日
 					var html = _this2.objHTML(); //生成时间选择器HTML
@@ -1312,7 +1312,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var _this3 = this;
 
 				this.on(doc, 'click', function (e) {
-					_this3.$obj = null;
 					_this3.removeCalendar();
 				});
 			}

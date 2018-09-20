@@ -181,8 +181,6 @@ class calendar{
 		this.on(this.obj.input,this.config.event, (e)=>{
 			e.preventDefault();
 			e.stopPropagation();
-			// 过滤重复生成
-			if (this.$obj) return;
 
 			// 隐藏其他时间插件框
 			let objs = doc[quall]('.zane-calendar');
@@ -190,7 +188,6 @@ class calendar{
 				let itemId = item.getAttribute('id')
 				if (('#' + itemId).replace(/DOUBLE/,'') !== this.obj.id.replace(/DOUBLE/,'') ){
 					itemId = itemId.replace('zane-calendar-','')
-					window[itemId].$obj = null
 					this.removeCalendar()
 				}
 			})
@@ -233,6 +230,9 @@ class calendar{
 					this.config.value = defaultValue
 				}
 			}
+
+			// 过滤重复生成
+			if (doc[query](this.obj.id)) return;
 
 			// 获得年月日
 			let html 	= this.objHTML();//生成时间选择器HTML
@@ -1228,7 +1228,6 @@ class calendar{
   	// document点击隐藏插件
   	documentClick(){
   		this.on(doc,'click',(e)=>{
-			this.$obj = null
   			this.removeCalendar()
   		})
   	}
