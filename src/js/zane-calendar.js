@@ -624,7 +624,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					month = 12;
 					year = year - 1;
 				}
-				var fulldate = year + "/" + month + "/" + this.obj.fulldatas.today;
+				var today = this.obj.fulldatas.today;
+				var totalday = new Date(year, month, 0).getDate();
+				if (today > totalday) today = totalday;
+				var fulldate = year + "/" + month + "/" + today;
 				var isreset = this.config.isDouble && this.obj.isDoubleOne ? true : false;
 				this.judgeCalendarRender('day', fulldate, isreset, 'pre');
 			}
@@ -639,7 +642,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					month = 1;
 					year = year + 1;
 				}
-				var fulldate = year + "/" + month + "/" + this.obj.fulldatas.today;
+				var today = this.obj.fulldatas.today;
+				var totalday = new Date(year, month, 0).getDate();
+				if (today > totalday) today = totalday;
+				var fulldate = year + "/" + month + "/" + today;
 				var isreset = this.config.isDouble && !this.obj.isDoubleOne ? true : false;
 				this.judgeCalendarRender('day', fulldate, isreset, 'next');
 			}

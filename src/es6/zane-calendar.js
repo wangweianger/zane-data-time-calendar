@@ -633,7 +633,10 @@ class calendar{
 			month 	= 12;
 			year 	= year-1
 		}
-		let fulldate 	= `${year}/${month}/${this.obj.fulldatas.today}`
+		let today = this.obj.fulldatas.today
+		let totalday = new Date(year, month, 0).getDate()
+		if (today > totalday) today = totalday
+		let fulldate = `${year}/${month}/${today}`
 		let isreset 	= this.config.isDouble&&this.obj.isDoubleOne?true:false
 		this.judgeCalendarRender('day',fulldate,isreset,'pre')
 	}
@@ -644,8 +647,11 @@ class calendar{
 		if(month == 13) {
 			month 	= 1;
 			year 	= year+1
-		}
-		let fulldate 	= `${year}/${month}/${this.obj.fulldatas.today}`
+		} 
+		let today = this.obj.fulldatas.today
+		let totalday = new Date(year, month, 0).getDate()
+		if (today > totalday) today = totalday
+		let fulldate = `${year}/${month}/${today}`
 		let isreset 	= this.config.isDouble&&!this.obj.isDoubleOne?true:false
 		this.judgeCalendarRender('day',fulldate,isreset,'next')
 	}
