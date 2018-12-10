@@ -747,7 +747,7 @@ class calendar{
 		let objs = this.$obj
 		[query]('.main-check-year')[quall]('td');
 		this.on(objs,'click',function(e){
-			let year = e.target.getAttribute('data-year')
+			let year = e.target.nodeName === 'TD' ? e.target.children[0].getAttribute('data-year') : e.target.getAttribute('data-year')
 			//选择具体日期添加样式
 			_this.forEach(objs,(index,item)=>{
 				_this.removeClass(item,'active');
@@ -805,8 +805,9 @@ class calendar{
 		let objs = this.$obj
 		[query]('.main-check-month')[quall]('td');
 		this.on(objs,'click',function(e){
-			let year 	= e.target.getAttribute('data-year')
-			let month 	= e.target.getAttribute('data-month')
+			let obj = e.target.nodeName === 'TD' ? e.target.children[0] : e.target;
+			let year 	= obj.getAttribute('data-year')
+			let month 	= obj.getAttribute('data-month')
 
 			//选择具体日期添加样式
 			_this.forEach(objs,(index,item)=>{

@@ -755,7 +755,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var _this = this;
 				var objs = this.$obj[query]('.main-check-year')[quall]('td');
 				this.on(objs, 'click', function (e) {
-					var year = e.target.getAttribute('data-year');
+					var year = e.target.nodeName === 'TD' ? e.target.children[0].getAttribute('data-year') : e.target.getAttribute('data-year');
 					//选择具体日期添加样式
 					_this.forEach(objs, function (index, item) {
 						_this.removeClass(item, 'active');
@@ -824,8 +824,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var _this = this;
 				var objs = this.$obj[query]('.main-check-month')[quall]('td');
 				this.on(objs, 'click', function (e) {
-					var year = e.target.getAttribute('data-year');
-					var month = e.target.getAttribute('data-month');
+					var obj = e.target.nodeName === 'TD' ? e.target.children[0] : e.target;
+					var year = obj.getAttribute('data-year');
+					var month = obj.getAttribute('data-month');
 
 					//选择具体日期添加样式
 					_this.forEach(objs, function (index, item) {
