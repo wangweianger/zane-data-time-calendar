@@ -286,7 +286,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: "objHTML",
 			value: function objHTML(json) {
-				var html = "<div class=\"zane-calendar\" style=\"width:" + this.config.width + "px;z-index:" + this.config.zindex + "\" id=\"" + this.obj.id.substring(1) + "\">\n\t\t\t\t\t<div class=\"zane-calendar-one left\" style=\"width:" + this.config.width + "px;\">\n\t\t\t\t\t\t<div class=\"zane-date-top\">\n\t\t\t\t\t\t\t<div class=\"common-top top-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-top top-check-year\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-month\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-time\"></div>\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"zane-date-main\" style=\"height:" + (this.config.height - 80) + "px\">\n\t\t\t\t\t\t\t<div class=\"common-main main-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-year\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-month\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-time\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"zane-date-bottom\" style=\"display:" + (this.config.haveBotBtns || this.config.isDouble ? 'block' : 'none') + ";\n\t\t\t\t\t\t\t\t\t\t\t\tborder-left:" + (this.obj.isDoubleOne ? 'none' : 'solid 1px #eee') + ";\">\n\t\t\t\t\t\t\t<div class=\"btn-select-time\" style=\"display:" + (this.config.showtime ? 'blcok' : 'none') + "\">\n\t\t\t\t\t\t\t\t<div class=\"zane-date-left button btn-select-time-item\" onclick=\"" + this.config.calendarName + ".getTimeHtml()\">" + this.obj.lang.timeTips + "</div>\n\t\t\t\t\t\t\t</div>\t\n\t\t\t\t \t\t\t<div class=\"zane-date-right\">\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.shownow ? 'no-right-line' : '') + "\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showclean ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".cleanInputVal()\">" + this.obj.lang.tools.clear + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.showsubmit ? 'no-right-line' : '') + "\"\n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.shownow && !this.config.min || this.config.shownow && !this.config.max ? 'blcok' : 'none') + "\" \n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".changeToToday()\">" + this.obj.lang.tools.now + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showsubmit ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".makeSureSelectTime()\">" + this.obj.lang.tools.confirm + "</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>";
+				var html = "<div class=\"zane-calendar\" style=\"width:" + this.config.width + "px;z-index:" + this.config.zindex + "\" id=\"" + this.obj.id.substring(1) + "\">\n\t\t\t\t\t<div class=\"zane-model-miss\"><div class=\"zane-model-mask\"></div><div class=\"zane-model-content\"></div></div>\n\t\t\t\t\t<div class=\"zane-calendar-one left\" style=\"width:" + this.config.width + "px;\">\n\t\t\t\t\t\t<div class=\"zane-date-top\">\n\t\t\t\t\t\t\t<div class=\"common-top top-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-top top-check-year\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-month\"></div>\t\n\t\t\t\t\t\t\t<div class=\"common-top top-check-time\"></div>\t\t\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"zane-date-main\" style=\"height:" + (this.config.height - 80) + "px\">\n\t\t\t\t\t\t\t<div class=\"common-main main-check-day\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-year\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-month\"></div>\n\t\t\t\t\t\t\t<div class=\"common-main main-check-time\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"zane-date-bottom\" style=\"display:" + (this.config.haveBotBtns || this.config.isDouble ? 'block' : 'none') + ";\n\t\t\t\t\t\t\t\t\t\t\t\tborder-left:" + (this.obj.isDoubleOne ? 'none' : 'solid 1px #eee') + ";\">\n\t\t\t\t\t\t\t<div class=\"btn-select-time\" style=\"display:" + (this.config.showtime ? 'blcok' : 'none') + "\">\n\t\t\t\t\t\t\t\t<div class=\"zane-date-left button btn-select-time-item\" onclick=\"" + this.config.calendarName + ".getTimeHtml()\">" + this.obj.lang.timeTips + "</div>\n\t\t\t\t\t\t\t</div>\t\n\t\t\t\t \t\t\t<div class=\"zane-date-right\">\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.shownow ? 'no-right-line' : '') + "\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showclean ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".cleanInputVal()\">" + this.obj.lang.tools.clear + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button " + (this.config.showsubmit ? 'no-right-line' : '') + "\"\n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.shownow && !this.config.min || this.config.shownow && !this.config.max ? 'blcok' : 'none') + "\" \n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".changeToToday()\">" + this.obj.lang.tools.now + "</div>\n\t\t\t\t\t\t\t\t<div class=\"button\" \n\t\t\t\t\t\t\t\t\tstyle=\"display:" + (this.config.showsubmit ? 'blcok' : 'none') + "\"\n\t\t\t\t\t\t\t\t\tonclick=\"" + this.config.calendarName + ".makeSureSelectTime()\">" + this.obj.lang.tools.confirm + "</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>";
 				return html;
 			}
 			// day - top html   时间选择器选择年月块
@@ -669,6 +669,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						//有calendar-disabled样式的不赋予事件
 						var dataTime = this.getAttribute('data-time');
 						var arr = dataTime.split('/');
+						var fulldatas = {
+							year: arr[0],
+							month: arr[1],
+							today: arr[2],
+							hour: _this.obj.fulldatas.hour,
+							minute: _this.obj.fulldatas.minute,
+							second: _this.obj.fulldatas.second
+						};
+						var result = _this.compareTimes('getDay', _this.obj.$noDoubleObj.obj.fulldatas, fulldatas);
+						if (result) return;
+
 						_this.obj.fulldatas.year = arr[0];
 						_this.obj.fulldatas.month = arr[1];
 						_this.obj.fulldatas.today = arr[2];
@@ -691,6 +702,49 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					var node = e.target.nodeName == 'SPAN' ? e.target.parentNode : e.target;
 					if (e.type === 'dblclick' && !_this.hasClass(node, 'calendar-disabled')) _this.makeSureSelectTime();
 				});
+			}
+		}, {
+			key: "compareTimes",
+			value: function compareTimes(type, preT, nextT) {
+				var preTimes = void 0,
+				    nextTimes = void 0,
+				    modelText = void 0;
+				if (type === 'getDay') {
+					preTimes = preT.year + "/" + preT.month + "/" + preT.today + " " + preT.hour + ":" + preT.minute + ":" + preT.second;
+					preTimes = new Date(preTimes).getTime();
+					nextTimes = nextT.year + "/" + nextT.month + "/" + nextT.today + " " + nextT.hour + ":" + nextT.minute + ":" + nextT.second;
+					nextTimes = new Date(nextTimes).getTime();
+					modelText = '结束时间必须大于开始时间！';
+				} else if (type === 'getYear') {
+					preTimes = preT.year;
+					nextTimes = nextT.year;
+					modelText = '结束年份必须大于开始年份！';
+				} else if (type === 'getMonth') {
+					preTimes = parseInt(preT.month);
+					nextTimes = parseInt(nextT.month);
+					modelText = '结束月份必须大于开始月份！';
+				} else if (type === 'selectTime') {
+					preTimes = "2018/01/01 " + preT.hour + ":" + preT.minute + ":" + preT.second;
+					preTimes = new Date(preTimes).getTime();
+					nextTimes = "2018/01/01 " + nextT.hour + ":" + nextT.minute + ":" + nextT.second;
+					nextTimes = new Date(nextTimes).getTime();
+					modelText = '结束时间必须大于开始时间！';
+				}
+
+				var result = false;
+				if (this.obj.isDoubleOne && nextTimes <= preTimes) result = true;
+				if (!this.obj.isDoubleOne && nextTimes >= preTimes) result = true;
+				var timer = null;
+				if (result) {
+					clearTimeout(timer);
+					var modelObj = this.$obj[query]('.zane-model-miss');
+					modelObj.style.display = 'block';
+					this.$obj[query]('.zane-model-content').innerHTML = modelText;
+					timer = setTimeout(function () {
+						modelObj.style.display = 'none';
+					}, 1000);
+				}
+				return result;
 			}
 
 			// 获得年html
@@ -756,20 +810,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var objs = this.$obj[query]('.main-check-year')[quall]('td');
 				this.on(objs, 'click', function (e) {
 					var year = e.target.nodeName === 'TD' ? e.target.children[0].getAttribute('data-year') : e.target.getAttribute('data-year');
-					//选择具体日期添加样式
-					_this.forEach(objs, function (index, item) {
-						_this.removeClass(item, 'active');
-					});
-					_this.addClass(this, 'active');
-
 					var fulldate = year + "/" + _this.obj.fulldatas.month + "/" + _this.obj.fulldatas.today;
 					if (_this.config.type === 'year') {
+						var result = _this.compareTimes('getYear', _this.obj.$noDoubleObj.obj.fulldatas, { year: year });
+						if (result) return;
 						_this.config.isDouble ? _this.obj.fulldatas.year = year : _this.getYearMonthAndDay(year, false);
 					} else {
 						//double 处理
 						var clickType = _this.obj.isDoubleOne ? 'pre' : '';
 						_this.judgeCalendarRender('day', fulldate, true, clickType);
 					}
+
+					//选择具体日期添加样式
+					_this.forEach(objs, function (index, item) {
+						_this.removeClass(item, 'active');
+					});
+					_this.addClass(this, 'active');
 				});
 			}
 
@@ -827,19 +883,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					var obj = e.target.nodeName === 'TD' ? e.target.children[0] : e.target;
 					var year = obj.getAttribute('data-year');
 					var month = obj.getAttribute('data-month');
-
+					var fulldate = year + "/" + month + "/" + _this.obj.fulldatas.today;
+					if (_this.config.type === 'month') {
+						var result = _this.compareTimes('getMonth', _this.obj.$noDoubleObj.obj.fulldatas, { month: month });
+						if (result) return;
+						_this.config.isDouble ? _this.obj.fulldatas.month = month : _this.getYearMonthAndDay(month, false);
+					} else {
+						_this.judgeCalendarRender('day', fulldate);
+					}
 					//选择具体日期添加样式
 					_this.forEach(objs, function (index, item) {
 						_this.removeClass(item, 'active');
 					});
 					_this.addClass(this, 'active');
-
-					var fulldate = year + "/" + month + "/" + _this.obj.fulldatas.today;
-					if (_this.config.type === 'month') {
-						_this.config.isDouble ? _this.obj.fulldatas.month = month : _this.getYearMonthAndDay(month, false);
-					} else {
-						_this.judgeCalendarRender('day', fulldate);
-					}
 				});
 			}
 
@@ -917,6 +973,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				});
 
 				this.on(secondObjs, 'click', function (e) {
+					var result = _this.compareTimes('selectTime', _this.obj.$noDoubleObj.obj.fulldatas, Object.assign({}, _this.obj.fulldatas, { second: this.getAttribute('data-time') }));
+					if (result) return;
+
 					_this.forEach(secondObjs, function (index, item) {
 						_this.removeClass(item, 'active');
 					});

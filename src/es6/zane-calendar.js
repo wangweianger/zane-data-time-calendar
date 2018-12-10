@@ -270,6 +270,7 @@ class calendar{
 	//生成时间选择器区域
 	objHTML(json){
 		let html =`<div class="zane-calendar" style="width:${this.config.width}px;z-index:${this.config.zindex}" id="${this.obj.id.substring(1)}">
+					<div class="zane-model-miss"><div class="zane-model-mask"></div><div class="zane-model-content"></div></div>
 					<div class="zane-calendar-one left" style="width:${this.config.width}px;">
 						<div class="zane-date-top">
 							<div class="common-top top-check-day"></div>
@@ -672,10 +673,21 @@ class calendar{
 			if(!_this.hasClass(node,'calendar-disabled')){//有calendar-disabled样式的不赋予事件
 				let dataTime 				= 	this.getAttribute('data-time');
 				let arr 					=	dataTime.split('/')
-				_this.obj.fulldatas.year 	=	arr[0]
-				_this.obj.fulldatas.month 	=	arr[1]
-				_this.obj.fulldatas.today 	=	arr[2]
+				let fulldatas = {
+					year: arr[0],
+					month: arr[1],
+					today: arr[2],
+					hour: _this.obj.fulldatas.hour,
+					minute: _this.obj.fulldatas.minute,
+					second: _this.obj.fulldatas.second
+				}
+				const result = _this.compareTimes('getDay', _this.obj.$noDoubleObj.obj.fulldatas, fulldatas);
+				if (result) return;
 
+				_this.obj.fulldatas.year = arr[0]
+				_this.obj.fulldatas.month = arr[1]
+				_this.obj.fulldatas.today = arr[2]
+				
 				//选择具体日期添加样式
 				_this.forEach(objs,(index,item)=>{
 					_this.removeClass(item,'active');
@@ -694,6 +706,44 @@ class calendar{
 			let node = e.target.nodeName=='SPAN'?e.target.parentNode:e.target
 			if(e.type === 'dblclick'&&!_this.hasClass(node,'calendar-disabled')) _this.makeSureSelectTime();
 		})
+	}
+
+	compareTimes(type,preT,nextT){
+		let preTimes, nextTimes, modelText;
+		if (type === 'getDay'){
+			preTimes = `${preT.year}/${preT.month}/${preT.today} ${preT.hour}:${preT.minute}:${preT.second}`;
+			preTimes = new Date(preTimes).getTime();
+			nextTimes = `${nextT.year}/${nextT.month}/${nextT.today} ${nextT.hour}:${nextT.minute}:${nextT.second}`;
+			nextTimes = new Date(nextTimes).getTime();
+			modelText = '结束时间必须大于开始时间！';
+		} else if (type === 'getYear'){
+			preTimes = preT.year;
+			nextTimes = nextT.year;
+			modelText = '结束年份必须大于开始年份！';
+		} else if (type === 'getMonth'){
+			preTimes = parseInt(preT.month);
+			nextTimes = parseInt(nextT.month);
+			modelText = '结束月份必须大于开始月份！';
+		} else if (type === 'selectTime'){
+			preTimes = `2018/01/01 ${preT.hour}:${preT.minute}:${preT.second}`;
+			preTimes = new Date(preTimes).getTime();
+			nextTimes = `2018/01/01 ${nextT.hour}:${nextT.minute}:${nextT.second}`;
+			nextTimes = new Date(nextTimes).getTime();
+			modelText = '结束时间必须大于开始时间！';
+		}
+
+		let result = false;
+		if (this.obj.isDoubleOne && nextTimes <= preTimes) result = true;
+		if (!this.obj.isDoubleOne && nextTimes >= preTimes) result = true;
+		let timer = null;
+		if (result) {
+			clearTimeout(timer);
+			const modelObj = this.$obj[query]('.zane-model-miss')
+			modelObj.style.display = 'block'
+			this.$obj[query]('.zane-model-content').innerHTML = modelText;
+			timer = setTimeout(() => { modelObj.style.display = 'none' }, 1000)
+		}
+		return result;
 	}
 
 	// 获得年html
@@ -748,20 +798,22 @@ class calendar{
 		[query]('.main-check-year')[quall]('td');
 		this.on(objs,'click',function(e){
 			let year = e.target.nodeName === 'TD' ? e.target.children[0].getAttribute('data-year') : e.target.getAttribute('data-year')
-			//选择具体日期添加样式
-			_this.forEach(objs,(index,item)=>{
-				_this.removeClass(item,'active');
-			})
-			_this.addClass(this,'active');
-
 			let fulldate 	= `${year}/${_this.obj.fulldatas.month}/${_this.obj.fulldatas.today}`
 			if(_this.config.type === 'year'){
+				const result = _this.compareTimes('getYear', _this.obj.$noDoubleObj.obj.fulldatas, { year: year});
+				if (result) return;
 				_this.config.isDouble ? _this.obj.fulldatas.year = year : _this.getYearMonthAndDay(year,false)
 			}else{
 				//double 处理
 				let clickType = _this.obj.isDoubleOne?'pre':'';
 				_this.judgeCalendarRender('day',fulldate,true,clickType)
 			}
+
+			//选择具体日期添加样式
+			_this.forEach(objs, (index, item) => {
+				_this.removeClass(item, 'active');
+			})
+			_this.addClass(this, 'active');
 		})
 	}
 
@@ -808,20 +860,19 @@ class calendar{
 			let obj = e.target.nodeName === 'TD' ? e.target.children[0] : e.target;
 			let year 	= obj.getAttribute('data-year')
 			let month 	= obj.getAttribute('data-month')
-
-			//选择具体日期添加样式
-			_this.forEach(objs,(index,item)=>{
-				_this.removeClass(item,'active');
-			})
-			_this.addClass(this,'active');
-
 			let fulldate 	= `${year}/${month}/${_this.obj.fulldatas.today}`
 			if(_this.config.type === 'month'){
+				const result = _this.compareTimes('getMonth', _this.obj.$noDoubleObj.obj.fulldatas, { month: month });
+				if (result) return;
 				_this.config.isDouble ? _this.obj.fulldatas.month = month : _this.getYearMonthAndDay(month,false)
-
 			}else{
 				_this.judgeCalendarRender('day',fulldate)
 			}
+			//选择具体日期添加样式
+			_this.forEach(objs, (index, item) => {
+				_this.removeClass(item, 'active');
+			})
+			_this.addClass(this, 'active');
 		})
 	}
 
@@ -893,6 +944,13 @@ class calendar{
 		})
 
 		this.on(secondObjs,'click',function(e){
+			const result = _this.compareTimes(
+				'selectTime', 
+				_this.obj.$noDoubleObj.obj.fulldatas, 
+				Object.assign({}, _this.obj.fulldatas, { second: this.getAttribute('data-time')})
+			);
+			if (result) return;
+
 			_this.forEach(secondObjs,(index,item)=>{
 				_this.removeClass(item,'active');
 			})

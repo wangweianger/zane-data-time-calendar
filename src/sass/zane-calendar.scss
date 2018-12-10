@@ -22,6 +22,37 @@ ul,li{
 	-webkit-user-select:none;
 	-ms-user-select:none;
 	user-select:none;
+	.zane-model-miss{
+		position: absolute;
+		left:0;
+		top:0;
+		width:100%;
+		height:100%;
+		display: none;
+		.zane-model-mask{
+			position: absolute;
+			left:0;
+			top:0;
+			width:100%;
+			height:100%;
+			z-index:99;
+		}
+		.zane-model-content{
+			position: absolute;
+			left:50%;
+			top:50%;
+			z-index:100;
+			width:auto;
+			text-align:center;
+			padding:10px 15px;
+			border-radius:20px;
+			transform: translate(-50%,-50%);
+			font-size:12px;
+			background:rgba(0,0,0,.8);
+			color:#fff;
+			white-space: nowrap;
+		}
+	}
 	.main-color{
 		color:#46d7a2;
 	}
