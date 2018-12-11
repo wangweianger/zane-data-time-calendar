@@ -619,6 +619,7 @@ class calendar{
 				fullday: fullday
 			})
 		}
+		setTimeout(()=>{if (!this.config.begintime && !this.config.endtime) this.setBeginEndTime(`${year}/${month}/${toDate}`);},1000);
 		return {
 			year:year,
 			month:month,

@@ -498,6 +498,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: "getTimeDates",
 			value: function getTimeDates(deraultDay, clickType) {
+				var _this3 = this;
+
 				var timeDatas = [];
 				var date = deraultDay ? new Date(deraultDay) : new Date();
 				var year = date.getFullYear();
@@ -607,6 +609,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						fullday: _fullday2
 					});
 				}
+				setTimeout(function () {
+					if (!_this3.config.begintime && !_this3.config.endtime) _this3.setBeginEndTime(year + "/" + month + "/" + toDate);
+				}, 1000);
 				return {
 					year: year,
 					month: month,
@@ -1182,7 +1187,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: "judgeCalendarRender",
 			value: function judgeCalendarRender(type, any, isreset, clickType) {
-				var _this3 = this;
+				var _this4 = this;
 
 				var mainHTML = void 0,
 				    topHTML = void 0,
@@ -1201,7 +1206,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						this.countHeight('.main-check-day', 7);
 						this.getDay();
 						setTimeout(function () {
-							_this3.addOrRemoveClass();
+							_this4.addOrRemoveClass();
 						}, 200);
 
 						break;
@@ -1426,10 +1431,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: "documentClick",
 			value: function documentClick() {
-				var _this4 = this;
+				var _this5 = this;
 
 				this.on(doc, 'click', function (e) {
-					_this4.removeCalendar();
+					_this5.removeCalendar();
 				});
 			}
 
