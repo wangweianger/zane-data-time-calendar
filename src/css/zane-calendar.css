@@ -120,6 +120,16 @@ ul, li {
         color: #fff; }
         .zane-calendar .zane-calendar-one .zane-date-main .week-day td.active span {
           background: #46d7a2; }
+      .zane-calendar .zane-calendar-one .zane-date-main .week-day td.sele_act {
+        background: #8cffd4; }
+      .zane-calendar .zane-calendar-one .zane-date-main .week-day td.act_block {
+        background: #46d7a2;
+        color: #fff; }
+      .zane-calendar .zane-calendar-one .zane-date-main .week-day td.act_block:hover, .zane-calendar .zane-calendar-one .zane-date-main .week-day td.sele_act:hover {
+        background: #46d7a2;
+        color: #fff; }
+        .zane-calendar .zane-calendar-one .zane-date-main .week-day td.act_block:hover span, .zane-calendar .zane-calendar-one .zane-date-main .week-day td.sele_act:hover span {
+          background: none; }
       .zane-calendar .zane-calendar-one .zane-date-main .week-day .border-day td span {
         width: auto;
         border-radius: 15px; }

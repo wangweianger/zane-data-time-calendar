@@ -145,6 +145,20 @@ ul,li{
 					}
 					color:#fff;
 				}
+				td.sele_act{
+					background:#8cffd4;
+				}
+				td.act_block{
+					background:#46d7a2;
+					color:#fff;
+				}
+				td.act_block:hover,td.sele_act:hover{
+					background:#46d7a2;
+					color:#fff;
+					span{
+						background:none;
+					}
+				}
 				.border-day{
 					td{
 						span{

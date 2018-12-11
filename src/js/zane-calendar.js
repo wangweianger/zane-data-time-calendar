@@ -107,9 +107,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				//选择完成之后调用
 				done: function done() {}
 			};
-
 			this.config = this.extend(this.config, json);
-
 			//校验时间格式
 			if (!this.config.value) this.config.value = '';
 			if (!this.config.min) this.config.min = '';
@@ -316,23 +314,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				html += "</tr>";
 				for (var i = 0, _len = json.datalist.length; i < _len; i++) {
 					var className = json.datalist[i].class || "";
+					var sele_act = json.datalist[i].sele_act || '';
 					if (json.datalist[i].day === parseInt(json.today) && json.datalist[i].daytype === 'now') {
-						className += " active";
+						className += this.config.isDouble ? " act_block" : " active";
 					}
 					//如果超出min时间或者max时间的，给禁止选中样式
 					if (this.config.min != '' && new Date(json.datalist[i].fullday).getTime() < new Date(this.config.min).getTime() || this.config.max != '' && new Date(json.datalist[i].fullday).getTime() > new Date(this.config.max).getTime()) {
 						className += " calendar-disabled";
 					}
-
 					if (i == 0) {
-						html += "<tr><td data-time=\"" + json.datalist[i].fullday + "\" class=\"" + className + "\"><span>" + json.datalist[i].day + "</span></td>";
+						html += "<tr><td data-time=\"" + json.datalist[i].fullday + "\" class=\"" + className + " " + sele_act + "\"><span>" + json.datalist[i].day + "</span></td>";
 					} else if (i == _len - 1) {
-						html += "<td data-time=\"" + json.datalist[i].fullday + "\" class=\"" + className + "\"><span>" + json.datalist[i].day + "</span></td></tr>";
+						html += "<td data-time=\"" + json.datalist[i].fullday + "\" class=\"" + className + " " + sele_act + "\"><span>" + json.datalist[i].day + "</span></td></tr>";
 					} else {
 						if ((i + 1) % 7 == 0) {
-							html += "<td data-time=\"" + json.datalist[i].fullday + "\" class=\"" + className + "\"><span>" + json.datalist[i].day + "</span></td></tr><tr>";
+							html += "<td data-time=\"" + json.datalist[i].fullday + "\" class=\"" + className + " " + sele_act + "\"><span>" + json.datalist[i].day + "</span></td></tr><tr>";
 						} else {
-							html += "<td data-time=\"" + json.datalist[i].fullday + "\" class=\"" + className + "\"><span>" + json.datalist[i].day + "</span></td>";
+							html += "<td data-time=\"" + json.datalist[i].fullday + "\" class=\"" + className + " " + sele_act + "\"><span>" + json.datalist[i].day + "</span></td>";
 						}
 					}
 				}
@@ -509,33 +507,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var hour = date.getHours();
 				var minute = date.getMinutes();
 				var second = date.getSeconds();
-
 				// double 处理
 				if (this.config.isDouble && this.obj.isDoubleOne && clickType == 'next') {
-					if (month >= 12) {
+					if (month > 12) {
 						year = year + 1;
 						month = 1;
-					} else {
-						month = month + 1;
 					}
 				} else if (this.config.isDouble && !this.obj.isDoubleOne && clickType == 'pre') {
-					if (month <= 1) {
+					if (month < 1) {
 						year = year - 1;
 						month = 12;
-					} else {
-						month = month - 1;
 					}
 				}
-
 				month = (month + '').length < 2 ? '0' + month : month;
 				toDate = (toDate + '').length < 2 ? '0' + toDate : toDate;
 				hour = (hour + '').length < 2 ? '0' + hour : hour;
 				minute = (minute + '').length < 2 ? '0' + minute : minute;
 				second = (second + '').length < 2 ? '0' + second : second;
-
 				// 计算当前这个月的天数
 				var monTotalDay = new Date(year, month, 0).getDate();
-
 				// 计算第一天是周几
 				var firstDayMeek = new Date(year + "/" + month + "/1").getDay();
 				var lastDayMeek = new Date(year + "/" + month + "/" + monTotalDay).getDay();
@@ -554,13 +544,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						var day = preMonTotalDay - i;
 						_premonth = (_premonth + '').length < 2 ? '0' + _premonth : _premonth;
 						day = (day + '').length < 2 ? '0' + day : day;
+						var fullday = _preyear + "/" + _premonth + "/" + day;
+						var sele_act = this.hasSelectAct(fullday, this.config.begintime, this.config.endtime) ? 'sele_act' : '';
 
 						timeDatas.push({
 							day: preMonTotalDay - i,
 							week: len - 1 - i,
 							class: 'light',
+							sele_act: sele_act,
 							daytype: "pre",
-							fullday: _preyear + "/" + _premonth + "/" + day
+							fullday: fullday
 						});
 					}
 				}
@@ -571,12 +564,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					var _day = _i3 + 1;
 					_premonth2 = (_premonth2 + '').length < 2 ? '0' + _premonth2 : _premonth2;
 					_day = (_day + '').length < 2 ? '0' + _day : _day;
+					var _fullday = year + "/" + _premonth2 + "/" + _day;
+					var _sele_act = this.hasSelectAct(_fullday, this.config.begintime, this.config.endtime) ? 'sele_act' : '';
 
 					timeDatas.push({
 						day: _i3 + 1,
 						week: _weekday,
 						daytype: "now",
-						fullday: year + "/" + _premonth2 + "/" + _day
+						sele_act: _sele_act,
+						fullday: _fullday
 					});
 					if (_i3 === _len4 - 1) {
 						preweek = _weekday;
@@ -599,13 +595,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					var _day2 = i + 1;
 					premonth = (premonth + '').length < 2 ? '0' + premonth : premonth;
 					_day2 = (_day2 + '').length < 2 ? '0' + _day2 : _day2;
+					var _fullday2 = preyear + "/" + premonth + "/" + _day2;
+					var _sele_act2 = this.hasSelectAct(_fullday2, this.config.begintime, this.config.endtime) ? 'sele_act' : '';
 
 					timeDatas.push({
 						day: i + 1,
 						week: _weekday2,
 						class: 'light',
+						sele_act: _sele_act2,
 						daytype: "next",
-						fullday: preyear + "/" + premonth + "/" + _day2
+						fullday: _fullday2
 					});
 				}
 				return {
@@ -617,6 +616,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					second: second,
 					datalist: timeDatas
 				};
+			}
+		}, {
+			key: "hasSelectAct",
+			value: function hasSelectAct(nowTime, beginTime, endTime) {
+				var result = false;
+				if (this.config.isDouble && this.config.begintime && this.config.endtime) {
+					nowTime = typeof nowTime === 'number' ? nowTime : new Date(nowTime).getTime();
+					beginTime = typeof beginTime === 'number' ? beginTime : new Date(beginTime.replace(/-/g, '/')).getTime();
+					endTime = typeof endTime === 'number' ? endTime : new Date(endTime.replace(/-/g, '/')).getTime();
+					if (nowTime >= beginTime && nowTime <= endTime) result = true;
+				}
+				return result;
 			}
 
 			// 选择上一月
@@ -634,6 +645,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				if (today > totalday) today = totalday;
 				var fulldate = year + "/" + month + "/" + today;
 				var isreset = this.config.isDouble && this.obj.isDoubleOne ? true : false;
+				this.setBeginEndTime(fulldate);
 				this.judgeCalendarRender('day', fulldate, isreset, 'pre');
 			}
 
@@ -652,7 +664,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				if (today > totalday) today = totalday;
 				var fulldate = year + "/" + month + "/" + today;
 				var isreset = this.config.isDouble && !this.obj.isDoubleOne ? true : false;
+				this.setBeginEndTime(fulldate);
 				this.judgeCalendarRender('day', fulldate, isreset, 'next');
+			}
+		}, {
+			key: "setBeginEndTime",
+			value: function setBeginEndTime(dataTime) {
+				if (this.config.isDouble) {
+					if (!this.obj.isDoubleOne) {
+						this.config.begintime = dataTime;
+						this.obj.$noDoubleObj.config.begintime = dataTime;
+					} else {
+						this.config.endtime = dataTime;
+						this.obj.$noDoubleObj.config.endtime = dataTime;
+					}
+				}
 			}
 
 			// 获得年月日,如果showtime=true,日期加样式，如果为false,直接设置当前选择的日期
@@ -677,21 +703,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							minute: _this.obj.fulldatas.minute,
 							second: _this.obj.fulldatas.second
 						};
+						_this.setBeginEndTime(dataTime);
 						if (_this.config.isDouble) {
 							var result = _this.compareTimes('getDay', _this.obj.$noDoubleObj.obj.fulldatas, fulldatas);
 							if (result) return;
 						}
-
 						_this.obj.fulldatas.year = arr[0];
 						_this.obj.fulldatas.month = arr[1];
 						_this.obj.fulldatas.today = arr[2];
-
 						//选择具体日期添加样式
-						_this.forEach(objs, function (index, item) {
-							_this.removeClass(item, 'active');
-						});
-						_this.addClass(this, 'active');
-
+						_this.addOrRemoveClass(this);
 						// double 处理
 						if (!_this.config.showtime && !_this.config.isDouble) {
 							var value = _this.obj.fulldatas.year + "/" + _this.obj.fulldatas.month + "/" + _this.obj.fulldatas.today;
@@ -704,6 +725,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					var node = e.target.nodeName == 'SPAN' ? e.target.parentNode : e.target;
 					if (e.type === 'dblclick' && !_this.hasClass(node, 'calendar-disabled')) _this.makeSureSelectTime();
 				});
+			}
+		}, {
+			key: "addOrRemoveClass",
+			value: function addOrRemoveClass(that, newtime) {
+				var _this = this;
+				var objs = this.$obj[query]('.main-check-day')[quall]('td');
+				if (_this.config.isDouble) {
+					var otherobjs = _this.obj.$noDoubleObj.$obj[query]('.main-check-day')[quall]('td');
+					_this.forEach(objs, function (index, item) {
+						var newtime = item.getAttribute('data-time');
+						var result = _this.hasSelectAct(newtime, _this.config.begintime, _this.config.endtime);
+						_this.removeClass(item, 'sele_act');
+						if (that) _this.removeClass(item, 'act_block');
+						if (result) _this.addClass(item, 'sele_act');
+					});
+					_this.forEach(otherobjs, function (index, item) {
+						var newtime = item.getAttribute('data-time');
+						var result = _this.hasSelectAct(newtime, _this.config.begintime, _this.config.endtime);
+						_this.removeClass(item, 'sele_act');
+						if (result) _this.addClass(item, 'sele_act');
+					});
+					if (that) _this.addClass(that, 'act_block');
+				} else {
+					_this.forEach(objs, function (index, item) {
+						_this.removeClass(item, 'actice');
+					});
+					if (that) _this.addClass(that, 'active');
+				}
 			}
 		}, {
 			key: "compareTimes",
@@ -822,6 +871,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					} else {
 						//double 处理
 						var clickType = _this.obj.isDoubleOne ? 'pre' : '';
+						_this.setBeginEndTime(fulldate);
 						_this.judgeCalendarRender('day', fulldate, true, clickType);
 					}
 
@@ -896,6 +946,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						_this.config.isDouble ? _this.obj.fulldatas.month = month : _this.getYearMonthAndDay(month, false);
 					} else {
 						var clickType = _this.obj.isDoubleOne ? 'pre' : '';
+						_this.setBeginEndTime(fulldate);
 						_this.judgeCalendarRender('day', fulldate, true, clickType);
 					}
 					//选择具体日期添加样式
@@ -999,7 +1050,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function backDateHtml() {
 				//double 处理
 				if (this.config.isDouble && !this.obj.isDoubleOne && this.config.type == 'day') this.obj.$noDoubleObj.backDateHtml();
-
 				this.obj.handleType = 'date';
 				var bottomHTML = this.bottomCheckTimeHTML();
 				this.renderCommonHtml('day', '', '', bottomHTML, false);
@@ -1132,6 +1182,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: "judgeCalendarRender",
 			value: function judgeCalendarRender(type, any, isreset, clickType) {
+				var _this3 = this;
+
 				var mainHTML = void 0,
 				    topHTML = void 0,
 				    bottomHTML = void 0;
@@ -1139,7 +1191,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					case 'day':
 						this.obj.handleType = 'day';
 						var json = this.getTimeDates(any, clickType);
-
 						this.obj.fulldatas = json;
 						// double 处理
 						this.compareSize(isreset, clickType);
@@ -1149,6 +1200,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						// 计算表格高度
 						this.countHeight('.main-check-day', 7);
 						this.getDay();
+						setTimeout(function () {
+							_this3.addOrRemoveClass();
+						}, 200);
+
 						break;
 					case 'year':
 						this.obj.handleType = 'year';
@@ -1244,6 +1299,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						nextTime = new Date(nextfullstr).getTime();
 						if (perTime >= nextTime - 86400000) {
 							var times = this.obj.isDoubleOne ? nextTime - 86400000 : perTime + 86400000;
+							this.obj.$noDoubleObj.setBeginEndTime(times);
 							this.obj.$noDoubleObj.judgeCalendarRender('day', times, false, json.clickType);
 						}
 						break;
@@ -1370,10 +1426,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: "documentClick",
 			value: function documentClick() {
-				var _this3 = this;
+				var _this4 = this;
 
 				this.on(doc, 'click', function (e) {
-					_this3.removeCalendar();
+					_this4.removeCalendar();
 				});
 			}
 
