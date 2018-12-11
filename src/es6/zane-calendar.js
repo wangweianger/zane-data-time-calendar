@@ -681,8 +681,10 @@ class calendar{
 					minute: _this.obj.fulldatas.minute,
 					second: _this.obj.fulldatas.second
 				}
-				const result = _this.compareTimes('getDay', _this.obj.$noDoubleObj.obj.fulldatas, fulldatas);
-				if (result) return;
+				if (_this.config.isDouble) {
+					const result = _this.compareTimes('getDay', _this.obj.$noDoubleObj.obj.fulldatas, fulldatas);
+					if (result) return;
+				}
 
 				_this.obj.fulldatas.year = arr[0]
 				_this.obj.fulldatas.month = arr[1]
@@ -715,21 +717,21 @@ class calendar{
 			preTimes = new Date(preTimes).getTime();
 			nextTimes = `${nextT.year}/${nextT.month}/${nextT.today} ${nextT.hour}:${nextT.minute}:${nextT.second}`;
 			nextTimes = new Date(nextTimes).getTime();
-			modelText = '结束时间必须大于开始时间！';
+			modelText = this.config.lang === 'cn' ? '结束时间必须大于开始时间！' : 'The end time must be greater than the start time.';
 		} else if (type === 'getYear'){
 			preTimes = preT.year;
 			nextTimes = nextT.year;
-			modelText = '结束年份必须大于开始年份！';
+			modelText = this.config.lang === 'cn' ? '结束年份必须大于开始年份！' : 'The end year must be greater than the beginning year.';
 		} else if (type === 'getMonth'){
 			preTimes = parseInt(preT.month);
 			nextTimes = parseInt(nextT.month);
-			modelText = '结束月份必须大于开始月份！';
+			modelText = this.config.lang === 'cn' ? '结束月份必须大于开始月份！' : 'The end month must be greater than the beginning month.';
 		} else if (type === 'selectTime'){
 			preTimes = `2018/01/01 ${preT.hour}:${preT.minute}:${preT.second}`;
 			preTimes = new Date(preTimes).getTime();
 			nextTimes = `2018/01/01 ${nextT.hour}:${nextT.minute}:${nextT.second}`;
 			nextTimes = new Date(nextTimes).getTime();
-			modelText = '结束时间必须大于开始时间！';
+			modelText = this.config.lang === 'cn' ? '结束时间必须大于开始时间！' : 'The end time must be greater than the start time.';
 		}
 
 		let result = false;
@@ -800,8 +802,10 @@ class calendar{
 			let year = e.target.nodeName === 'TD' ? e.target.children[0].getAttribute('data-year') : e.target.getAttribute('data-year')
 			let fulldate 	= `${year}/${_this.obj.fulldatas.month}/${_this.obj.fulldatas.today}`
 			if(_this.config.type === 'year'){
-				const result = _this.compareTimes('getYear', _this.obj.$noDoubleObj.obj.fulldatas, { year: year});
-				if (result) return;
+				if (_this.config.isDouble){
+					const result = _this.compareTimes('getYear', _this.obj.$noDoubleObj.obj.fulldatas, { year: year });
+					if (result) return;
+				}
 				_this.config.isDouble ? _this.obj.fulldatas.year = year : _this.getYearMonthAndDay(year,false)
 			}else{
 				//double 处理
@@ -862,11 +866,14 @@ class calendar{
 			let month 	= obj.getAttribute('data-month')
 			let fulldate 	= `${year}/${month}/${_this.obj.fulldatas.today}`
 			if(_this.config.type === 'month'){
-				const result = _this.compareTimes('getMonth', _this.obj.$noDoubleObj.obj.fulldatas, { month: month });
-				if (result) return;
+				if (_this.config.isDouble) {
+					const result = _this.compareTimes('getMonth', _this.obj.$noDoubleObj.obj.fulldatas, { month: month });
+					if (result) return;
+				}
 				_this.config.isDouble ? _this.obj.fulldatas.month = month : _this.getYearMonthAndDay(month,false)
 			}else{
-				_this.judgeCalendarRender('day',fulldate)
+				let clickType = _this.obj.isDoubleOne ? 'pre' : '';
+				_this.judgeCalendarRender('day', fulldate, true, clickType)
 			}
 			//选择具体日期添加样式
 			_this.forEach(objs, (index, item) => {
@@ -944,13 +951,14 @@ class calendar{
 		})
 
 		this.on(secondObjs,'click',function(e){
-			const result = _this.compareTimes(
-				'selectTime', 
-				_this.obj.$noDoubleObj.obj.fulldatas, 
-				Object.assign({}, _this.obj.fulldatas, { second: this.getAttribute('data-time')})
-			);
-			if (result) return;
-
+			if (_this.config.isDouble) {
+				const result = _this.compareTimes(
+					'selectTime',
+					_this.obj.$noDoubleObj.obj.fulldatas,
+					Object.assign({}, _this.obj.fulldatas, { second: this.getAttribute('data-time') })
+				);
+				if (result) return;
+			}
 			_this.forEach(secondObjs,(index,item)=>{
 				_this.removeClass(item,'active');
 			})
@@ -1087,10 +1095,8 @@ class calendar{
 				this.obj.fulldatas 	= json;
 				// double 处理
 				this.compareSize(isreset,clickType);
-
 				topHTML 			= this.topCheckDayHTML(json)
 				mainHTML 			= this.mainCheckDayHTML(json);
-
 				this.renderCommonHtml('day',topHTML,mainHTML);
 				// 计算表格高度
 				this.countHeight('.main-check-day',7);
@@ -1100,12 +1106,9 @@ class calendar{
 				this.obj.handleType = 'year';
 				// double 处理
 				this.compareSize(isreset,clickType);
-
 				mainHTML 	= this.mainCheckYearHTML(any);
 				topHTML		= this.topCheckYearHTML(any);
-
 				this.renderCommonHtml('year',topHTML,mainHTML);
-
 				// 计算表格高度
 				this.countHeight('.main-check-year',6);
 				this.getYear();
@@ -1114,9 +1117,7 @@ class calendar{
 				this.obj.handleType = 'month';
 				mainHTML 	= this.mainCheckMonthHTML(any);
 				topHTML		= this.topCheckMonthHTML(any);
-
 				this.renderCommonHtml('month',topHTML,mainHTML);
-
 				// 计算表格高度
 				this.countHeight('.main-check-month',4);
 				this.getMonth();
@@ -1126,7 +1127,6 @@ class calendar{
 				mainHTML 	= this.mainCheckTimeHTML(any);
 				topHTML		= this.topCheckTimeHTML();
 				bottomHTML  = this.bottomCheckTimeHTML();
-
 				this.renderCommonHtml('time',topHTML,mainHTML,bottomHTML);
 				this.$obj[query]('.select-time').style.height = this.config.height-115 +'px'
 				let hourScrollTop = this.$obj[query]('ul.hour')[query]('li.active').offsetTop
@@ -1138,7 +1138,6 @@ class calendar{
 				this.selectTime();
 				break;		
 		}
-		
 	}
 
 	renderCommonHtml(type,topHTML,mainHTML,bottomHTML,isrender=true){
@@ -1186,7 +1185,8 @@ class calendar{
 				perTime 		= new Date(prefullstr).getTime()
 				nextTime 		= new Date(nextfullstr).getTime()
 				if(perTime >= nextTime-86400000) {
-					this.obj.$noDoubleObj.judgeCalendarRender('day',nextTime,false,json.clickType)
+					const times = this.obj.isDoubleOne ? nextTime - 86400000 : perTime + 86400000;
+					this.obj.$noDoubleObj.judgeCalendarRender('day', times,false,json.clickType)
 				}
 				break;
 			case 'year':
@@ -1368,11 +1368,11 @@ let zaneDate = function(option){
 		calendarName 			= calendarName.replace(/[_-]/g,'').toUpperCase();
 		option.calendarName 	= json&&json.double ?calendarName+json.double:calendarName;
 		if(option.width){
-			option.width = option.width<250?250:option.width
+			option.width = option.width<220?220:option.width
 			option.width = option.width>500?500:option.width
 		}
 		if(option.height){
-			option.height = option.height<250?250:option.height
+			option.height = option.height<240?240:option.height
 			option.height = option.height>350?350:option.height
 		}
 

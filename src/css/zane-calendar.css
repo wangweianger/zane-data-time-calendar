@@ -50,7 +50,7 @@ ul, li {
       font-size: 12px;
       background: rgba(0, 0, 0, 0.8);
       color: #fff;
-      white-space: nowrap; }
+      min-width: 180px; }
   .zane-calendar .main-color {
     color: #46d7a2; }
   .zane-calendar .zane-date-left {

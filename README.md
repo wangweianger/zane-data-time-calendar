@@ -77,8 +77,8 @@ npm run build
 	elem:'#zane-calendar',   控件的dom原生 注意：仅限制于id选择器
 	type:'day',   可选类型 day year month time doubleday doubleyear doublemonth doubletime
 	lang:'cn',   可选择语言类型 cn , en 
-	width:280,  		插件宽度配置   250 <= X <= 500
-	height:300, 		插件高度配置   250 <= X <= 350
+	width:250,  		插件宽度配置   220 <= X <= 500
+	height:280, 		插件高度配置   240 <= X <= 350
 	behindTop:10,   	插件于输入框的高度 
 	format:'yyyy-MM-dd HH:mm:ss',  时间格式化
 	begintime:'',  				开始时间  （单选择器默认选择此项）
