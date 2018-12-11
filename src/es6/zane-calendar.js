@@ -207,7 +207,7 @@ class calendar{
 				window[noDoubleObj].obj.$noDoubleObj = this;
 			};
 
-			// // 设置默认值
+			// 设置默认值
 			let defaultValue,inpValue;
 			defaultValue = this.obj.input.nodeName === 'INPUT'?this.obj.input.value.trim():this.obj.input.textContent.trim()
 			if(defaultValue){
@@ -729,7 +729,7 @@ class calendar{
 		})
 	}
 
-	addOrRemoveClass(that, newtime){
+	addOrRemoveClass(that){
 		const _this = this;
 		let objs = this.$obj[query]('.main-check-day')[quall]('td');
 		if (_this.config.isDouble) {
@@ -737,22 +737,28 @@ class calendar{
 			_this.forEach(objs, (index, item) => {
 				let newtime = item.getAttribute('data-time')
 				let result = _this.hasSelectAct(newtime, _this.config.begintime, _this.config.endtime)
-				_this.removeClass(item, 'sele_act');
 				if (that) _this.removeClass(item, 'act_block');
-				if (result) _this.addClass(item, 'sele_act');
+				if (result){
+					if (!_this.hasClass(item, 'sele_act')) _this.addClass(item, 'sele_act');
+				} else {
+					_this.removeClass(item, 'sele_act')
+				}
 			})
 			_this.forEach(otherobjs, (index, item) => {
 				let newtime = item.getAttribute('data-time')
 				let result = _this.hasSelectAct(newtime, _this.config.begintime, _this.config.endtime)
-				_this.removeClass(item, 'sele_act');
-				if (result) _this.addClass(item, 'sele_act');
+				if (result) {
+					if (!_this.hasClass(item, 'sele_act')) _this.addClass(item, 'sele_act');
+				}else{
+					_this.removeClass(item, 'sele_act');
+				}
 			})
 			if (that) _this.addClass(that, 'act_block');
-		}else{
+		} else if (that){
 			_this.forEach(objs, (index, item) => {
-				_this.removeClass(item, 'actice');
+				_this.removeClass(item, 'active');
 			})
-			if (that) _this.addClass(that, 'active');
+			_this.addClass(that, 'active');
 		}
 	}
 
@@ -798,14 +804,12 @@ class calendar{
 	getYearHtml(year,isreset,clickType){
 		year = year || new Date().getFullYear();
 		year = parseInt(year)
-
 		// double 处理
 		if(this.config.isDouble&&this.obj.isDoubleOne&&clickType=='next'){
-			year 	= year + 1;
+			year = year + this.obj.totalYear;
 		}else if(this.config.isDouble&&!this.obj.isDoubleOne&&clickType=='pre'){
-			year 	= year - 1;
+			year = year - this.obj.totalYear;
 		}
-
 		let yearDatas 	= {
 			nowyear:year,
 			datalist:[]
@@ -821,7 +825,6 @@ class calendar{
 		}
 
 		this.obj.fulldatas.year = this.config.isDouble?yearDatas.nowyear:''
-
 		this.judgeCalendarRender('year',yearDatas,isreset,clickType);
 	}
 
@@ -1350,7 +1353,7 @@ class calendar{
   				let parent = item.parentElement;
 				let parents = parent.parentElement;
 				let removed = parents.removeChild(parent);
-  			})
+			})
   		}
   	}
 

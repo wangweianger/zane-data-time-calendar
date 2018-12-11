@@ -220,7 +220,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						window[noDoubleObj].obj.$noDoubleObj = _this2;
 					};
 
-					// // 设置默认值
+					// 设置默认值
 					var defaultValue = void 0,
 					    inpValue = void 0;
 					defaultValue = _this2.obj.input.nodeName === 'INPUT' ? _this2.obj.input.value.trim() : _this2.obj.input.textContent.trim();
@@ -733,7 +733,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}, {
 			key: "addOrRemoveClass",
-			value: function addOrRemoveClass(that, newtime) {
+			value: function addOrRemoveClass(that) {
 				var _this = this;
 				var objs = this.$obj[query]('.main-check-day')[quall]('td');
 				if (_this.config.isDouble) {
@@ -741,22 +741,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					_this.forEach(objs, function (index, item) {
 						var newtime = item.getAttribute('data-time');
 						var result = _this.hasSelectAct(newtime, _this.config.begintime, _this.config.endtime);
-						_this.removeClass(item, 'sele_act');
 						if (that) _this.removeClass(item, 'act_block');
-						if (result) _this.addClass(item, 'sele_act');
+						if (result) {
+							if (!_this.hasClass(item, 'sele_act')) _this.addClass(item, 'sele_act');
+						} else {
+							_this.removeClass(item, 'sele_act');
+						}
 					});
 					_this.forEach(otherobjs, function (index, item) {
 						var newtime = item.getAttribute('data-time');
 						var result = _this.hasSelectAct(newtime, _this.config.begintime, _this.config.endtime);
-						_this.removeClass(item, 'sele_act');
-						if (result) _this.addClass(item, 'sele_act');
+						if (result) {
+							if (!_this.hasClass(item, 'sele_act')) _this.addClass(item, 'sele_act');
+						} else {
+							_this.removeClass(item, 'sele_act');
+						}
 					});
 					if (that) _this.addClass(that, 'act_block');
-				} else {
+				} else if (that) {
 					_this.forEach(objs, function (index, item) {
-						_this.removeClass(item, 'actice');
+						_this.removeClass(item, 'active');
 					});
-					if (that) _this.addClass(that, 'active');
+					_this.addClass(that, 'active');
 				}
 			}
 		}, {
@@ -810,14 +816,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function getYearHtml(year, isreset, clickType) {
 				year = year || new Date().getFullYear();
 				year = parseInt(year);
-
 				// double 处理
 				if (this.config.isDouble && this.obj.isDoubleOne && clickType == 'next') {
-					year = year + 1;
+					year = year + this.obj.totalYear;
 				} else if (this.config.isDouble && !this.obj.isDoubleOne && clickType == 'pre') {
-					year = year - 1;
+					year = year - this.obj.totalYear;
 				}
-
 				var yearDatas = {
 					nowyear: year,
 					datalist: []
@@ -833,7 +837,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 
 				this.obj.fulldatas.year = this.config.isDouble ? yearDatas.nowyear : '';
-
 				this.judgeCalendarRender('year', yearDatas, isreset, clickType);
 			}
 
