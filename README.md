@@ -1,11 +1,10 @@
 # zane-data-time-calendar
-时间日历插件
+PC端时间日历插件
 
 ### 说明：
 此插件不依赖任何第三方插件，因此可以在任何地方单独使用
 
 ### images 
-
 ![输入图片说明](https://github.com/wangweianger/zane-data-time-calendar/blob/master/demo/01.png "在这里输入图片标题")
 ![输入图片说明](https://github.com/wangweianger/zane-data-time-calendar/blob/master/demo/02.png "在这里输入图片标题")
 ![输入图片说明](https://github.com/wangweianger/zane-data-time-calendar/blob/master/demo/03.png "在这里输入图片标题")
@@ -62,31 +61,31 @@ zaneDate({
 
 ### 参数说明
 
-参数配置   
+参数配置(参数可灵活配置)
 ```js
 {
 	
-	elem:'#zane-calendar',   控件的dom原生 注意：仅限制于id选择器
-	type:'day',   可选类型 day year month time doubleday doubleyear doublemonth doubletime
-	lang:'cn',   可选择语言类型 cn , en 
-	width:250,  		插件宽度配置   220 <= X <= 500
-	height:280, 		插件高度配置   240 <= X <= 350
-	behindTop:10,   	插件于输入框的高度 
+	elem:'#zane-calendar',  控件的dom原生 注意：仅限制于id选择器
+	type:'day',   			可选类型 day year month time doubleday doubleyear doublemonth doubletime
+	lang:'cn',   			可选择语言类型 cn , en 
+	width:250,  			插件宽度配置   220 <= X <= 500
+	height:280, 			插件高度配置   240 <= X <= 350
+	behindTop:10,   		插件于输入框的高度 
 	format:'yyyy-MM-dd HH:mm:ss',  时间格式化
-	begintime:'',  				开始时间  （单选择器默认选择此项）
-	endtime:'',                 结束时间  （double选择器需要）
-	min:'',  可选取时间最小范围 1900-10-01
-	max: '',  可选取时间最大范围 2099-12-31
-	position:'fixed',  定位方式  暂时只支持 fixed
-	event:'click',   事件方式 暂时只支持 click 
-	zindex:100,   z-index值
-	showtime:true,  是否显示选择时间
-	showclean:true,  是否显示清除按钮
-	shownow:true,  是否显示当前按钮
-	showsubmit:true, 是否显示提交按钮
-	haveBotBtns:true, 是否有底部按钮列表
-	calendarName:'', 此参数勿动 表示当前时间插件实例化对象
-	mounted:()=>{}, 插件加载完成之后调用
+	begintime:'',  			开始时间  （单选择器默认选择此项）
+	endtime:'',             结束时间  （double选择器需要）
+	min:'',  				可选取时间最小范围 1900-10-01
+	max: '',  				可选取时间最大范围 2099-12-31
+	position:'fixed',  		定位方式  暂时只支持 fixed
+	event:'click',   		事件方式 暂时只支持 click 
+	zindex:100,   			z-index值
+	showtime:true,  		是否显示选择时间
+	showclean:true,  		是否显示清除按钮
+	shownow:true,  			是否显示当前按钮
+	showsubmit:true, 		是否显示提交按钮
+	haveBotBtns:true, 		是否有底部按钮列表
+	calendarName:'', 		此参数勿动 表示当前时间插件实例化对象
+	mounted:()=>{}, 		插件加载完成之后调用
 	change:(fulltime,begintime,endtime)=>{}, 时间变更之后调用
 	done:(fulltime,begintime,endtime)=>{}, 选择完成之后调用
 }	
