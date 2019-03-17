@@ -237,7 +237,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						});
 						if (_this2.config.isDouble) {
 							var arr = defaultValue.split('-');
-							_this2.config.value = _this2.obj.isDoubleOne ? arr[1].trim() : arr[0].trim();
+							var begintime = arr[1].trim();
+							var endtime = arr[0].trim();
+							_this2.config.value = _this2.obj.isDoubleOne ? begintime : endtime;
+							_this2.config.begintime = endtime;
+							_this2.config.endtime = begintime;
 						} else {
 							_this2.config.value = defaultValue;
 						}
@@ -794,8 +798,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 
 				var result = false;
-				if (this.obj.isDoubleOne && nextTimes <= preTimes) result = true;
-				if (!this.obj.isDoubleOne && nextTimes >= preTimes) result = true;
+				var isShowTime = this.config.showtime || this.obj.$noDoubleObj.config.showtime;
+				if (this.obj.isDoubleOne && nextTimes <= preTimes && !isShowTime || this.obj.isDoubleOne && nextTimes < preTimes && isShowTime) result = true;
+				if (!this.obj.isDoubleOne && nextTimes >= preTimes && !isShowTime || !this.obj.isDoubleOne && nextTimes > preTimes && isShowTime) result = true;
 				var timer = null;
 				if (result) {
 					clearTimeout(timer);

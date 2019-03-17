@@ -190,7 +190,6 @@ class calendar{
 				}
 			})
 
-
 			let obj = doc[query](this.obj.id);
 
 			if(obj){
@@ -223,10 +222,15 @@ class calendar{
 				})
 				if(this.config.isDouble){
 					let arr = defaultValue.split('-')
-					this.config.value = this.obj.isDoubleOne?arr[1].trim():arr[0].trim()
+					let begintime = arr[1].trim()
+					let endtime = arr[0].trim()
+					this.config.value = this.obj.isDoubleOne ? begintime : endtime
+					this.config.begintime = endtime
+					this.config.endtime = begintime
 				}else{
 					this.config.value = defaultValue
 				}
+
 			}
 
 			// 过滤重复生成
@@ -787,8 +791,15 @@ class calendar{
 		}
 
 		let result = false;
-		if (this.obj.isDoubleOne && nextTimes <= preTimes) result = true;
-		if (!this.obj.isDoubleOne && nextTimes >= preTimes) result = true;
+		let isShowTime = this.config.showtime || this.obj.$noDoubleObj.config.showtime;
+		if (
+			(this.obj.isDoubleOne && nextTimes <= preTimes && !isShowTime) || 
+			(this.obj.isDoubleOne && nextTimes < preTimes && isShowTime)
+		) result = true;
+		if (
+			(!this.obj.isDoubleOne && nextTimes >= preTimes && !isShowTime) || 
+			(!this.obj.isDoubleOne && nextTimes > preTimes && isShowTime)
+		) result = true;
 		let timer = null;
 		if (result) {
 			clearTimeout(timer);

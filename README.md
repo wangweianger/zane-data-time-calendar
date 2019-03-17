@@ -28,10 +28,10 @@
 <link href="./dist/zane-calendar.min.css">
 <script src="./dist/zane-calendar.min.js"></script>
 
-<!-- 需要加时间插件的输入框 -->
+<!-- Input boxes for plug-ins requiring extra time. -->
 <input type="" name="" id="zane-calendar">
 
-初始化
+Initialization.
 zaneDate({
 	elem:'#zane-calendar',
 })
@@ -49,23 +49,14 @@ const zaneDate = require('zane-calendar') 或
 import zaneDate from 'zane-calendar'
 
 
-<!-- 需要加时间插件的输入框 -->
+<!-- Input boxes for plug-ins requiring extra time. -->
 <input type="" name="" id="zane-calendar">
 
 
-初始化 
+Initialization. 
 zaneDate({
 	elem:'#zane-calendar',
 })
-
-```
-
-### 项目运行方法
-```js
-git clone https://github.com/wangweianger/zane-data-time-calendar.git
-npm install
-npm run dev
-npm run build
 
 ```
 
