@@ -153,6 +153,8 @@ ul, li {
             width: 33.333%;
             float: left;
             text-align: center; }
+        .zane-calendar .zane-calendar-one .zane-date-main .main-check-time .week-day .nav-1 li {
+          width: 50%; }
         .zane-calendar .zane-calendar-one .zane-date-main .main-check-time .week-day .select-time {
           overflow: hidden;
           text-align: center;
@@ -186,6 +188,9 @@ ul, li {
             -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
             border-radius: 0;
             background: rgba(0, 0, 0, 0.1); }
+        .zane-calendar .zane-calendar-one .zane-date-main .main-check-time .week-day .select-time-1 ul {
+          width: 45%;
+          margin: 0 1%; }
     .zane-calendar .zane-calendar-one .zane-date-bottom {
       border-top: solid 1px #eee;
       border-left: solid 1px #eee;

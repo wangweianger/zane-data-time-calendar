@@ -98,6 +98,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				showsubmit: true,
 				// 是否有底部按钮列表
 				haveBotBtns: true,
+				// type='time'时是否显示秒单位
+				showsecond: false,
+
 				calendarName: '',
 				isDouble: false,
 				// 插件加载完成之后调用
@@ -426,7 +429,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: "mainCheckTimeHTML",
 			value: function mainCheckTimeHTML(json) {
-				var html = "<div class=\"week-day\"><ul class=\"nav\"><li>" + this.obj.lang.time[0] + "</li><li>" + this.obj.lang.time[1] + "</li><li>" + this.obj.lang.time[2] + "</li></ul><div class=\"select-time\">\n\t\t\t\t<ul class=\"hour\">";
+				var html = "<div class=\"week-day\"><ul class=\"nav " + (this.config.showsecond ? '' : 'nav-1') + "\">\n\t\t\t\t\t\t<li>" + this.obj.lang.time[0] + "</li>\n\t\t\t\t\t\t<li>" + this.obj.lang.time[1] + "</li>\n\t\t\t\t\t\t" + (this.config.showsecond ? '<li>' + this.obj.lang.time[2] + '</li>' : '') + "\n\t\t\t\t\t</ul><div class=\"select-time " + (this.config.showsecond ? '' : 'select-time-1') + "\">\n\t\t\t\t<ul class=\"hour\">";
 				for (var i = 0, len = json.hours.length; i < len; i++) {
 					var className = '';
 					if (json.hours[i] == json.hour) className = 'active';
@@ -438,11 +441,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					if (json.minutes[_i] == json.minute) _className = 'active';
 					html += "<li class=\"" + _className + "\" data-time=\"" + json.minutes[_i] + "\">" + json.minutes[_i] + "</li>";
 				}
-				html += "</ul><ul class=\"second\">";
-				for (var _i2 = 0, _len3 = json.seconds.length; _i2 < _len3; _i2++) {
-					var _className2 = '';
-					if (json.seconds[_i2] == json.second) _className2 = 'active';
-					html += "<li class=\"" + _className2 + "\" data-time=\"" + json.seconds[_i2] + "\">" + json.seconds[_i2] + "</li>";
+				if (this.config.showsecond) {
+					html += "</ul><ul class=\"second\">";
+					for (var _i2 = 0, _len3 = json.seconds.length; _i2 < _len3; _i2++) {
+						var _className2 = '';
+						if (json.seconds[_i2] == json.second) _className2 = 'active';
+						html += "<li class=\"" + _className2 + "\" data-time=\"" + json.seconds[_i2] + "\">" + json.seconds[_i2] + "</li>";
+					}
 				}
 				html += "</ul></div></div>";
 				return html;
@@ -1025,7 +1030,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var _this = this;
 				var hourObjs = this.$obj[query]('ul.hour')[quall]('li');
 				var minuteObjs = this.$obj[query]('ul.minute')[quall]('li');
-				var secondObjs = this.$obj[query]('ul.second')[quall]('li');
+
+				var secondObjs = null;
+				if (this.config.showsecond) {
+					secondObjs = this.$obj[query]('ul.second')[quall]('li');
+				}
 
 				this.on(hourObjs, 'click', function (e) {
 					_this.forEach(hourObjs, function (index, item) {
@@ -1036,6 +1045,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				});
 
 				this.on(minuteObjs, 'click', function (e) {
+					if (_this.config.isDouble && !_this.config.showsecond) {
+						var result = _this.compareTimes('selectTime', _this.obj.$noDoubleObj.obj.fulldatas, Object.assign({}, _this.obj.fulldatas, { minute: this.getAttribute('data-time') }));
+						if (result) return;
+					}
 					_this.forEach(minuteObjs, function (index, item) {
 						_this.removeClass(item, 'active');
 					});
@@ -1043,17 +1056,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					_this.obj.fulldatas.minute = this.getAttribute('data-time');
 				});
 
-				this.on(secondObjs, 'click', function (e) {
-					if (_this.config.isDouble) {
-						var result = _this.compareTimes('selectTime', _this.obj.$noDoubleObj.obj.fulldatas, Object.assign({}, _this.obj.fulldatas, { second: this.getAttribute('data-time') }));
-						if (result) return;
-					}
-					_this.forEach(secondObjs, function (index, item) {
-						_this.removeClass(item, 'active');
+				if (this.config.showsecond) {
+					this.on(secondObjs, 'click', function (e) {
+						if (_this.config.isDouble) {
+							var result = _this.compareTimes('selectTime', _this.obj.$noDoubleObj.obj.fulldatas, Object.assign({}, _this.obj.fulldatas, { second: this.getAttribute('data-time') }));
+							if (result) return;
+						}
+						_this.forEach(secondObjs, function (index, item) {
+							_this.removeClass(item, 'active');
+						});
+						_this.addClass(this, 'active');
+						_this.obj.fulldatas.second = this.getAttribute('data-time');
 					});
-					_this.addClass(this, 'active');
-					_this.obj.fulldatas.second = this.getAttribute('data-time');
-				});
+				}
 			}
 
 			// 返回日期
@@ -1104,10 +1119,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var value = null;
 				var isFormat = true;
 				if (this.config.showtime) {
-					value = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today + " " + this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute + ":" + this.obj.fulldatas.second;
+					value = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today + " " + this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute;
+					if (this.config.showsecond) {
+						value = value + ":" + this.obj.fulldatas.second;
+					}
 				} else if (this.config.type == 'time' && !this.config.isDouble) {
 					isFormat = false;
-					value = this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute + ":" + this.obj.fulldatas.second;
+					value = this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute;
+					if (this.config.showsecond) {
+						value = value + ":" + this.obj.fulldatas.second;
+					}
 				} else {
 					//doubule 处理
 					if (this.config.isDouble) {
@@ -1118,8 +1139,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						switch (this.config.type) {
 							case 'day':
 								if (this.obj.$noDoubleObj.config.showtime) {
-									noDoubleStr = noDoubleData.year + "/" + noDoubleData.month + "/" + noDoubleData.today + " " + noDoubleData.hour + ":" + noDoubleData.minute + ":" + noDoubleData.second;
-									haveDoubleStr = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today + " " + this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute + ":" + this.obj.fulldatas.second;
+									noDoubleStr = noDoubleData.year + "/" + noDoubleData.month + "/" + noDoubleData.today + " " + noDoubleData.hour + ":" + noDoubleData.minute;
+									haveDoubleStr = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today + " " + this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute;
+									if (this.obj.$noDoubleObj.config.showsecond) {
+										noDoubleStr = noDoubleStr + ":" + noDoubleData.second;
+										haveDoubleStr = haveDoubleStr + ":" + this.obj.fulldatas.second;
+									}
 								} else {
 									noDoubleStr = noDoubleData.year + "/" + noDoubleData.month + "/" + noDoubleData.today;
 									haveDoubleStr = this.obj.fulldatas.year + "/" + this.obj.fulldatas.month + "/" + this.obj.fulldatas.today;
@@ -1137,8 +1162,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 								break;
 							case 'time':
 								isFormat = false;
-								noDoubleStr = noDoubleData.hour + ":" + noDoubleData.minute + ":" + noDoubleData.second;
-								haveDoubleStr = this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute + ":" + this.obj.fulldatas.second;
+								noDoubleStr = noDoubleData.hour + ":" + noDoubleData.minute;
+								haveDoubleStr = this.obj.fulldatas.hour + ":" + this.obj.fulldatas.minute;
+								if (this.config.showsecond) {
+									noDoubleStr = noDoubleStr + ":" + noDoubleData.second;
+									haveDoubleStr = haveDoubleStr + ":" + this.obj.fulldatas.second;
+								}
 								break;
 						};
 						value = noDoubleStr + '|' + haveDoubleStr;
@@ -1247,10 +1276,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						this.$obj[query]('.select-time').style.height = this.config.height - 115 + 'px';
 						var hourScrollTop = this.$obj[query]('ul.hour')[query]('li.active').offsetTop;
 						var minuteScrollTop = this.$obj[query]('ul.minute')[query]('li.active').offsetTop;
-						var secondScrollTop = this.$obj[query]('ul.second')[query]('li.active').offsetTop;
+
 						this.$obj[query]('ul.hour').scrollTop = hourScrollTop - 150;
 						this.$obj[query]('ul.minute').scrollTop = minuteScrollTop - 150;
-						this.$obj[query]('ul.second').scrollTop = secondScrollTop - 150;
+
+						if (this.config.showsecond) {
+							var secondScrollTop = this.$obj[query]('ul.second')[query]('li.active').offsetTop;
+							this.$obj[query]('ul.second').scrollTop = secondScrollTop - 150;
+						}
+
 						this.selectTime();
 						break;
 				}

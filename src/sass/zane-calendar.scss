@@ -203,6 +203,11 @@ ul,li{
 							text-align:center;
 						}
 					}
+					.nav-1{
+						li{
+							width:50%;
+						}
+					}
 					.select-time{
 						overflow:hidden;
 						text-align:center;
@@ -243,6 +248,12 @@ ul,li{
 				            border-radius: 0;
 				            background: rgba(0,0,0,.1);
 				        }
+					}
+					.select-time-1{
+						ul{
+							width:45%;
+							margin:0 1%;
+						}
 					}
 				}
 			}

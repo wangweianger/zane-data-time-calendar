@@ -121,7 +121,7 @@
 	</style>
 	<link rel="stylesheet" type="text/css" href="./css/zane-calendar.css">
 	<link href="https://cdn.bootcss.com/prism/1.9.0/themes/prism-tomorrow.min.css" rel="stylesheet">
-	<script src="./js/zane-calendar.js"></script>
+	<script src="./es6/zane-calendar.js"></script>
 </head>
 <body>
 	<ul class="navdemo">
@@ -284,11 +284,13 @@ zaneDate({
 		</div>
 		<div class="line">
 		<div class="demo">
-			<span class="t1">z-index值:</span><input id="demo26" type="text" class="input" placeholder="zindex:500">
+			<span class="t1">选择时间(只选择时和分):</span>
+			<input id="demo56" type="text" class="input" placeholder="HH:mm">
 <span class="button">代码</span>
 <div class="every-code"><pre><code class="language-js">zaneDate({
-	elem:'#demo26',
-	zindex:500
+	elem:'#demo56',
+	type:'time',
+	showsecond:false,
 })</code></pre></div>
 		</div>
 		<div class="demo">
@@ -421,6 +423,17 @@ zaneDate({
 })</code></pre></div>
 		</div>
 	</div>
+	<div class="line">
+		<div class="demo">
+			<span class="t1">z-index值:</span>
+			<input id="demo26" type="text" class="input" placeholder="zindex:500">
+<span class="button">代码</span>
+<div class="every-code"><pre><code class="language-js">zaneDate({
+	elem:'#demo26',
+	zindex:500
+})</code></pre></div>
+		</div>
+		</div>
 		<div class="english h2">双选择器案例</div>
 		<div class="line">
 		<div class="demo">
@@ -482,6 +495,18 @@ zaneDate({
 	begintime:'2017-09-20 12:10:10',
 	endtime:'2017-10-01 15:16:16',
 	showtime:true
+})</code></pre></div>
+		</div>
+		<div class="demo">
+			<span class="t1">doubletime 只选择时分:</span>
+			<input id="demo66" type="text" class="input" placeholder="HH:mm:ss">
+<span class="button">代码</span>
+<div class="every-code"><pre><code class="language-js">zaneDate({
+	elem:'#demo24',
+	begintime:'12:10',
+	endtime:'15:16',
+	type:'doubletime',
+	showsecond:false
 })</code></pre></div>
 		</div>
 	</div>	
@@ -569,6 +594,11 @@ zaneDate({
 		zaneDate({
 			elem:'#demo6',
 			type:'time'
+		})
+		zaneDate({
+			elem:'#demo56',
+			type:'time',
+			showsecond:false
 		})
 		zaneDate({
 			elem:'#demo7',
@@ -667,6 +697,13 @@ zaneDate({
 			begintime:'12:10:10',
 			endtime:'15:16:16',
 			type:'doubletime',
+		})
+		zaneDate({
+			elem:'#demo66',
+			begintime:'12:10',
+			endtime:'15:16',
+			type:'doubletime',
+			showsecond:false
 		})
 		zaneDate({
 			elem:'#demo25',

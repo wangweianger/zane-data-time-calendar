@@ -86,6 +86,9 @@ class calendar{
 			showsubmit:true,
 			// 是否有底部按钮列表
 			haveBotBtns:true,
+			// type='time'时是否显示秒单位
+			showsecond:false,
+
 			calendarName:'',
 			isDouble:false,
 			// 插件加载完成之后调用
@@ -442,7 +445,11 @@ class calendar{
 	}
 	// time -main html 时间选择器选择时间状态内容块
 	mainCheckTimeHTML(json){
-		let html = `<div class="week-day"><ul class="nav"><li>${this.obj.lang.time[0]}</li><li>${this.obj.lang.time[1]}</li><li>${this.obj.lang.time[2]}</li></ul><div class="select-time">
+		let html = `<div class="week-day"><ul class="nav ${this.config.showsecond?'':'nav-1'}">
+						<li>${this.obj.lang.time[0]}</li>
+						<li>${this.obj.lang.time[1]}</li>
+						${this.config.showsecond?'<li>'+this.obj.lang.time[2]+'</li>':''}
+					</ul><div class="select-time ${this.config.showsecond?'':'select-time-1'}">
 				<ul class="hour">`
 				for (let i = 0,len=json.hours.length; i < len; i++) {
 					let className='';
@@ -455,12 +462,14 @@ class calendar{
 					if(json.minutes[i] == json.minute) className='active';
 					html +=`<li class="${className}" data-time="${json.minutes[i]}">${json.minutes[i]}</li>`
 				}
-			html+=`</ul><ul class="second">`
-				for (let i = 0,len=json.seconds.length; i < len; i++) {
-					let className='';
-					if(json.seconds[i] == json.second) className='active';
-					html +=`<li class="${className}" data-time="${json.seconds[i]}">${json.seconds[i]}</li>`
-				}
+			if(this.config.showsecond){
+				html+=`</ul><ul class="second">`
+					for (let i = 0,len=json.seconds.length; i < len; i++) {
+						let className='';
+						if(json.seconds[i] == json.second) className='active';
+						html +=`<li class="${className}" data-time="${json.seconds[i]}">${json.seconds[i]}</li>`
+					}
+			}	
 			html+=`</ul></div></div>`
 		return html;
 	}
@@ -994,7 +1003,11 @@ class calendar{
 		let _this 		= this
 		let hourObjs 	= this.$obj[query]('ul.hour')[quall]('li')
 		let minuteObjs 	= this.$obj[query]('ul.minute')[quall]('li')
-		let secondObjs 	= this.$obj[query]('ul.second')[quall]('li')
+
+		let secondObjs  = null;
+		if(this.config.showsecond){
+			secondObjs 	= this.$obj[query]('ul.second')[quall]('li')
+		}
 		
 		this.on(hourObjs,'click',function(e){
 			_this.forEach(hourObjs,(index,item)=>{
@@ -1005,6 +1018,14 @@ class calendar{
 		})
 
 		this.on(minuteObjs,'click',function(e){
+			if(_this.config.isDouble && !_this.config.showsecond){
+				const result = _this.compareTimes(
+					'selectTime',
+					_this.obj.$noDoubleObj.obj.fulldatas,
+					Object.assign({}, _this.obj.fulldatas, { minute: this.getAttribute('data-time') })
+				);
+				if (result) return;
+			}
 			_this.forEach(minuteObjs,(index,item)=>{
 				_this.removeClass(item,'active');
 			})
@@ -1012,21 +1033,23 @@ class calendar{
 			_this.obj.fulldatas.minute = this.getAttribute('data-time');
 		})
 
-		this.on(secondObjs,'click',function(e){
-			if (_this.config.isDouble) {
-				const result = _this.compareTimes(
-					'selectTime',
-					_this.obj.$noDoubleObj.obj.fulldatas,
-					Object.assign({}, _this.obj.fulldatas, { second: this.getAttribute('data-time') })
-				);
-				if (result) return;
-			}
-			_this.forEach(secondObjs,(index,item)=>{
-				_this.removeClass(item,'active');
+		if(this.config.showsecond){
+			this.on(secondObjs,'click',function(e){
+				if (_this.config.isDouble) {
+					const result = _this.compareTimes(
+						'selectTime',
+						_this.obj.$noDoubleObj.obj.fulldatas,
+						Object.assign({}, _this.obj.fulldatas, { second: this.getAttribute('data-time') })
+					);
+					if (result) return;
+				}
+				_this.forEach(secondObjs,(index,item)=>{
+					_this.removeClass(item,'active');
+				})
+				_this.addClass(this,'active');
+				_this.obj.fulldatas.second = this.getAttribute('data-time');
 			})
-			_this.addClass(this,'active');
-			_this.obj.fulldatas.second = this.getAttribute('data-time');
-		})
+		}
 	}
 
 	// 返回日期
@@ -1065,10 +1088,16 @@ class calendar{
 		let value 		= null;
 		let isFormat 	= true;
 		if(this.config.showtime){
-			value = `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today} ${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`					
+			value = `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today} ${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}`
+			if(this.config.showsecond){
+				value = `${value}:${this.obj.fulldatas.second}`
+			}
 		}else if(this.config.type == 'time'&&!this.config.isDouble){
 			isFormat 	= false;
-			value = `${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`
+			value = `${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}`
+			if(this.config.showsecond){
+				value = `${value}:${this.obj.fulldatas.second}`
+			}
 		}else{
 			//doubule 处理
 			if(this.config.isDouble){
@@ -1078,8 +1107,12 @@ class calendar{
 				switch(this.config.type){
 					case 'day':
 						if(this.obj.$noDoubleObj.config.showtime){
-							noDoubleStr		=  `${noDoubleData.year}/${noDoubleData.month}/${noDoubleData.today} ${noDoubleData.hour}:${noDoubleData.minute}:${noDoubleData.second}`
-							haveDoubleStr	=  `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today} ${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`
+							noDoubleStr		=  `${noDoubleData.year}/${noDoubleData.month}/${noDoubleData.today} ${noDoubleData.hour}:${noDoubleData.minute}`
+							haveDoubleStr	=  `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today} ${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}`
+							if(this.obj.$noDoubleObj.config.showsecond){
+								noDoubleStr 	= `${noDoubleStr}:${noDoubleData.second}`
+								haveDoubleStr 	= `${haveDoubleStr}:${this.obj.fulldatas.second}`
+							}
 						}else{
 							noDoubleStr		=  `${noDoubleData.year}/${noDoubleData.month}/${noDoubleData.today}`
 							haveDoubleStr	=  `${this.obj.fulldatas.year}/${this.obj.fulldatas.month}/${this.obj.fulldatas.today}`
@@ -1097,8 +1130,12 @@ class calendar{
 						break;	
 					case 'time' :		
 						isFormat = false
-						noDoubleStr 	=  `${noDoubleData.hour}:${noDoubleData.minute}:${noDoubleData.second}`
-						haveDoubleStr 	=  `${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}:${this.obj.fulldatas.second}`
+						noDoubleStr 	=  `${noDoubleData.hour}:${noDoubleData.minute}`
+						haveDoubleStr 	=  `${this.obj.fulldatas.hour}:${this.obj.fulldatas.minute}`
+						if(this.config.showsecond){
+							noDoubleStr 	= `${noDoubleStr}:${noDoubleData.second}`
+							haveDoubleStr 	= `${haveDoubleStr}:${this.obj.fulldatas.second}`
+						}
 						break;		
 				};
 				value					=  noDoubleStr +'|'+ haveDoubleStr
@@ -1195,10 +1232,15 @@ class calendar{
 				this.$obj[query]('.select-time').style.height = this.config.height-115 +'px'
 				let hourScrollTop = this.$obj[query]('ul.hour')[query]('li.active').offsetTop
 				let minuteScrollTop = this.$obj[query]('ul.minute')[query]('li.active').offsetTop
-				let secondScrollTop = this.$obj[query]('ul.second')[query]('li.active').offsetTop
+				
 				this.$obj[query]('ul.hour').scrollTop 		= 	hourScrollTop-150
 				this.$obj[query]('ul.minute').scrollTop 	= 	minuteScrollTop-150
-				this.$obj[query]('ul.second').scrollTop 	=	secondScrollTop-150
+
+				if(this.config.showsecond){
+					let secondScrollTop = this.$obj[query]('ul.second')[query]('li.active').offsetTop
+					this.$obj[query]('ul.second').scrollTop 	=	secondScrollTop-150
+				} 
+
 				this.selectTime();
 				break;		
 		}
