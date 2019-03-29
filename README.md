@@ -85,6 +85,7 @@ zaneDate({
 	shownow:true,  			是否显示当前按钮
 	showsubmit:true, 		是否显示提交按钮
 	haveBotBtns:true, 		是否有底部按钮列表
+	showsecond:true,        type='time|doubletime'时是支持选择秒单位
 	calendarName:'', 		此参数勿动 表示当前时间插件实例化对象
 	mounted:()=>{}, 		插件加载完成之后调用
 	change:(fulltime,begintime,endtime)=>{}, 时间变更之后调用
@@ -224,5 +225,5 @@ zaneDate({
 
 ### 2.2.6 版本 修复双选择器默认选中颜色相关bug
 
-
+### 2.2.7 版本 type='time|doubletime'时是支持选择秒单位
 
