@@ -99,7 +99,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				// 是否有底部按钮列表
 				haveBotBtns: true,
 				// type='time'时是否显示秒单位
-				showsecond: false,
+				showsecond: true,
 
 				calendarName: '',
 				isDouble: false,
