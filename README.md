@@ -42,7 +42,7 @@ zaneDate({
 
 ```js
 
-npm install zane-calendar --save-dev
+npm install zane-calendar --save   |  yarn add zane-calendar
 
 
 const zaneDate = require('zane-calendar') 或
