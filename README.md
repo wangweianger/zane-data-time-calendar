@@ -66,19 +66,19 @@ zaneDate({
 ```js
 {
 	
-	elem:'#zane-calendar',  控件的dom原生 注意：仅限制于id选择器
+	elem:'#zane-calendar',  控件的原生dom 注意：仅限制于id选择器
 	type:'day',   			可选类型 day year month time doubleday doubleyear doublemonth doubletime
 	lang:'cn',   			可选择语言类型 cn , en 
 	width:250,  			插件宽度配置   220 <= X <= 500
 	height:280, 			插件高度配置   240 <= X <= 350
-	behindTop:10,   		插件于输入框的高度 
+	behindTop:10,   		插件与输入框的高度 
 	format:'yyyy-MM-dd HH:mm:ss',  时间格式化
-	begintime:'',  			开始时间  （单选择器默认选择此项）
-	endtime:'',             结束时间  （double选择器需要）
+	begintime:'',  			开始时间  （单选择可选项）
+	endtime:'',             结束时间  （double选择器可选项）
 	min:'',  				可选取时间最小范围 1900-10-01
 	max: '',  				可选取时间最大范围 2099-12-31
-	position:'fixed',  		定位方式  暂时只支持 fixed
-	event:'click',   		事件方式 暂时只支持 click 
+	position:'fixed',  		定位方式，暂时只支持 fixed
+	event:'click',   		事件方式，暂时只支持 click 
 	zindex:100,   			z-index值
 	showtime:true,  		是否显示选择时间
 	showclean:true,  		是否显示清除按钮
@@ -226,4 +226,12 @@ zaneDate({
 ### 2.2.6 版本 修复双选择器默认选中颜色相关bug
 
 ### 2.2.7 版本 type='time|doubletime'时是否支持选择秒单位
+```js
+zaneDate({
+	elem:'#demo25',
+	type:'time',
+	showsecond:false
+})
+
+```
 
